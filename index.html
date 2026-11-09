@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zylo — High-Performance Cloud Video & Discord Platform</title>
+  <meta name="description" content="Next-Generation Video Sharing & Discord Clip Infrastructure engineered with Cloudflare R2 and client-side WebCodecs. Developed by Walter (@walterdotblend).">
+  
+  <!-- OpenGraph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zylo.stream">
+  <meta property="og:title" content="Zylo — Zero-Egress Video Streaming & Discord Infrastructure">
+  <meta property="og:description" content="Shatter Discord's 10MB limit with instant R2 direct streaming and client-side WebCodecs transcoding.">
+  <meta property="og:image" content="assets/privacy_banner.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --bg-surface: #0e121b;
+      --bg-card: rgba(18, 24, 38, 0.72);
+      --bg-card-hover: rgba(26, 35, 54, 0.85);
+      --accent-orange: #ff6d00;
+      --accent-orange-glow: rgba(255, 109, 0, 0.35);
+      --accent-cyan: #00e5ff;
+      --accent-cyan-glow: rgba(0, 229, 255, 0.25);
+      --accent-purple: #8b5cf6;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-active: rgba(255, 109, 0, 0.45);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+      selection-background-color: var(--accent-orange);
+      selection-color: #000;
+    }
+
+    /* Ambient Cyber Background Grid & Orbs */
+    .cyber-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: 
+        radial-gradient(circle at 15% 20%, rgba(255, 109, 0, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(0, 229, 255, 0.09) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+    }
+
+    /* Top Redirection Banner */
+    .redirect-banner {
+      background: linear-gradient(90deg, rgba(255, 109, 0, 0.2), rgba(0, 229, 255, 0.15));
+      border-bottom: 1px solid var(--border-active);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      font-size: 0.88rem;
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+
+    .redirect-banner.hidden {
+      display: none;
+    }
+
+    .redirect-counter {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--accent-cyan);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+    }
+
+    .btn-banner-go {
+      background: var(--accent-orange);
+      color: #fff;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.82rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-banner-go:hover {
+      background: #ff8524;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px var(--accent-orange-glow);
+    }
+
+    .btn-banner-stay {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-muted);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-banner-stay:hover {
+      border-color: #fff;
+      color: #fff;
+    }
+
+    /* Navigation */
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      filter: drop-shadow(0 0 12px var(--accent-orange-glow));
+    }
+
+    .brand-text {
+      font-weight: 900;
+      font-size: 1.4rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff 40%, var(--accent-orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: rgba(255, 109, 0, 0.15);
+      color: var(--accent-orange);
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 109, 0, 0.3);
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Language Switcher */
+    .lang-selector {
+      position: relative;
+    }
+
+    .lang-select-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .lang-select-btn:hover {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan-glow);
+    }
+
+    .lang-dropdown {
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      z-index: 50;
+      backdrop-filter: blur(16px);
+    }
+
+    .lang-dropdown.show {
+      display: flex;
+    }
+
+    .lang-opt {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+    }
+
+    .lang-opt:hover, .lang-opt.active {
+      background: rgba(255, 109, 0, 0.12);
+      color: var(--accent-orange);
+    }
+
+    .btn-nav-primary {
+      background: linear-gradient(135deg, var(--accent-orange), #ff4d00);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 8px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px var(--accent-orange-glow);
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(255, 109, 0, 0.5);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 70px 0 60px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 229, 255, 0.08);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
+      animation: pulseGlow 3s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 10px rgba(0, 229, 255, 0.1); }
+      to { box-shadow: 0 0 24px rgba(0, 229, 255, 0.3); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 22px;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, #fff 20%, var(--accent-orange) 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero h1 .cyan-text {
+      background: linear-gradient(135deg, #00e5ff 20%, #7000ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 760px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .btn-hero-main {
+      background: linear-gradient(135deg, var(--accent-orange), #ff4200);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 800;
+      padding: 14px 34px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 30px var(--accent-orange-glow);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-hero-main:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(255, 109, 0, 0.55);
+    }
+
+    .btn-hero-sec {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+    }
+
+    .btn-hero-sec:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    /* Live Stat Bar */
+    .stat-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 12px;
+      border-right: 1px solid var(--border-subtle);
+    }
+
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-val {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .stat-val.accent {
+      color: var(--accent-orange);
+    }
+
+    .stat-val.cyan {
+      color: var(--accent-cyan);
+    }
+
+    .stat-lbl {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* Section Headers */
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--accent-orange);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto;
+      font-size: 1rem;
+    }
+
+    /* Architecture Pipeline Section */
+    .arch-section {
+      padding: 80px 0;
+    }
+
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      position: relative;
+    }
+
+    .pipe-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(12px);
+    }
+
+    .pipe-card:hover {
+      border-color: var(--border-active);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-orange-glow);
+    }
+
+    .pipe-step-num {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--accent-orange);
+      background: rgba(255, 109, 0, 0.12);
+      border: 1px solid rgba(255, 109, 0, 0.25);
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+
+    .pipe-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .pipe-card h3 {
+      font-size: 1.18rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .pipe-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .pipe-tag {
+      margin-top: 18px;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Feature Tabs */
+    .features-section {
+      padding: 70px 0;
+    }
+
+    .feature-tabs-nav {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .tab-btn.active {
+      background: rgba(255, 109, 0, 0.15);
+      color: var(--accent-orange);
+      border-color: var(--accent-orange);
+      box-shadow: 0 0 18px var(--accent-orange-glow);
+    }
+
+    .tab-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      backdrop-filter: blur(16px);
+      display: none;
+    }
+
+    .tab-content.active {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 40px;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-left h3 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .tab-left p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .tab-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .tab-bullets li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: #e2e8f0;
+    }
+
+    .tab-bullets li span.check {
+      color: var(--accent-cyan);
+      font-weight: 800;
+    }
+
+    .tab-right {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Interactive Simulator */
+    .sim-box {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+
+    .sim-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      color: var(--text-dim);
+    }
+
+    .sim-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .sim-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .sim-dots span:nth-child(1) { background: #ef4444; }
+    .sim-dots span:nth-child(2) { background: #f59e0b; }
+    .sim-dots span:nth-child(3) { background: #10b981; }
+
+    .sim-progress-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      height: 10px;
+      overflow: hidden;
+      margin: 14px 0 8px;
+    }
+
+    .sim-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-orange), var(--accent-cyan));
+      border-radius: 6px;
+      transition: width 0.1s linear;
+    }
+
+    .sim-btn-trigger {
+      background: var(--accent-orange);
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 0.84rem;
+      font-weight: 700;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .sim-btn-trigger:hover {
+      background: #ff8524;
+    }
+
+    .sim-embed-preview {
+      background: #2b2d31;
+      border-left: 4px solid var(--accent-orange);
+      border-radius: 4px;
+      padding: 12px;
+      margin-top: 16px;
+      color: #dbdee1;
+      font-family: var(--font-sans);
+      display: none;
+    }
+
+    .sim-embed-preview.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* Author / Portfolio Section */
+    .author-section {
+      padding: 80px 0;
+    }
+
+    .author-card {
+      background: linear-gradient(135deg, rgba(255, 109, 0, 0.06), rgba(0, 229, 255, 0.04));
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 36px;
+      align-items: center;
+      backdrop-filter: blur(20px);
+    }
+
+    .author-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      box-shadow: 0 0 24px var(--accent-orange-glow);
+    }
+
+    .author-info h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .author-title {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .author-bio {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      max-width: 620px;
+    }
+
+    .author-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .author-link-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .author-link-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Final CTA */
+    .final-cta {
+      padding: 80px 0 100px;
+      text-align: center;
+    }
+
+    .final-cta-card {
+      background: linear-gradient(180deg, rgba(14, 18, 27, 0.9), rgba(7, 9, 14, 0.95));
+      border: 1px solid var(--border-active);
+      border-radius: var(--radius-lg);
+      padding: 60px 30px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(255, 109, 0, 0.15);
+    }
+
+    .final-cta h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+    }
+
+    .final-cta p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 36px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    footer a:hover {
+      color: var(--accent-orange);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 860px) {
+      .nav-links {
+        display: none;
+      }
+      .tab-content.active {
+        grid-template-columns: 1fr;
+      }
+      .author-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+        justify-items: center;
+      }
+      .author-links {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cyber-bg"></div>
+
+  <!-- Smart Redirect Banner with Countdown -->
+  <aside class="redirect-banner" id="redirectBanner">
+    <span>🌐 <strong data-i18n="banner_title">Live Platform Available:</strong> <span data-i18n="banner_desc">Redirecting to zylo.stream in</span> <span class="redirect-counter" id="timerCount">12s</span></span>
+    <a href="https://zylo.stream" class="btn-banner-go" id="bannerGoBtn">
+      <span data-i18n="banner_btn_go">Open zylo.stream Now</span> ↗
+    </a>
+    <button class="btn-banner-stay" id="bannerStayBtn" data-i18n="banner_btn_stay">Stay on Presentation</button>
+  </aside>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="https://zylo.stream" class="brand">
+      <img src="assets/logo.png" alt="Zylo Logo">
+      <span class="brand-text">ZYLO</span>
+      <span class="brand-tag">v2.4 PROD</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#architecture" data-i18n="nav_arch">Architecture</a></li>
+      <li><a href="#features" data-i18n="nav_features">Capabilities</a></li>
+      <li><a href="#simulator" data-i18n="nav_demo">Interactive Demo</a></li>
+      <li><a href="#author" data-i18n="nav_author">Engineer</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Multilingual Switcher -->
+      <div class="lang-selector">
+        <button class="lang-select-btn" id="langSelectBtn">
+          <span>🌐</span> <span id="currentLangLabel">English (EN)</span> ▾
+        </button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button class="lang-opt active" data-lang="en">English (EN)</button>
+          <button class="lang-opt" data-lang="es">Español (ES)</button>
+          <button class="lang-opt" data-lang="pt">Português (PT)</button>
+          <button class="lang-opt" data-lang="ja">日本語 (JA)</button>
+        </div>
+      </div>
+
+      <a href="https://zylo.stream" class="btn-nav-primary">
+        <span data-i18n="nav_launch">Launch App</span> ↗
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="container">
+    <section class="hero">
+      <div class="hero-badge">
+        <span>⚡</span> <span data-i18n="hero_badge">CLOUD-NATIVE VIDEO STREAMING ARCHITECTURE</span>
+      </div>
+
+      <h1>
+        <span data-i18n="hero_h1_part1">Instant Clip Sharing with</span><br>
+        <span class="gradient-text" data-i18n="hero_h1_part2">Zero-Egress Direct Delivery</span> &amp; 
+        <span class="cyan-text" data-i18n="hero_h1_part3">In-Browser GPU Transcode</span>
+      </h1>
+
+      <p data-i18n="hero_subtitle">
+        Engineered by Walter (<a href="https://github.com/walterdotblend" style="color:var(--accent-orange);text-decoration:none;font-weight:700;">@walterdotblend</a>) to permanently conquer Discord's 10MB limit. Combines Cloudflare R2 object storage with client-side WebCodecs encoding for sub-second, cost-free video distribution.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="https://zylo.stream" class="btn-hero-main">
+          <span>🚀</span> <span data-i18n="hero_btn_main">Enter Platform (zylo.stream)</span>
+        </a>
+        <a href="#architecture" class="btn-hero-sec">
+          <span>⚙️</span> <span data-i18n="hero_btn_sec">Explore Tech Architecture</span>
+        </a>
+      </div>
+
+      <!-- Live Metric Badges -->
+      <div class="stat-bar">
+        <div class="stat-item">
+          <div class="stat-val accent">$0.00</div>
+          <div class="stat-lbl" data-i18n="stat_egress">Cloud Egress Fees (R2)</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val cyan">100MB+</div>
+          <div class="stat-lbl" data-i18n="stat_limit">10x Discord Clip Size</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val">100%</div>
+          <div class="stat-lbl" data-i18n="stat_gpu">Client WebCodecs Offload</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-val accent">&lt; 1.2s</div>
+          <div class="stat-lbl" data-i18n="stat_speed">Discord Embed Response</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="arch-section" id="architecture">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="arch_tag">Systems Engineering</span>
+        <h2 class="section-title" data-i18n="arch_title">End-to-End Scalable Pipeline</h2>
+        <p class="section-desc" data-i18n="arch_desc">A streamlined four-stage architecture engineered for high concurrency, zero server transcoding load, and instant Discord playback.</p>
+      </div>
+
+      <div class="pipeline-grid">
+        <div class="pipe-card">
+          <span class="pipe-step-num">STAGE 01</span>
+          <span class="pipe-icon">⚡</span>
+          <h3 data-i18n="pipe1_title">WebCodecs Transcoding</h3>
+          <p data-i18n="pipe1_desc">Videos are processed directly in the user's browser using MediaBunny and WebCodecs GPU pipelines. Compresses files locally without spending server CPU cycles.</p>
+          <div class="pipe-tag">⚙️ Client GPU / 60 FPS / H.264</div>
+        </div>
+
+        <div class="pipe-card">
+          <span class="pipe-step-num">STAGE 02</span>
+          <span class="pipe-icon">☁️</span>
+          <h3 data-i18n="pipe2_title">Direct Cloudflare R2 Upload</h3>
+          <p data-i18n="pipe2_desc">Pre-signed S3-compatible URLs pipe media directly to Cloudflare R2. Bypasses application server bottlenecks and completely eliminates outbound egress bandwidth costs.</p>
+          <div class="pipe-tag">🛡️ S3 API / Zero Egress Fees</div>
+        </div>
+
+        <div class="pipe-card">
+          <span class="pipe-step-num">STAGE 03</span>
+          <span class="pipe-icon">🤖</span>
+          <h3 data-i18n="pipe3_title">Discord Bot v14 &amp; /clip</h3>
+          <p data-i18n="pipe3_desc">Built on Discord.js v14 with slash commands, ephemeral administrative controls, and top.gg automated verification. Returns rich embed video cards instantaneously.</p>
+          <div class="pipe-tag">💬 Discord REST v10 / Webhooks</div>
+        </div>
+
+        <div class="pipe-card">
+          <span class="pipe-step-num">STAGE 04</span>
+          <span class="pipe-icon">🔒</span>
+          <h3 data-i18n="pipe4_title">Dual-Mode Security &amp; Stream</h3>
+          <p data-i18n="pipe4_desc">Separates public playback links from permanent HMAC-signed Creator management URLs. Enables instant one-click link revocation and tamper protection.</p>
+          <div class="pipe-tag">🔑 HMAC Signatures / Killswitch</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capabilities / Features Tabs -->
+    <section class="features-section" id="features">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="feat_tag">Core Platform Highlights</span>
+        <h2 class="section-title" data-i18n="feat_title">Designed for Creators &amp; Communities</h2>
+        <p class="section-desc" data-i18n="feat_desc">Explore the specific modular subsystems powering the production deployment of zylo.stream.</p>
+      </div>
+
+      <div class="feature-tabs-nav">
+        <button class="tab-btn active" data-tab="discord-tab">🤖 <span data-i18n="tab_btn_discord">Discord Native</span></button>
+        <button class="tab-btn" data-tab="encoder-tab">⚡ <span data-i18n="tab_btn_encoder">Hardware Encoder</span></button>
+        <button class="tab-btn" data-tab="privacy-tab">🛡️ <span data-i18n="tab_btn_privacy">Privacy Engine</span></button>
+        <button class="tab-btn" data-tab="admin-tab">📊 <span data-i18n="tab_btn_admin">Telemetry &amp; Admin</span></button>
+      </div>
+
+      <!-- Tab 1 -->
+      <div class="tab-content active" id="discord-tab">
+        <div class="tab-left">
+          <h3 data-i18n="tab1_title">Interactive Discord Slash Integration</h3>
+          <p data-i18n="tab1_desc">Gamers and creators can share high-definition highlights directly from Discord without paying for Nitro subscriptions. Zylo embeds auto-unfurl with inline HTML5 video players.</p>
+          <ul class="tab-bullets">
+            <li><span class="check">✓</span> <strong data-i18n="tab1_b1_title">`/clip` Slash Command:</strong> <span data-i18n="tab1_b1_desc">Converts raw media into lightweight streaming cards.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab1_b2_title">Embed Video Previews:</strong> <span data-i18n="tab1_b2_desc">Instant playback on desktop, iOS, and Android Discord clients.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab1_b3_title">Automated Top.gg Verification:</strong> <span data-i18n="tab1_b3_desc">Unlocks tier rewards and perks dynamically upon user votes.</span></li>
+          </ul>
+          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Test on zylo.stream</span> ↗</a>
+        </div>
+        <div class="tab-right">
+          <img src="assets/banner_discord.svg" alt="Discord Bot Preview" style="width: 100%; height: auto; border-radius: 8px;">
+        </div>
+      </div>
+
+      <!-- Tab 2 -->
+      <div class="tab-content" id="encoder-tab">
+        <div class="tab-left">
+          <h3 data-i18n="tab2_title">Client-Side Hardware Accelerated WebCodecs</h3>
+          <p data-i18n="tab2_desc">Traditional platforms waste hundreds of dollars per month on cloud server transcoding CPU instances. Zylo executes the entire transcode process directly on the user's local GPU before transmission.</p>
+          <ul class="tab-bullets">
+            <li><span class="check">✓</span> <strong data-i18n="tab2_b1_title">0 Server Transcoding Latency:</strong> <span data-i18n="tab2_b1_desc">Instant upload without waiting in queue.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab2_b2_title">MediaBunny WebAssembly:</strong> <span data-i18n="tab2_b2_desc">Fast H.264 video compression directly in memory.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab2_b3_title">Quality Presets:</strong> <span data-i18n="tab2_b3_desc">Lossless, Balanced, and Ultra-Speed compression modes.</span></li>
+          </ul>
+          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Test on zylo.stream</span> ↗</a>
+        </div>
+        <div class="tab-right">
+          <img src="assets/banner_features.svg" alt="Features Preview" style="width: 100%; height: auto; border-radius: 8px;">
+        </div>
+      </div>
+
+      <!-- Tab 3 -->
+      <div class="tab-content" id="privacy-tab">
+        <div class="tab-left">
+          <h3 data-i18n="tab3_title">Dual-Mode Privacy &amp; Revocation Killswitch</h3>
+          <p data-i18n="tab3_desc">Creators retain full sovereign control over their content. Every uploaded clip generates two distinct cryptographically secure URLs.</p>
+          <ul class="tab-bullets">
+            <li><span class="check">✓</span> <strong data-i18n="tab3_b1_title">Public Watch URL:</strong> <span data-i18n="tab3_b1_desc">Clean, shareable streaming link without management controls.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab3_b2_title">Creator Master Secret:</strong> <span data-i18n="tab3_b2_desc">Permanent access to delete or revoke links at any moment.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab3_b3_title">Instant Revoke:</strong> <span data-i18n="tab3_b3_desc">Deactivates public viewing instantly without deleting audit records.</span></li>
+          </ul>
+          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Test on zylo.stream</span> ↗</a>
+        </div>
+        <div class="tab-right">
+          <img src="assets/privacy_banner.png" alt="Privacy Banner" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+        </div>
+      </div>
+
+      <!-- Tab 4 -->
+      <div class="tab-content" id="admin-tab">
+        <div class="tab-left">
+          <h3 data-i18n="tab4_title">Real-Time Moderation &amp; Telemetry Console</h3>
+          <p data-i18n="tab4_desc">A built-in administrative suite protected by HMAC session cookies. Provides platform operators with live visibility into bandwidth consumption, active links, and security alerts.</p>
+          <ul class="tab-bullets">
+            <li><span class="check">✓</span> <strong data-i18n="tab4_b1_title">Live Storage Tracker:</strong> <span data-i18n="tab4_b1_desc">Monitors exact Megabytes stored in Cloudflare R2.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab4_b2_title">Instant Search &amp; Filter:</strong> <span data-i18n="tab4_b2_desc">Look up clips by unique ID, date, or status.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab4_b3_title">Security Audit Log:</strong> <span data-i18n="tab4_b3_desc">Tracks IP hashes, views, and automated abuse reports.</span></li>
+          </ul>
+          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Test on zylo.stream</span> ↗</a>
+        </div>
+        <div class="tab-right">
+          <img src="assets/banner_mobile_promo.svg" alt="Admin Preview" style="width: 100%; height: auto; border-radius: 8px;">
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Simulator Demo -->
+    <section class="features-section" id="simulator">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="sim_tag">Interactive Live Simulator</span>
+        <h2 class="section-title" data-i18n="sim_title">Experience the Zylo Pipeline</h2>
+        <p class="section-desc" data-i18n="sim_desc">Click the trigger below to simulate how Zylo compresses, uploads, and generates an instant Discord embed in real time.</p>
+      </div>
+
+      <div style="max-width: 780px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 32px; backdrop-filter: blur(16px);">
+        <div class="sim-box">
+          <div class="sim-header">
+            <div class="sim-dots"><span></span><span></span><span></span></div>
+            <span>zylo_webcodecs_engine.js — GPU Pipeline</span>
+            <span id="simStatusText" style="color:var(--accent-cyan);">READY</span>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; color:var(--text-muted); font-size:0.8rem;">
+            <span>Simulated Clip: <strong>gameplay_clutch_4k.mp4 (84.2 MB)</strong></span>
+            <span id="simPctText">0%</span>
+          </div>
+
+          <div class="sim-progress-track">
+            <div class="sim-progress-fill" id="simProgressBar"></div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; flex-wrap:wrap; gap:12px;">
+            <button class="sim-btn-trigger" id="simStartBtn">⚡ <span data-i18n="sim_btn_run">Run Simulated Transcode &amp; Upload</span></button>
+            <span style="font-size:0.78rem; color:var(--text-dim);" id="simElapsedText">Latency: 0.00s</span>
+          </div>
+
+          <!-- Result Preview -->
+          <div class="sim-embed-preview" id="simEmbedPreview">
+            <div style="font-size:0.75rem; text-transform:uppercase; color:#949ba4; font-weight:700; margin-bottom:4px;">Discord Bot Embed Preview • zylo.stream</div>
+            <div style="font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:4px;">🎥 Gameplay Clutch Highlight [1080p 60FPS]</div>
+            <div style="font-size:0.85rem; color:#b5bac1; margin-bottom:10px;">Streamed via Cloudflare R2 • Transcoded locally in 1.1s (Compressed 84MB ➔ 7.8MB)</div>
+            <div style="background:#1e1f22; border-radius:4px; padding:10px; font-family:var(--font-mono); font-size:0.82rem; color:var(--accent-cyan); display:flex; justify-content:space-between; align-items:center;">
+              <span>https://zylo.stream/v/clutch-x8f2a</span>
+              <a href="https://zylo.stream" style="color:var(--accent-orange); text-decoration:none; font-weight:700;">Open Live ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Author & Portfolio Section -->
+    <section class="author-section" id="author">
+      <div class="author-card">
+        <div class="author-avatar">👨‍💻</div>
+        <div class="author-info">
+          <span class="author-title" data-i18n="author_role">SYSTEMS ARCHITECT &amp; LEAD DEVELOPER</span>
+          <h3>Walter (<a href="https://github.com/walterdotblend" style="color:inherit;text-decoration:none;">@walterdotblend</a>)</h3>
+          <p class="author-bio" data-i18n="author_bio">
+            Specializing in cloud-native video streaming architectures, browser WebCodecs client compute, Discord bot ecosystems, and distributed zero-egress object storage solutions. Creator and architect of Zylo (zylo.stream).
+          </p>
+        </div>
+        <div class="author-links">
+          <a href="https://github.com/walterdotblend" target="_blank" rel="noopener" class="author-link-btn">
+            <span>🐙</span> GitHub Profile
+          </a>
+          <a href="https://zylo.stream" class="author-link-btn" style="border-color:var(--accent-orange); color:var(--accent-orange);">
+            <span>🚀</span> Launch zylo.stream
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final Call to Action -->
+    <section class="final-cta">
+      <div class="final-cta-card">
+        <h2 data-i18n="cta_title">Ready to Experience Zero-Egress Video?</h2>
+        <p data-i18n="cta_desc">Join gamers and creators using Zylo to share uncompressed, high-definition clips effortlessly across Discord and the web.</p>
+        <a href="https://zylo.stream" class="btn-hero-main">
+          <span>🚀</span> <span data-i18n="cta_btn">Go Directly to zylo.stream</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p style="margin-bottom:8px;">
+        <strong>Zylo Platform</strong> • Engineered by <a href="https://github.com/walterdotblend" target="_blank" rel="noopener">Walter (@walterdotblend)</a>
+      </p>
+      <p style="font-size:0.78rem;">
+        Production instance live at <a href="https://zylo.stream">zylo.stream</a> • Powered by Cloudflare R2 &amp; WebCodecs
+      </p>
+    </div>
+  </footer>
+
+  <!-- Internationalization (i18n) & Interactive Logic -->
+  <script>
+    // 1. Multilingual Dictionary (Default: English)
+    const translations = {
+      en: {
+        banner_title: "Live Platform Available:",
+        banner_desc: "Redirecting to zylo.stream in",
+        banner_btn_go: "Open zylo.stream Now",
+        banner_btn_stay: "Stay on Presentation",
+        nav_arch: "Architecture",
+        nav_features: "Capabilities",
+        nav_demo: "Interactive Demo",
+        nav_author: "Engineer",
+        nav_launch: "Launch App",
+        hero_badge: "CLOUD-NATIVE VIDEO STREAMING ARCHITECTURE",
+        hero_h1_part1: "Instant Clip Sharing with",
+        hero_h1_part2: "Zero-Egress Direct Delivery",
+        hero_h1_part3: "In-Browser GPU Transcode",
+        hero_subtitle: "Engineered by Walter (@walterdotblend) to permanently conquer Discord's 10MB limit. Combines Cloudflare R2 object storage with client-side WebCodecs encoding for sub-second, cost-free video distribution.",
+        hero_btn_main: "Enter Platform (zylo.stream)",
+        hero_btn_sec: "Explore Tech Architecture",
+        stat_egress: "Cloud Egress Fees (R2)",
+        stat_limit: "10x Discord Clip Size",
+        stat_gpu: "Client WebCodecs Offload",
+        stat_speed: "Discord Embed Response",
+        arch_tag: "Systems Engineering",
+        arch_title: "End-to-End Scalable Pipeline",
+        arch_desc: "A streamlined four-stage architecture engineered for high concurrency, zero server transcoding load, and instant Discord playback.",
+        pipe1_title: "WebCodecs Transcoding",
+        pipe1_desc: "Videos are processed directly in the user's browser using MediaBunny and WebCodecs GPU pipelines. Compresses files locally without spending server CPU cycles.",
+        pipe2_title: "Direct Cloudflare R2 Upload",
+        pipe2_desc: "Pre-signed S3-compatible URLs pipe media directly to Cloudflare R2. Bypasses application server bottlenecks and completely eliminates outbound egress bandwidth costs.",
+        pipe3_title: "Discord Bot v14 & /clip",
+        pipe3_desc: "Built on Discord.js v14 with slash commands, ephemeral administrative controls, and top.gg automated verification. Returns rich embed video cards instantaneously.",
+        pipe4_title: "Dual-Mode Security & Stream",
+        pipe4_desc: "Separates public playback links from permanent HMAC-signed Creator management URLs. Enables instant one-click link revocation and tamper protection.",
+        feat_tag: "Core Platform Highlights",
+        feat_title: "Designed for Creators & Communities",
+        feat_desc: "Explore the specific modular subsystems powering the production deployment of zylo.stream.",
+        tab_btn_discord: "Discord Native",
+        tab_btn_encoder: "Hardware Encoder",
+        tab_btn_privacy: "Privacy Engine",
+        tab_btn_admin: "Telemetry & Admin",
+        tab1_title: "Interactive Discord Slash Integration",
+        tab1_desc: "Gamers and creators can share high-definition highlights directly from Discord without paying for Nitro subscriptions. Zylo embeds auto-unfurl with inline HTML5 video players.",
+        tab1_b1_title: "/clip Slash Command:",
+        tab1_b1_desc: "Converts raw media into lightweight streaming cards.",
+        tab1_b2_title: "Embed Video Previews:",
+        tab1_b2_desc: "Instant playback on desktop, iOS, and Android Discord clients.",
+        tab1_b3_title: "Automated Top.gg Verification:",
+        tab1_b3_desc: "Unlocks tier rewards and perks dynamically upon user votes.",
+        tab2_title: "Client-Side Hardware Accelerated WebCodecs",
+        tab2_desc: "Traditional platforms waste hundreds of dollars per month on cloud server transcoding CPU instances. Zylo executes the entire transcode process directly on the user's local GPU before transmission.",
+        tab2_b1_title: "0 Server Transcoding Latency:",
+        tab2_b1_desc: "Instant upload without waiting in queue.",
+        tab2_b2_title: "MediaBunny WebAssembly:",
+        tab2_b2_desc: "Fast H.264 video compression directly in memory.",
+        tab2_b3_title: "Quality Presets:",
+        tab2_b3_desc: "Lossless, Balanced, and Ultra-Speed compression modes.",
+        tab3_title: "Dual-Mode Privacy & Revocation Killswitch",
+        tab3_desc: "Creators retain full sovereign control over their content. Every uploaded clip generates two distinct cryptographically secure URLs.",
+        tab3_b1_title: "Public Watch URL:",
+        tab3_b1_desc: "Clean, shareable streaming link without management controls.",
+        tab3_b2_title: "Creator Master Secret:",
+        tab3_b2_desc: "Permanent access to delete or revoke links at any moment.",
+        tab3_b3_title: "Instant Revoke:",
+        tab3_b3_desc: "Deactivates public viewing instantly without deleting audit records.",
+        tab4_title: "Real-Time Moderation & Telemetry Console",
+        tab4_desc: "A built-in administrative suite protected by HMAC session cookies. Provides platform operators with live visibility into bandwidth consumption, active links, and security alerts.",
+        tab4_b1_title: "Live Storage Tracker:",
+        tab4_b1_desc: "Monitors exact Megabytes stored in Cloudflare R2.",
+        tab4_b2_title: "Instant Search & Filter:",
+        tab4_b2_desc: "Look up clips by unique ID, date, or status.",
+        tab4_b3_title: "Security Audit Log:",
+        tab4_b3_desc: "Tracks IP hashes, views, and automated abuse reports.",
+        tab_cta: "Test on zylo.stream",
+        sim_tag: "Interactive Live Simulator",
+        sim_title: "Experience the Zylo Pipeline",
+        sim_desc: "Click the trigger below to simulate how Zylo compresses, uploads, and generates an instant Discord embed in real time.",
+        sim_btn_run: "Run Simulated Transcode & Upload",
+        author_role: "SYSTEMS ARCHITECT & LEAD DEVELOPER",
+        author_bio: "Specializing in cloud-native video streaming architectures, browser WebCodecs client compute, Discord bot ecosystems, and distributed zero-egress object storage solutions. Creator and architect of Zylo (zylo.stream).",
+        cta_title: "Ready to Experience Zero-Egress Video?",
+        cta_desc: "Join gamers and creators using Zylo to share uncompressed, high-definition clips effortlessly across Discord and the web.",
+        cta_btn: "Go Directly to zylo.stream"
+      },
+      es: {
+        banner_title: "Plataforma en Vivo Disponible:",
+        banner_desc: "Redirigiendo a zylo.stream en",
+        banner_btn_go: "Abrir zylo.stream Ahora",
+        banner_btn_stay: "Quedarse en Presentación",
+        nav_arch: "Arquitectura",
+        nav_features: "Capacidades",
+        nav_demo: "Demo Interactiva",
+        nav_author: "Ingeniero",
+        nav_launch: "Lanzar App",
+        hero_badge: "ARQUITECTURA DE STREAMING CLOUD-NATIVE",
+        hero_h1_part1: "Comparte Clips al Instante con",
+        hero_h1_part2: "Entrega Directa Sin Costos de Salida",
+        hero_h1_part3: "Transcodificación GPU en Navegador",
+        hero_subtitle: "Diseñado por Walter (@walterdotblend) para superar de forma definitiva el límite de 10MB de Discord. Combina almacenamiento Cloudflare R2 con codificación WebCodecs del lado del cliente para una distribución de video inmediata y sin costes.",
+        hero_btn_main: "Entrar a la Plataforma (zylo.stream)",
+        hero_btn_sec: "Explorar Arquitectura Técnica",
+        stat_egress: "Costes de Egress en Cloud (R2)",
+        stat_limit: "10x Límite de Clips de Discord",
+        stat_gpu: "Descarga 100% GPU del Cliente",
+        stat_speed: "Respuesta de Embeds Discord",
+        arch_tag: "Ingeniería de Sistemas",
+        arch_title: "Pipeline Escalable de Extremo a Extremo",
+        arch_desc: "Una arquitectura en 4 etapas creada para alta concurrencia, cero carga de transcodificación en el servidor y reproducción inmediata en Discord.",
+        pipe1_title: "Transcodificación WebCodecs",
+        pipe1_desc: "Los videos se procesan directamente en el navegador del usuario con MediaBunny y pipelines GPU WebCodecs. Comprime localmente sin consumir CPU del servidor.",
+        pipe2_title: "Subida Directa a Cloudflare R2",
+        pipe2_desc: "URLs prefirmadas compatibles con S3 envían los medios directo a Cloudflare R2. Elimina cuellos de botella y costes de ancho de banda de salida.",
+        pipe3_title: "Bot de Discord v14 y /clip",
+        pipe3_desc: "Construido en Discord.js v14 con comandos de barra, controles administrativos y verificación automática de Top.gg. Genera tarjetas de video al instante.",
+        pipe4_title: "Seguridad Dual y Streaming",
+        pipe4_desc: "Separa los enlaces públicos de reproducción de los enlaces permanentes de Creador con HMAC. Permite revocación inmediata con un solo clic.",
+        feat_tag: "Puntos Clave de la Plataforma",
+        feat_title: "Diseñado para Creadores y Comunidades",
+        feat_desc: "Explora los subsistemas modulares que impulsan el despliegue en producción de zylo.stream.",
+        tab_btn_discord: "Nativo en Discord",
+        tab_btn_encoder: "Codificador Hardware",
+        tab_btn_privacy: "Motor de Privacidad",
+        tab_btn_admin: "Telemetría y Admin",
+        tab1_title: "Integración Nativa con Comandos de Discord",
+        tab1_desc: "Gamers y creadores pueden compartir momentos destacados en alta definición directamente en Discord sin pagar Nitro. Los embeds se reproducen automáticamente.",
+        tab1_b1_title: "Comando Slash /clip:",
+        tab1_b1_desc: "Convierte videos pesados en tarjetas de streaming ligeras.",
+        tab1_b2_title: "Vistas Previas con Reproductor:",
+        tab1_b2_desc: "Reproducción directa en clientes de escritorio, iOS y Android.",
+        tab1_b3_title: "Verificación Automática Top.gg:",
+        tab1_b3_desc: "Desbloquea recompensas y niveles automáticamente con votos.",
+        tab2_title: "WebCodecs Acelerado por Hardware en el Cliente",
+        tab2_desc: "Las plataformas tradicionales gastan cientos de dólares al mes en servidores de transcodificación. Zylo procesa todo en la GPU local del usuario antes de la subida.",
+        tab2_b1_title: "0 Latencia de Cola en Servidor:",
+        tab2_b1_desc: "Subida inmediata sin tiempos de espera.",
+        tab2_b2_title: "MediaBunny WebAssembly:",
+        tab2_b2_desc: "Compresión H.264 ultra rápida directamente en memoria.",
+        tab2_b3_title: "Ajustes de Calidad:",
+        tab2_b3_desc: "Modos Lossless, Equilibrado y Ultra-Rápido.",
+        tab3_title: "Privacidad Dual y Botón de Revocación Inmediata",
+        tab3_desc: "Los creadores mantienen control total sobre su contenido. Cada clip subido genera dos URLs criptográficamente seguras.",
+        tab3_b1_title: "Enlace Público de Reproducción:",
+        tab3_b1_desc: "Enlace limpio para compartir sin opciones de administración.",
+        tab3_b2_title: "Clave Maestra del Creador:",
+        tab3_b2_desc: "Acceso permanente para borrar o revocar el enlace cuando quieras.",
+        tab3_b3_title: "Revocación Instantánea:",
+        tab3_b3_desc: "Desactiva la visualización pública en el acto sin borrar el registro de auditoría.",
+        tab4_title: "Consola de Moderación y Telemetría en Tiempo Real",
+        tab4_desc: "Panel administrativo protegido con cookies de sesión HMAC. Proporciona visibilidad en vivo del consumo de almacenamiento, enlaces activos y alertas.",
+        tab4_b1_title: "Monitor de Almacenamiento:",
+        tab4_b1_desc: "Rastrea los megabytes exactos alojados en Cloudflare R2.",
+        tab4_b2_title: "Búsqueda y Filtro Instantáneo:",
+        tab4_b2_desc: "Localiza clips por ID único, fecha o estado.",
+        tab4_b3_title: "Registro de Auditoría:",
+        tab4_b3_desc: "Monitorea hashes de IP, reproducciones y reportes.",
+        tab_cta: "Probar en zylo.stream",
+        sim_tag: "Simulador Interactivo en Vivo",
+        sim_title: "Experimenta el Pipeline de Zylo",
+        sim_desc: "Haz clic abajo para simular cómo Zylo comprime, sube y genera un embed de Discord al instante.",
+        sim_btn_run: "Ejecutar Transcodificación y Subida Simulada",
+        author_role: "ARQUITECTO DE SISTEMAS Y DESARROLLADOR PRINCIPAL",
+        author_bio: "Especializado en arquitecturas cloud-native de video, computación del lado del cliente con WebCodecs, bots de Discord y almacenamiento distribuido sin costos de salida. Creador y arquitecto de Zylo (zylo.stream).",
+        cta_title: "¿Listo para Experimentar Video Sin Límites?",
+        cta_desc: "Únete a los gamers y creadores que usan Zylo para compartir clips en alta definición en Discord y en la web.",
+        cta_btn: "Ir Directamente a zylo.stream"
+      },
+      pt: {
+        banner_title: "Plataforma Ao Vivo Disponível:",
+        banner_desc: "Redirecionando para zylo.stream em",
+        banner_btn_go: "Abrir zylo.stream Agora",
+        banner_btn_stay: "Ficar na Apresentação",
+        nav_arch: "Arquitetura",
+        nav_features: "Recursos",
+        nav_demo: "Demo Interativa",
+        nav_author: "Engenheiro",
+        nav_launch: "Abrir App",
+        hero_badge: "ARQUITETURA DE STREAMING CLOUD-NATIVE",
+        hero_h1_part1: "Compartilhamento Instantâneo com",
+        hero_h1_part2: "Entrega Direta Sem Taxas de Egress",
+        hero_h1_part3: "Transcodificação GPU no Navegador",
+        hero_subtitle: "Desenvolvido por Walter (@walterdotblend) para superar o limite de 10MB do Discord. Combina Cloudflare R2 com WebCodecs no cliente para distribuição rápida e sem custos.",
+        hero_btn_main: "Entrar na Plataforma (zylo.stream)",
+        hero_btn_sec: "Explorar Arquitetura Técnica",
+        stat_egress: "Taxas de Egress em Nuvem (R2)",
+        stat_limit: "10x Limite de Clips do Discord",
+        stat_gpu: "Descarga 100% GPU no Cliente",
+        stat_speed: "Resposta de Embeds Discord",
+        arch_tag: "Engenharia de Sistemas",
+        arch_title: "Pipeline Escalável de Ponta a Ponta",
+        arch_desc: "Uma arquitetura em 4 etapas criada para alta concorrência e reprodução imediata no Discord.",
+        pipe1_title: "Transcodificação WebCodecs",
+        pipe1_desc: "Vídeos são processados no navegador com GPU local, sem gastar CPU do servidor.",
+        pipe2_title: "Envio Direto para Cloudflare R2",
+        pipe2_desc: "URLs pré-assinadas enviam mídias diretamente ao R2 sem custo de tráfego de saída.",
+        pipe3_title: "Bot Discord v14 e /clip",
+        pipe3_desc: "Construído em Discord.js com cartões de vídeo instantâneos.",
+        pipe4_title: "Segurança Dual e Streaming",
+        pipe4_desc: "Separa links públicos de links de criadores assinados com HMAC.",
+        feat_tag: "Destaques da Plataforma",
+        feat_title: "Projetado para Criadores e Comunidades",
+        feat_desc: "Conheça os subsistemas que alimentam o zylo.stream.",
+        tab_btn_discord: "Nativo no Discord",
+        tab_btn_encoder: "Codificador Hardware",
+        tab_btn_privacy: "Motor de Privacidade",
+        tab_btn_admin: "Telemetria e Admin",
+        tab1_title: "Comandos Nativos do Discord",
+        tab1_desc: "Compartilhe clipes em alta resolução diretamente no Discord.",
+        tab1_b1_title: "Comando /clip:",
+        tab1_b1_desc: "Gera cartões de vídeo leves e rápidos.",
+        tab1_b2_title: "Pré-visualização Incorporada:",
+        tab1_b2_desc: "Reprodução direta no Discord.",
+        tab1_b3_title: "Verificação Top.gg:",
+        tab1_b3_desc: "Desbloqueia benefícios automaticamente.",
+        tab2_title: "WebCodecs Acelerado por Hardware",
+        tab2_desc: "Compressão H.264 rápida feita diretamente na máquina do usuário.",
+        tab2_b1_title: "Zero Latência de Fila:",
+        tab2_b1_desc: "Upload imediato.",
+        tab2_b2_title: "MediaBunny WebAssembly:",
+        tab2_b2_desc: "Compressão de vídeo local rápida.",
+        tab2_b3_title: "Predefinições de Qualidade:",
+        tab2_b3_desc: "Opções para máxima velocidade ou qualidade.",
+        tab3_title: "Privacidade e Revogação Imediata",
+        tab3_desc: "Controle total sobre o conteúdo com URLs criptografadas.",
+        tab3_b1_title: "Link Público:",
+        tab3_b1_desc: "Apenas para reprodução segura.",
+        tab3_b2_title: "Chave do Criador:",
+        tab3_b2_desc: "Acesso permanente para apagar ou pausar.",
+        tab3_b3_title: "Revogação Instantânea:",
+        tab3_b3_desc: "Bloqueia o link imediatamente.",
+        tab4_title: "Console de Moderação em Tempo Real",
+        tab4_desc: "Painel protegido para acompanhar armazenamento e visualizações.",
+        tab4_b1_title: "Medidor de Armazenamento:",
+        tab4_b1_desc: "Monitora o uso no Cloudflare R2.",
+        tab4_b2_title: "Busca Rápida:",
+        tab4_b2_desc: "Encontre qualquer clipe em segundos.",
+        tab4_b3_title: "Auditoria:",
+        tab4_b3_desc: "Registros de segurança e acessos.",
+        tab_cta: "Testar no zylo.stream",
+        sim_tag: "Simulador Interativo",
+        sim_title: "Experimente o Pipeline",
+        sim_desc: "Clique abaixo para simular a compressão e envio de um clipe.",
+        sim_btn_run: "Executar Simulação de Transcode e Upload",
+        author_role: "ARQUITETO DE SISTEMAS & LEAD DEVELOPER",
+        author_bio: "Especialista em arquiteturas de vídeo em nuvem, WebCodecs no navegador e bots Discord. Criador do Zylo (zylo.stream).",
+        cta_title: "Pronto para Vídeos Sem Limites?",
+        cta_desc: "Junte-se aos criadores que utilizam o Zylo para compartilhar clipes em alta definição.",
+        cta_btn: "Ir Diretamente para zylo.stream"
+      },
+      ja: {
+        banner_title: "ライブプラットフォーム提供中:",
+        banner_desc: "zylo.stream への自動リダイレクトまで",
+        banner_btn_go: "今すぐ zylo.stream を開く",
+        banner_btn_stay: "紹介ページに留まる",
+        nav_arch: "アーキテクチャ",
+        nav_features: "機能と特徴",
+        nav_demo: "体験シミュレータ",
+        nav_author: "エンジニア",
+        nav_launch: "アプリを起動",
+        hero_badge: "クラウドネイティブ・動画ストリーミング設計",
+        hero_h1_part1: "Discordの制限を突破する",
+        hero_h1_part2: "エグレス転送無料・高速配信",
+        hero_h1_part3: "ブラウザ内GPU動画トランスコード",
+        hero_subtitle: "Walter (@walterdotblend) により設計。Discordの10MB制限を解消するため、Cloudflare R2とクライアント側WebCodecsを連携させ、極限の低遅延・ゼロコストで動画を共有できます。",
+        hero_btn_main: "zylo.stream を利用する",
+        hero_btn_sec: "技術設計を見る",
+        stat_egress: "クラウド転送料金 (R2)",
+        stat_limit: "Discord制限の10倍以上の容量",
+        stat_gpu: "クライアントGPUオフロード",
+        stat_speed: "Discord埋め込み応答速度",
+        arch_tag: "システム設計",
+        arch_title: "高スケーラブル・パイプライン",
+        arch_desc: "サーバー負荷ゼロ・高速再生を実現する4段階のパイプラインアーキテクチャ。",
+        pipe1_title: "WebCodecs トランスコード",
+        pipe1_desc: "ユーザーのブラウザ内GPUで直接H.264圧縮を行い、サーバーのCPU負荷をゼロにします。",
+        pipe2_title: "Cloudflare R2 直通アップロード",
+        pipe2_desc: "署名付きURLを用いてR2へ直通転送。下り転送コストを完全にゼロ化します。",
+        pipe3_title: "Discord Bot v14 & /clip",
+        pipe3_desc: "スラッシュコマンド対応。モバイル・PCどちらのDiscordでもインライン再生されます。",
+        pipe4_title: "デュアルモード・セキュリティ",
+        pipe4_desc: "公開URLとHMAC署名付きクリエイター管理URLを分離し、即時取り消しに対応。",
+        feat_tag: "コアプラットフォーム特徴",
+        feat_title: "クリエイターとコミュニティのために",
+        feat_desc: "zylo.stream の本番環境を支えるモジュール構造をご覧ください。",
+        tab_btn_discord: "Discord連携",
+        tab_btn_encoder: "GPUエンコーダー",
+        tab_btn_privacy: "プライバシー機構",
+        tab_btn_admin: "監査と管理",
+        tab1_title: "Discord スラッシュコマンド統合",
+        tab1_desc: "Nitro不要で高画質ハイライト動画をチャンネルに共有可能。",
+        tab1_b1_title: "/clip コマンド:",
+        tab1_b1_desc: "ワンタップで動画リンクを生成。",
+        tab1_b2_title: "インライン埋め込み再生:",
+        tab1_b2_desc: "アプリ内で直接ストリーミング。",
+        tab1_b3_title: "Top.gg 連携:",
+        tab1_b3_desc: "コミュニティ投票による機能解放。",
+        tab2_title: "ハードウェア加速 WebCodecs",
+        tab2_desc: "ローカルGPUを活用して超高速に動画を事前圧縮。",
+        tab2_b1_title: "待機時間ゼロ:",
+        tab2_b1_desc: "エンコード待ちキューなし。",
+        tab2_b2_title: "MediaBunny WebAssembly:",
+        tab2_b2_desc: "メモリ上で直接H.264処理。",
+        tab2_b3_title: "品質プリセット:",
+        tab2_b3_desc: "用途に応じた最適圧縮モード。",
+        tab3_title: "公開リンクと即時取り消し",
+        tab3_desc: "クリエイターがいつでも動画を非公開化可能。",
+        tab3_b1_title: "公開視聴リンク:",
+        tab3_b1_desc: "安全に共有できる専用リンク。",
+        tab3_b2_title: "管理者キー:",
+        tab3_b2_desc: "動画を削除・停止できるマスターキー。",
+        tab3_b3_title: "ワンクリック停止:",
+        tab3_b3_desc: "瞬時に公開を停止。",
+        tab4_title: "リアルタイム管理コンソール",
+        tab4_desc: "ストレージ容量や通信量を一目で監視可能。",
+        tab4_b1_title: "容量トラッカー:",
+        tab4_b1_desc: "Cloudflare R2の保存量をリアルタイム表示。",
+        tab4_b2_title: "即時検索:",
+        tab4_b2_desc: "IDやステータスで即時絞り込み。",
+        tab4_b3_title: "セキュリティログ:",
+        tab4_b3_desc: "アクセス記録と通報対応。",
+        tab_cta: "zylo.stream で体験",
+        sim_tag: "ライブ体験シミュレータ",
+        sim_title: "パイプラインを疑似体験",
+        sim_desc: "下のボタンをクリックして、ローカル圧縮からアップロードまでの流れを試せます。",
+        sim_btn_run: "シミュレーション開始",
+        author_role: "システムアーキテクト / リードエンジニア",
+        author_bio: "クラウドネイティブ動画配信、ブラウザWebCodecs、Discord Botエコシステム、ゼロエグレス設計のスペシャリスト。Zylo (zylo.stream) の設計開発者。",
+        cta_title: "高画質な動画共有をはじめましょう",
+        cta_desc: "zylo.stream で快適なクリップ共有を今すぐ体感してください。",
+        cta_btn: "zylo.stream へ移動する"
+      }
+    };
+
+    // 2. Language Switcher Engine
+    let currentLang = localStorage.getItem('zylo_lang') || 'en';
+
+    function setLanguage(lang) {
+      if (!translations[lang]) lang = 'en';
+      currentLang = lang;
+      localStorage.setItem('zylo_lang', lang);
+      document.documentElement.lang = lang;
+
+      const dict = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+
+      // Update current label
+      const labels = {
+        en: 'English (EN)',
+        es: 'Español (ES)',
+        pt: 'Português (PT)',
+        ja: '日本語 (JA)'
+      };
+      document.getElementById('currentLangLabel').textContent = labels[lang] || 'English (EN)';
+
+      // Update active option
+      document.querySelectorAll('.lang-opt').forEach(opt => {
+        opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+      });
+    }
+
+    // Toggle Dropdown
+    const langBtn = document.getElementById('langSelectBtn');
+    const langDropdown = document.getElementById('langDropdown');
+
+    langBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', () => {
+      langDropdown.classList.remove('show');
+    });
+
+    document.querySelectorAll('.lang-opt').forEach(opt => {
+      opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const selected = opt.getAttribute('data-lang');
+        setLanguage(selected);
+        langDropdown.classList.remove('show');
+      });
+    });
+
+    // 3. Smart Redirect Timer (12 seconds countdown)
+    let countdownSec = 12;
+    let timerPaused = false;
+    const timerCountEl = document.getElementById('timerCount');
+    const bannerStayBtn = document.getElementById('bannerStayBtn');
+    const redirectBanner = document.getElementById('redirectBanner');
+
+    const countdownInterval = setInterval(() => {
+      if (timerPaused) return;
+      countdownSec--;
+      if (countdownSec <= 0) {
+        clearInterval(countdownInterval);
+        timerCountEl.textContent = '0s';
+        // Auto-redirect to live platform
+        window.location.href = 'https://zylo.stream';
+      } else {
+        timerCountEl.textContent = `${countdownSec}s`;
+      }
+    }, 1000);
+
+    bannerStayBtn.addEventListener('click', () => {
+      timerPaused = true;
+      clearInterval(countdownInterval);
+      redirectBanner.classList.add('hidden');
+    });
+
+    // 4. Feature Tabs Logic
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
+
+        btn.classList.add('active');
+        const targetId = btn.getAttribute('data-tab');
+        const targetContent = document.getElementById(targetId);
+        if (targetContent) targetContent.classList.add('active');
+      });
+    });
+
+    // 5. Interactive Pipeline Simulator
+    const simStartBtn = document.getElementById('simStartBtn');
+    const simProgressBar = document.getElementById('simProgressBar');
+    const simPctText = document.getElementById('simPctText');
+    const simStatusText = document.getElementById('simStatusText');
+    const simElapsedText = document.getElementById('simElapsedText');
+    const simEmbedPreview = document.getElementById('simEmbedPreview');
+
+    let isSimulating = false;
+
+    simStartBtn.addEventListener('click', () => {
+      if (isSimulating) return;
+      isSimulating = true;
+      simStartBtn.disabled = true;
+      simStartBtn.style.opacity = '0.5';
+      simEmbedPreview.classList.remove('show');
+
+      simProgressBar.style.width = '0%';
+      simPctText.textContent = '0%';
+      simStatusText.textContent = 'TRANSCODING (GPU)';
+      simStatusText.style.color = '#ff6d00';
+
+      const startTime = performance.now();
+      let step = 0;
+
+      const simInterval = setInterval(() => {
+        step += 4;
+        if (step <= 65) {
+          simStatusText.textContent = `WEBM/MP4 TRANSCODE [${step}%]`;
+        } else if (step <= 90) {
+          simStatusText.textContent = `UPLOADING TO R2 [${step}%]`;
+          simStatusText.style.color = '#00e5ff';
+        } else {
+          simStatusText.textContent = `FINALIZING DISCORD EMBED [${Math.min(100, step)}%]`;
+        }
+
+        const curWidth = Math.min(100, step);
+        simProgressBar.style.width = curWidth + '%';
+        simPctText.textContent = curWidth + '%';
+
+        const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+        simElapsedText.textContent = `Latency: ${elapsed}s`;
+
+        if (step >= 100) {
+          clearInterval(simInterval);
+          simStatusText.textContent = 'COMPLETE (READY ON ZYLO.STREAM)';
+          simStatusText.style.color = '#10b981';
+          simEmbedPreview.classList.add('show');
+          isSimulating = false;
+          simStartBtn.disabled = false;
+          simStartBtn.style.opacity = '1';
+        }
+      }, 45);
+    });
+
+    // Initialize Default Language
+    setLanguage(currentLang);
+  </script>
+</body>
+</html>
