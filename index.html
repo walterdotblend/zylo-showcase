@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zylo — High-Performance Cloud Video & Discord Platform</title>
-  <meta name="description" content="Next-Generation Video Sharing & Discord Clip Infrastructure engineered with Cloudflare R2 and client-side WebCodecs. Developed by Walter (@walterdotblend).">
+  <meta name="description" content="Next-Generation Cloud Video & Discord Clip Infrastructure. Zero egress streaming with Cloudflare R2 and browser-native WebCodecs GPU transcoding.">
   
   <!-- OpenGraph / Social Meta -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://zylo.stream">
   <meta property="og:title" content="Zylo — Zero-Egress Video Streaming & Discord Infrastructure">
   <meta property="og:description" content="Shatter Discord's 10MB limit with instant R2 direct streaming and client-side WebCodecs transcoding.">
-  <meta property="og:image" content="assets/privacy_banner.png">
+  <meta property="og:image" content="assets/logo.png">
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -32,6 +32,7 @@
       --accent-cyan: #00e5ff;
       --accent-cyan-glow: rgba(0, 229, 255, 0.25);
       --accent-purple: #8b5cf6;
+      --accent-green: #10b981;
       --text-main: #f1f5f9;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
@@ -57,8 +58,6 @@
       line-height: 1.6;
       overflow-x: hidden;
       position: relative;
-      selection-background-color: var(--accent-orange);
-      selection-color: #000;
     }
 
     /* Ambient Cyber Background Grid & Orbs */
@@ -76,78 +75,20 @@
       background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
     }
 
-    /* Top Redirection Banner */
-    .redirect-banner {
-      background: linear-gradient(90deg, rgba(255, 109, 0, 0.2), rgba(0, 229, 255, 0.15));
-      border-bottom: 1px solid var(--border-active);
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      font-size: 0.88rem;
-      backdrop-filter: blur(12px);
+    /* Navigation */
+    header {
       position: sticky;
       top: 0;
-      z-index: 100;
-      transition: all 0.3s ease;
+      z-index: 90;
+      background: rgba(7, 9, 14, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
     }
 
-    .redirect-banner.hidden {
-      display: none;
-    }
-
-    .redirect-counter {
-      font-family: var(--font-mono);
-      font-weight: 700;
-      color: var(--accent-cyan);
-      background: rgba(0, 0, 0, 0.4);
-      padding: 2px 8px;
-      border-radius: 4px;
-      border: 1px solid rgba(0, 229, 255, 0.3);
-    }
-
-    .btn-banner-go {
-      background: var(--accent-orange);
-      color: #fff;
-      font-weight: 700;
-      padding: 4px 14px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 0.82rem;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-banner-go:hover {
-      background: #ff8524;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px var(--accent-orange-glow);
-    }
-
-    .btn-banner-stay {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: var(--text-muted);
-      padding: 3px 10px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-banner-stay:hover {
-      border-color: #fff;
-      color: #fff;
-    }
-
-    /* Navigation */
     nav {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px 24px;
+      padding: 16px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -157,42 +98,26 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
       text-decoration: none;
-      color: #fff;
+      cursor: pointer;
     }
 
-    .brand img {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      filter: drop-shadow(0 0 12px var(--accent-orange-glow));
+    .brand-logo {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 10px rgba(255, 109, 0, 0.45));
+      transition: transform 0.2s ease;
     }
 
-    .brand-text {
-      font-weight: 900;
-      font-size: 1.4rem;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #fff 40%, var(--accent-orange) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .brand-tag {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      background: rgba(255, 109, 0, 0.15);
-      color: var(--accent-orange);
-      padding: 2px 7px;
-      border-radius: 4px;
-      border: 1px solid rgba(255, 109, 0, 0.3);
-      font-weight: 700;
+    .brand:hover .brand-logo {
+      transform: scale(1.03);
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 28px;
       list-style: none;
     }
 
@@ -287,7 +212,7 @@
       color: #fff;
       font-weight: 700;
       font-size: 0.88rem;
-      padding: 8px 18px;
+      padding: 8px 20px;
       border-radius: 8px;
       text-decoration: none;
       display: inline-flex;
@@ -311,7 +236,7 @@
 
     /* Hero Section */
     .hero {
-      padding: 70px 0 60px;
+      padding: 80px 0 60px;
       text-align: center;
       position: relative;
     }
@@ -326,7 +251,7 @@
       font-family: var(--font-mono);
       font-size: 0.82rem;
       font-weight: 700;
-      padding: 6px 16px;
+      padding: 6px 18px;
       border-radius: 100px;
       margin-bottom: 24px;
       box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
@@ -341,10 +266,10 @@
     .hero h1 {
       font-size: clamp(2.4rem, 5.5vw, 4.4rem);
       font-weight: 900;
-      line-height: 1.1;
+      line-height: 1.12;
       letter-spacing: -1.5px;
       margin-bottom: 22px;
-      max-width: 960px;
+      max-width: 980px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -364,9 +289,9 @@
     .hero p {
       font-size: clamp(1.05rem, 1.8vw, 1.25rem);
       color: var(--text-muted);
-      max-width: 760px;
+      max-width: 780px;
       margin: 0 auto 36px;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
     .hero-ctas {
@@ -375,7 +300,7 @@
       justify-content: center;
       gap: 16px;
       flex-wrap: wrap;
-      margin-bottom: 48px;
+      margin-bottom: 54px;
     }
 
     .btn-hero-main {
@@ -383,7 +308,7 @@
       color: #fff;
       font-size: 1.05rem;
       font-weight: 800;
-      padding: 14px 34px;
+      padding: 14px 36px;
       border-radius: 12px;
       text-decoration: none;
       display: inline-flex;
@@ -447,7 +372,7 @@
 
     .stat-val {
       font-family: var(--font-mono);
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: 800;
       color: #fff;
       display: flex;
@@ -499,7 +424,7 @@
 
     .section-desc {
       color: var(--text-muted);
-      max-width: 640px;
+      max-width: 680px;
       margin: 0 auto;
       font-size: 1rem;
     }
@@ -626,7 +551,7 @@
 
     .tab-content.active {
       display: grid;
-      grid-template-columns: 1.2fr 1fr;
+      grid-template-columns: 1.1fr 1fr;
       gap: 40px;
       align-items: center;
       animation: fadeIn 0.3s ease;
@@ -673,13 +598,159 @@
     }
 
     .tab-right {
-      background: var(--bg-surface);
+      background: #090c13;
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
       padding: 24px;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
     }
+
+    /* Native Interactive Mockups for Tabs (Replacing Ads/Banners) */
+    /* Discord Chat Mockup */
+    .discord-mockup {
+      font-family: var(--font-sans);
+      background: #313338;
+      border-radius: 8px;
+      padding: 16px;
+      color: #dbdee1;
+    }
+
+    .discord-msg-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .discord-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #ff6d00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #fff;
+      font-size: 0.85rem;
+    }
+
+    .discord-username {
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.92rem;
+    }
+
+    .discord-bot-badge {
+      background: #5865f2;
+      color: #fff;
+      font-size: 0.65rem;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    .discord-embed-card {
+      border-left: 4px solid var(--accent-orange);
+      background: #2b2d31;
+      border-radius: 4px;
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    .discord-video-frame {
+      background: #111214;
+      border-radius: 6px;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 10px;
+    }
+
+    .discord-play-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 109, 0, 0.9);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 20px rgba(255, 109, 0, 0.4);
+    }
+
+    .discord-quality-tag {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #00e5ff;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    /* Hardware Transcoder UI */
+    .hud-console {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+    }
+
+    .hud-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+    }
+
+    .hud-line strong {
+      color: #fff;
+    }
+
+    .hud-chip {
+      background: rgba(0, 229, 255, 0.12);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      color: var(--accent-cyan);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+
+    /* Privacy URL Mockup */
+    .url-spec-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .url-type-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .url-type-pub { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+    .url-type-creator { background: rgba(255, 109, 0, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
 
     /* Interactive Simulator */
     .sim-box {
@@ -736,8 +807,8 @@
       font-size: 0.84rem;
       font-weight: 700;
       border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
+      padding: 10px 20px;
+      border-radius: 8px;
       cursor: pointer;
       margin-top: 14px;
       transition: all 0.2s ease;
@@ -745,13 +816,14 @@
 
     .sim-btn-trigger:hover {
       background: #ff8524;
+      transform: translateY(-1px);
     }
 
     .sim-embed-preview {
       background: #2b2d31;
       border-left: 4px solid var(--accent-orange);
       border-radius: 4px;
-      padding: 12px;
+      padding: 14px;
       margin-top: 16px;
       color: #dbdee1;
       font-family: var(--font-sans);
@@ -761,85 +833,6 @@
     .sim-embed-preview.show {
       display: block;
       animation: fadeIn 0.3s ease;
-    }
-
-    /* Author / Portfolio Section */
-    .author-section {
-      padding: 80px 0;
-    }
-
-    .author-card {
-      background: linear-gradient(135deg, rgba(255, 109, 0, 0.06), rgba(0, 229, 255, 0.04));
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 48px;
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 36px;
-      align-items: center;
-      backdrop-filter: blur(20px);
-    }
-
-    .author-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.6rem;
-      box-shadow: 0 0 24px var(--accent-orange-glow);
-    }
-
-    .author-info h3 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 6px;
-    }
-
-    .author-title {
-      font-family: var(--font-mono);
-      font-size: 0.88rem;
-      color: var(--accent-cyan);
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .author-bio {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      line-height: 1.55;
-      max-width: 620px;
-    }
-
-    .author-links {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .author-link-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border-subtle);
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 700;
-      padding: 10px 20px;
-      border-radius: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-
-    .author-link-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: #fff;
-      transform: translateY(-2px);
     }
 
     /* Final CTA */
@@ -868,14 +861,14 @@
     .final-cta p {
       color: var(--text-muted);
       font-size: 1.1rem;
-      max-width: 600px;
+      max-width: 620px;
       margin: 0 auto 36px;
     }
 
     /* Footer */
     footer {
       border-top: 1px solid var(--border-subtle);
-      padding: 40px 0;
+      padding: 36px 0;
       text-align: center;
       color: var(--text-dim);
       font-size: 0.88rem;
@@ -899,63 +892,45 @@
       .tab-content.active {
         grid-template-columns: 1fr;
       }
-      .author-card {
-        grid-template-columns: 1fr;
-        text-align: center;
-        justify-items: center;
-      }
-      .author-links {
-        flex-direction: row;
-      }
     }
   </style>
 </head>
 <body>
   <div class="cyber-bg"></div>
 
-  <!-- Smart Redirect Banner with Countdown -->
-  <aside class="redirect-banner" id="redirectBanner">
-    <span>🌐 <strong data-i18n="banner_title">Live Platform Available:</strong> <span data-i18n="banner_desc">Redirecting to zylo.stream in</span> <span class="redirect-counter" id="timerCount">12s</span></span>
-    <a href="https://zylo.stream" class="btn-banner-go" id="bannerGoBtn">
-      <span data-i18n="banner_btn_go">Open zylo.stream Now</span> ↗
-    </a>
-    <button class="btn-banner-stay" id="bannerStayBtn" data-i18n="banner_btn_stay">Stay on Presentation</button>
-  </aside>
-
-  <!-- Navigation -->
-  <nav>
-    <a href="https://zylo.stream" class="brand">
-      <img src="assets/logo.png" alt="Zylo Logo">
-      <span class="brand-text">ZYLO</span>
-      <span class="brand-tag">v2.4 PROD</span>
-    </a>
-
-    <ul class="nav-links">
-      <li><a href="#architecture" data-i18n="nav_arch">Architecture</a></li>
-      <li><a href="#features" data-i18n="nav_features">Capabilities</a></li>
-      <li><a href="#simulator" data-i18n="nav_demo">Interactive Demo</a></li>
-      <li><a href="#author" data-i18n="nav_author">Engineer</a></li>
-    </ul>
-
-    <div class="nav-actions">
-      <!-- Multilingual Switcher -->
-      <div class="lang-selector">
-        <button class="lang-select-btn" id="langSelectBtn">
-          <span>🌐</span> <span id="currentLangLabel">English (EN)</span> ▾
-        </button>
-        <div class="lang-dropdown" id="langDropdown">
-          <button class="lang-opt active" data-lang="en">English (EN)</button>
-          <button class="lang-opt" data-lang="es">Español (ES)</button>
-          <button class="lang-opt" data-lang="pt">Português (PT)</button>
-          <button class="lang-opt" data-lang="ja">日本語 (JA)</button>
-        </div>
-      </div>
-
-      <a href="https://zylo.stream" class="btn-nav-primary">
-        <span data-i18n="nav_launch">Launch App</span> ↗
+  <!-- Header & Navigation -->
+  <header>
+    <nav>
+      <a href="https://zylo.stream" class="brand" title="Zylo Platform">
+        <img src="assets/logo.png" alt="Zylo" class="brand-logo">
       </a>
-    </div>
-  </nav>
+
+      <ul class="nav-links">
+        <li><a href="#architecture" data-i18n="nav_arch">Architecture</a></li>
+        <li><a href="#features" data-i18n="nav_features">Capabilities</a></li>
+        <li><a href="#simulator" data-i18n="nav_demo">Interactive Pipeline</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Multilingual Switcher -->
+        <div class="lang-selector">
+          <button class="lang-select-btn" id="langSelectBtn">
+            <span>🌐</span> <span id="currentLangLabel">English (EN)</span> ▾
+          </button>
+          <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-opt active" data-lang="en">English (EN)</button>
+            <button class="lang-opt" data-lang="es">Español (ES)</button>
+            <button class="lang-opt" data-lang="pt">Português (PT)</button>
+            <button class="lang-opt" data-lang="ja">日本語 (JA)</button>
+          </div>
+        </div>
+
+        <a href="https://zylo.stream" class="btn-nav-primary">
+          <span data-i18n="nav_launch">Launch App</span> ↗
+        </a>
+      </div>
+    </nav>
+  </header>
 
   <!-- Hero Section -->
   <main class="container">
@@ -971,7 +946,7 @@
       </h1>
 
       <p data-i18n="hero_subtitle">
-        Engineered by Walter (<a href="https://github.com/walterdotblend" style="color:var(--accent-orange);text-decoration:none;font-weight:700;">@walterdotblend</a>) to permanently conquer Discord's 10MB limit. Combines Cloudflare R2 object storage with client-side WebCodecs encoding for sub-second, cost-free video distribution.
+        Engineered to shatter Discord's 10MB limit with zero egress fees. Zylo pairs Cloudflare R2 object storage with browser-native WebCodecs GPU transcoding for sub-second, uncompressed video delivery across communities and the web.
       </p>
 
       <div class="hero-ctas">
@@ -1062,7 +1037,7 @@
         <button class="tab-btn" data-tab="admin-tab">📊 <span data-i18n="tab_btn_admin">Telemetry &amp; Admin</span></button>
       </div>
 
-      <!-- Tab 1 -->
+      <!-- Tab 1: Discord Native -->
       <div class="tab-content active" id="discord-tab">
         <div class="tab-left">
           <h3 data-i18n="tab1_title">Interactive Discord Slash Integration</h3>
@@ -1072,14 +1047,38 @@
             <li><span class="check">✓</span> <strong data-i18n="tab1_b2_title">Embed Video Previews:</strong> <span data-i18n="tab1_b2_desc">Instant playback on desktop, iOS, and Android Discord clients.</span></li>
             <li><span class="check">✓</span> <strong data-i18n="tab1_b3_title">Automated Top.gg Verification:</strong> <span data-i18n="tab1_b3_desc">Unlocks tier rewards and perks dynamically upon user votes.</span></li>
           </ul>
-          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Test on zylo.stream</span> ↗</a>
+          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Open zylo.stream</span> ↗</a>
         </div>
         <div class="tab-right">
-          <img src="assets/banner_discord.svg" alt="Discord Bot Preview" style="width: 100%; height: auto; border-radius: 8px;">
+          <!-- Live Interactive Discord Message Mockup -->
+          <div class="discord-mockup">
+            <div class="discord-msg-header">
+              <div class="discord-avatar">Z</div>
+              <div>
+                <span class="discord-username">Zylo Bot</span>
+                <span class="discord-bot-badge">APP</span>
+              </div>
+            </div>
+            <div style="font-size:0.88rem; color:#dbdee1; margin-bottom:6px;">
+              Shared a high-definition clip via <strong>/clip</strong>:
+            </div>
+            <div class="discord-embed-card">
+              <div style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:4px;">Apex Legends • Triple Clutch 1v3</div>
+              <div style="font-size:0.78rem; color:#949ba4;">Streamed directly via Cloudflare R2 • 1080p 60FPS</div>
+              <div class="discord-video-frame">
+                <div class="discord-quality-tag">1080P • 60FPS</div>
+                <div class="discord-play-btn">▶</div>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:0.8rem;">
+                <span style="color:#00e5ff; font-family:var(--font-mono);">zylo.stream/v/apex-c98x</span>
+                <a href="https://zylo.stream" style="color:var(--accent-orange); text-decoration:none; font-weight:700;">Watch HD ↗</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Tab 2 -->
+      <!-- Tab 2: Hardware Encoder -->
       <div class="tab-content" id="encoder-tab">
         <div class="tab-left">
           <h3 data-i18n="tab2_title">Client-Side Hardware Accelerated WebCodecs</h3>
@@ -1089,14 +1088,40 @@
             <li><span class="check">✓</span> <strong data-i18n="tab2_b2_title">MediaBunny WebAssembly:</strong> <span data-i18n="tab2_b2_desc">Fast H.264 video compression directly in memory.</span></li>
             <li><span class="check">✓</span> <strong data-i18n="tab2_b3_title">Quality Presets:</strong> <span data-i18n="tab2_b3_desc">Lossless, Balanced, and Ultra-Speed compression modes.</span></li>
           </ul>
-          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Test on zylo.stream</span> ↗</a>
+          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Open zylo.stream</span> ↗</a>
         </div>
         <div class="tab-right">
-          <img src="assets/banner_features.svg" alt="Features Preview" style="width: 100%; height: auto; border-radius: 8px;">
+          <!-- WebCodecs GPU Telemetry HUD -->
+          <div class="hud-console">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px;">
+              <span style="color:var(--accent-orange); font-weight:700;">GPU ACCELERATION ACTIVE</span>
+              <span class="hud-chip">WebCodecs v2</span>
+            </div>
+            <div class="hud-line">
+              <span>Hardware VideoEncoder:</span>
+              <strong>avc1.640028 (High Profile)</strong>
+            </div>
+            <div class="hud-line">
+              <span>Encoding Throughput:</span>
+              <strong style="color:var(--accent-cyan);">142 FPS (Real-Time 4.7x)</strong>
+            </div>
+            <div class="hud-line">
+              <span>Original Clip Size:</span>
+              <span>84.2 MB (Raw 4K/1080p)</span>
+            </div>
+            <div class="hud-line">
+              <span>Optimized Stream Size:</span>
+              <strong style="color:var(--accent-green);">7.8 MB (-90.7%)</strong>
+            </div>
+            <div class="hud-line">
+              <span>Server CPU Overhead:</span>
+              <strong style="color:var(--accent-green);">0.00% (Client Offloaded)</strong>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Tab 3 -->
+      <!-- Tab 3: Privacy Engine -->
       <div class="tab-content" id="privacy-tab">
         <div class="tab-left">
           <h3 data-i18n="tab3_title">Dual-Mode Privacy &amp; Revocation Killswitch</h3>
@@ -1106,14 +1131,29 @@
             <li><span class="check">✓</span> <strong data-i18n="tab3_b2_title">Creator Master Secret:</strong> <span data-i18n="tab3_b2_desc">Permanent access to delete or revoke links at any moment.</span></li>
             <li><span class="check">✓</span> <strong data-i18n="tab3_b3_title">Instant Revoke:</strong> <span data-i18n="tab3_b3_desc">Deactivates public viewing instantly without deleting audit records.</span></li>
           </ul>
-          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Test on zylo.stream</span> ↗</a>
+          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Open zylo.stream</span> ↗</a>
         </div>
         <div class="tab-right">
-          <img src="assets/privacy_banner.png" alt="Privacy Banner" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+          <!-- Dual-URL Security Architecture Mockup -->
+          <div class="url-spec-box">
+            <span class="url-type-badge url-type-pub">PUBLIC STREAMING URL</span>
+            <div style="color:#fff; word-break:break-all; font-size:0.85rem; margin:4px 0;">https://zylo.stream/v/c7a10f</div>
+            <div style="font-size:0.75rem; color:var(--text-dim);">Safe to share on Discord, Twitter, and Reddit. No controls exposed.</div>
+          </div>
+
+          <div class="url-spec-box" style="border-color:rgba(255,109,0,0.3);">
+            <span class="url-type-badge url-type-creator">CREATOR MASTER KEY (HMAC)</span>
+            <div style="color:var(--accent-orange); word-break:break-all; font-size:0.85rem; margin:4px 0;">https://zylo.stream/v/c7a10f?key=sec_8f9a2b1c4d...</div>
+            <div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:8px;">Grants creator authority to instantly revoke or delete clip from R2 storage.</div>
+            <button id="btnMockRevoke" style="background:#ef4444; color:#fff; border:none; padding:4px 10px; border-radius:4px; font-family:var(--font-mono); font-size:0.72rem; cursor:pointer; font-weight:700;">
+              🛑 TEST ONE-CLICK KILLSWITCH
+            </button>
+            <span id="mockRevokeStatus" style="font-size:0.75rem; color:#10b981; margin-left:8px; display:none;">LINK REVOKED (404)</span>
+          </div>
         </div>
       </div>
 
-      <!-- Tab 4 -->
+      <!-- Tab 4: Telemetry & Admin -->
       <div class="tab-content" id="admin-tab">
         <div class="tab-left">
           <h3 data-i18n="tab4_title">Real-Time Moderation &amp; Telemetry Console</h3>
@@ -1123,10 +1163,36 @@
             <li><span class="check">✓</span> <strong data-i18n="tab4_b2_title">Instant Search &amp; Filter:</strong> <span data-i18n="tab4_b2_desc">Look up clips by unique ID, date, or status.</span></li>
             <li><span class="check">✓</span> <strong data-i18n="tab4_b3_title">Security Audit Log:</strong> <span data-i18n="tab4_b3_desc">Tracks IP hashes, views, and automated abuse reports.</span></li>
           </ul>
-          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Test on zylo.stream</span> ↗</a>
+          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Open zylo.stream</span> ↗</a>
         </div>
         <div class="tab-right">
-          <img src="assets/banner_mobile_promo.svg" alt="Admin Preview" style="width: 100%; height: auto; border-radius: 8px;">
+          <!-- Live Telemetry HUD -->
+          <div class="hud-console">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px;">
+              <span style="color:var(--accent-cyan); font-weight:700;">PLATFORM HEALTH TELEMETRY</span>
+              <span class="hud-chip" style="background:rgba(16,185,129,0.15); color:var(--accent-green); border-color:var(--accent-green);">100% OPERATIONAL</span>
+            </div>
+            <div class="hud-line">
+              <span>Cloudflare R2 Bucket:</span>
+              <strong style="color:#fff;">zylo-production-edge</strong>
+            </div>
+            <div class="hud-line">
+              <span>Global CDN Edge POPs:</span>
+              <strong>310+ Locations (Direct)</strong>
+            </div>
+            <div class="hud-line">
+              <span>Cumulative Egress Cost:</span>
+              <strong style="color:var(--accent-green);">$0.00 (Zero Egress Guarantee)</strong>
+            </div>
+            <div class="hud-line">
+              <span>Active Discord Sessions:</span>
+              <strong style="color:var(--accent-cyan);">Multi-Guild Ready</strong>
+            </div>
+            <div class="hud-line">
+              <span>Avg Link Response:</span>
+              <strong style="color:var(--accent-orange);">&lt; 42 ms</strong>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1175,28 +1241,6 @@
       </div>
     </section>
 
-    <!-- Author & Portfolio Section -->
-    <section class="author-section" id="author">
-      <div class="author-card">
-        <div class="author-avatar">👨‍💻</div>
-        <div class="author-info">
-          <span class="author-title" data-i18n="author_role">SYSTEMS ARCHITECT &amp; LEAD DEVELOPER</span>
-          <h3>Walter (<a href="https://github.com/walterdotblend" style="color:inherit;text-decoration:none;">@walterdotblend</a>)</h3>
-          <p class="author-bio" data-i18n="author_bio">
-            Specializing in cloud-native video streaming architectures, browser WebCodecs client compute, Discord bot ecosystems, and distributed zero-egress object storage solutions. Creator and architect of Zylo (zylo.stream).
-          </p>
-        </div>
-        <div class="author-links">
-          <a href="https://github.com/walterdotblend" target="_blank" rel="noopener" class="author-link-btn">
-            <span>🐙</span> GitHub Profile
-          </a>
-          <a href="https://zylo.stream" class="author-link-btn" style="border-color:var(--accent-orange); color:var(--accent-orange);">
-            <span>🚀</span> Launch zylo.stream
-          </a>
-        </div>
-      </div>
-    </section>
-
     <!-- Final Call to Action -->
     <section class="final-cta">
       <div class="final-cta-card">
@@ -1213,10 +1257,10 @@
   <footer>
     <div class="container">
       <p style="margin-bottom:8px;">
-        <strong>Zylo Platform</strong> • Engineered by <a href="https://github.com/walterdotblend" target="_blank" rel="noopener">Walter (@walterdotblend)</a>
+        <strong>Zylo Platform</strong> • <a href="https://zylo.stream">zylo.stream</a>
       </p>
       <p style="font-size:0.78rem;">
-        Production instance live at <a href="https://zylo.stream">zylo.stream</a> • Powered by Cloudflare R2 &amp; WebCodecs
+        Next-Generation Video Streaming &amp; Discord Infrastructure • Powered by Cloudflare R2 &amp; WebCodecs
       </p>
     </div>
   </footer>
@@ -1226,20 +1270,15 @@
     // 1. Multilingual Dictionary (Default: English)
     const translations = {
       en: {
-        banner_title: "Live Platform Available:",
-        banner_desc: "Redirecting to zylo.stream in",
-        banner_btn_go: "Open zylo.stream Now",
-        banner_btn_stay: "Stay on Presentation",
         nav_arch: "Architecture",
         nav_features: "Capabilities",
-        nav_demo: "Interactive Demo",
-        nav_author: "Engineer",
+        nav_demo: "Interactive Pipeline",
         nav_launch: "Launch App",
         hero_badge: "CLOUD-NATIVE VIDEO STREAMING ARCHITECTURE",
         hero_h1_part1: "Instant Clip Sharing with",
         hero_h1_part2: "Zero-Egress Direct Delivery",
         hero_h1_part3: "In-Browser GPU Transcode",
-        hero_subtitle: "Engineered by Walter (@walterdotblend) to permanently conquer Discord's 10MB limit. Combines Cloudflare R2 object storage with client-side WebCodecs encoding for sub-second, cost-free video distribution.",
+        hero_subtitle: "Engineered to shatter Discord's 10MB limit with zero egress fees. Zylo pairs Cloudflare R2 object storage with browser-native WebCodecs GPU transcoding for sub-second, uncompressed video delivery across communities and the web.",
         hero_btn_main: "Enter Platform (zylo.stream)",
         hero_btn_sec: "Explore Tech Architecture",
         stat_egress: "Cloud Egress Fees (R2)",
@@ -1296,32 +1335,25 @@
         tab4_b2_desc: "Look up clips by unique ID, date, or status.",
         tab4_b3_title: "Security Audit Log:",
         tab4_b3_desc: "Tracks IP hashes, views, and automated abuse reports.",
-        tab_cta: "Test on zylo.stream",
+        tab_cta: "Open zylo.stream",
         sim_tag: "Interactive Live Simulator",
         sim_title: "Experience the Zylo Pipeline",
         sim_desc: "Click the trigger below to simulate how Zylo compresses, uploads, and generates an instant Discord embed in real time.",
         sim_btn_run: "Run Simulated Transcode & Upload",
-        author_role: "SYSTEMS ARCHITECT & LEAD DEVELOPER",
-        author_bio: "Specializing in cloud-native video streaming architectures, browser WebCodecs client compute, Discord bot ecosystems, and distributed zero-egress object storage solutions. Creator and architect of Zylo (zylo.stream).",
         cta_title: "Ready to Experience Zero-Egress Video?",
         cta_desc: "Join gamers and creators using Zylo to share uncompressed, high-definition clips effortlessly across Discord and the web.",
         cta_btn: "Go Directly to zylo.stream"
       },
       es: {
-        banner_title: "Plataforma en Vivo Disponible:",
-        banner_desc: "Redirigiendo a zylo.stream en",
-        banner_btn_go: "Abrir zylo.stream Ahora",
-        banner_btn_stay: "Quedarse en Presentación",
         nav_arch: "Arquitectura",
         nav_features: "Capacidades",
-        nav_demo: "Demo Interactiva",
-        nav_author: "Ingeniero",
+        nav_demo: "Pipeline Interactivo",
         nav_launch: "Lanzar App",
         hero_badge: "ARQUITECTURA DE STREAMING CLOUD-NATIVE",
         hero_h1_part1: "Comparte Clips al Instante con",
         hero_h1_part2: "Entrega Directa Sin Costos de Salida",
         hero_h1_part3: "Transcodificación GPU en Navegador",
-        hero_subtitle: "Diseñado por Walter (@walterdotblend) para superar de forma definitiva el límite de 10MB de Discord. Combina almacenamiento Cloudflare R2 con codificación WebCodecs del lado del cliente para una distribución de video inmediata y sin costes.",
+        hero_subtitle: "Diseñado para superar de forma definitiva el límite de 10MB de Discord sin costes de salida. Zylo combina almacenamiento Cloudflare R2 con codificación WebCodecs del lado del cliente para una distribución de video en alta definición.",
         hero_btn_main: "Entrar a la Plataforma (zylo.stream)",
         hero_btn_sec: "Explorar Arquitectura Técnica",
         stat_egress: "Costes de Egress en Cloud (R2)",
@@ -1378,32 +1410,25 @@
         tab4_b2_desc: "Localiza clips por ID único, fecha o estado.",
         tab4_b3_title: "Registro de Auditoría:",
         tab4_b3_desc: "Monitorea hashes de IP, reproducciones y reportes.",
-        tab_cta: "Probar en zylo.stream",
+        tab_cta: "Abrir zylo.stream",
         sim_tag: "Simulador Interactivo en Vivo",
         sim_title: "Experimenta el Pipeline de Zylo",
         sim_desc: "Haz clic abajo para simular cómo Zylo comprime, sube y genera un embed de Discord al instante.",
         sim_btn_run: "Ejecutar Transcodificación y Subida Simulada",
-        author_role: "ARQUITECTO DE SISTEMAS Y DESARROLLADOR PRINCIPAL",
-        author_bio: "Especializado en arquitecturas cloud-native de video, computación del lado del cliente con WebCodecs, bots de Discord y almacenamiento distribuido sin costos de salida. Creador y arquitecto de Zylo (zylo.stream).",
         cta_title: "¿Listo para Experimentar Video Sin Límites?",
         cta_desc: "Únete a los gamers y creadores que usan Zylo para compartir clips en alta definición en Discord y en la web.",
         cta_btn: "Ir Directamente a zylo.stream"
       },
       pt: {
-        banner_title: "Plataforma Ao Vivo Disponível:",
-        banner_desc: "Redirecionando para zylo.stream em",
-        banner_btn_go: "Abrir zylo.stream Agora",
-        banner_btn_stay: "Ficar na Apresentação",
         nav_arch: "Arquitetura",
         nav_features: "Recursos",
-        nav_demo: "Demo Interativa",
-        nav_author: "Engenheiro",
+        nav_demo: "Pipeline Interativo",
         nav_launch: "Abrir App",
         hero_badge: "ARQUITETURA DE STREAMING CLOUD-NATIVE",
         hero_h1_part1: "Compartilhamento Instantâneo com",
         hero_h1_part2: "Entrega Direta Sem Taxas de Egress",
         hero_h1_part3: "Transcodificação GPU no Navegador",
-        hero_subtitle: "Desenvolvido por Walter (@walterdotblend) para superar o limite de 10MB do Discord. Combina Cloudflare R2 com WebCodecs no cliente para distribuição rápida e sem custos.",
+        hero_subtitle: "Projetado para superar o limite de 10MB do Discord. Combina Cloudflare R2 com WebCodecs no cliente para distribuição ultrarrápida e sem custos de saída.",
         hero_btn_main: "Entrar na Plataforma (zylo.stream)",
         hero_btn_sec: "Explorar Arquitetura Técnica",
         stat_egress: "Taxas de Egress em Nuvem (R2)",
@@ -1460,32 +1485,25 @@
         tab4_b2_desc: "Encontre qualquer clipe em segundos.",
         tab4_b3_title: "Auditoria:",
         tab4_b3_desc: "Registros de segurança e acessos.",
-        tab_cta: "Testar no zylo.stream",
+        tab_cta: "Abrir zylo.stream",
         sim_tag: "Simulador Interativo",
         sim_title: "Experimente o Pipeline",
         sim_desc: "Clique abaixo para simular a compressão e envio de um clipe.",
         sim_btn_run: "Executar Simulação de Transcode e Upload",
-        author_role: "ARQUITETO DE SISTEMAS & LEAD DEVELOPER",
-        author_bio: "Especialista em arquiteturas de vídeo em nuvem, WebCodecs no navegador e bots Discord. Criador do Zylo (zylo.stream).",
         cta_title: "Pronto para Vídeos Sem Limites?",
         cta_desc: "Junte-se aos criadores que utilizam o Zylo para compartilhar clipes em alta definição.",
         cta_btn: "Ir Diretamente para zylo.stream"
       },
       ja: {
-        banner_title: "ライブプラットフォーム提供中:",
-        banner_desc: "zylo.stream への自動リダイレクトまで",
-        banner_btn_go: "今すぐ zylo.stream を開く",
-        banner_btn_stay: "紹介ページに留まる",
         nav_arch: "アーキテクチャ",
         nav_features: "機能と特徴",
-        nav_demo: "体験シミュレータ",
-        nav_author: "エンジニア",
+        nav_demo: "パイプライン体験",
         nav_launch: "アプリを起動",
         hero_badge: "クラウドネイティブ・動画ストリーミング設計",
         hero_h1_part1: "Discordの制限を突破する",
         hero_h1_part2: "エグレス転送無料・高速配信",
         hero_h1_part3: "ブラウザ内GPU動画トランスコード",
-        hero_subtitle: "Walter (@walterdotblend) により設計。Discordの10MB制限を解消するため、Cloudflare R2とクライアント側WebCodecsを連携させ、極限の低遅延・ゼロコストで動画を共有できます。",
+        hero_subtitle: "Discordの10MB制限を完全解消。Cloudflare R2とクライアント側WebCodecsを連携させ、極限の低遅延・ゼロコストで高品質な動画を共有できる動画配信プラットフォーム。",
         hero_btn_main: "zylo.stream を利用する",
         hero_btn_sec: "技術設計を見る",
         stat_egress: "クラウド転送料金 (R2)",
@@ -1547,8 +1565,6 @@
         sim_title: "パイプラインを疑似体験",
         sim_desc: "下のボタンをクリックして、ローカル圧縮からアップロードまでの流れを試せます。",
         sim_btn_run: "シミュレーション開始",
-        author_role: "システムアーキテクト / リードエンジニア",
-        author_bio: "クラウドネイティブ動画配信、ブラウザWebCodecs、Discord Botエコシステム、ゼロエグレス設計のスペシャリスト。Zylo (zylo.stream) の設計開発者。",
         cta_title: "高画質な動画共有をはじめましょう",
         cta_desc: "zylo.stream で快適なクリップ共有を今すぐ体感してください。",
         cta_btn: "zylo.stream へ移動する"
@@ -1609,33 +1625,7 @@
       });
     });
 
-    // 3. Smart Redirect Timer (12 seconds countdown)
-    let countdownSec = 12;
-    let timerPaused = false;
-    const timerCountEl = document.getElementById('timerCount');
-    const bannerStayBtn = document.getElementById('bannerStayBtn');
-    const redirectBanner = document.getElementById('redirectBanner');
-
-    const countdownInterval = setInterval(() => {
-      if (timerPaused) return;
-      countdownSec--;
-      if (countdownSec <= 0) {
-        clearInterval(countdownInterval);
-        timerCountEl.textContent = '0s';
-        // Auto-redirect to live platform
-        window.location.href = 'https://zylo.stream';
-      } else {
-        timerCountEl.textContent = `${countdownSec}s`;
-      }
-    }, 1000);
-
-    bannerStayBtn.addEventListener('click', () => {
-      timerPaused = true;
-      clearInterval(countdownInterval);
-      redirectBanner.classList.add('hidden');
-    });
-
-    // 4. Feature Tabs Logic
+    // 3. Feature Tabs Logic
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -1651,7 +1641,18 @@
       });
     });
 
-    // 5. Interactive Pipeline Simulator
+    // Mock Killswitch Toggle
+    const btnMockRevoke = document.getElementById('btnMockRevoke');
+    const mockRevokeStatus = document.getElementById('mockRevokeStatus');
+    if (btnMockRevoke) {
+      btnMockRevoke.addEventListener('click', () => {
+        mockRevokeStatus.style.display = 'inline-block';
+        btnMockRevoke.style.opacity = '0.5';
+        btnMockRevoke.disabled = true;
+      });
+    }
+
+    // 4. Interactive Pipeline Simulator
     const simStartBtn = document.getElementById('simStartBtn');
     const simProgressBar = document.getElementById('simProgressBar');
     const simPctText = document.getElementById('simPctText');
