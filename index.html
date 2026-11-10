@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zylo — High-Performance Cloud Video & Discord Platform</title>
-  <meta name="description" content="Next-Generation Cloud Video & Discord Clip Infrastructure. Zero egress streaming with Cloudflare R2 and browser-native WebCodecs GPU transcoding.">
+  <meta name="description" content="Next-Generation Cloud Video & Discord Clip Infrastructure. Zero bandwidth egress fees with Cloudflare R2, Zylo Studio in-browser recording, and client-side WebCodecs GPU transcoding.">
   
   <!-- OpenGraph / Social Meta -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://zylo.stream">
-  <meta property="og:title" content="Zylo — Zero-Egress Video Streaming & Discord Infrastructure">
-  <meta property="og:description" content="Shatter Discord's 10MB limit with instant R2 direct streaming and client-side WebCodecs transcoding.">
+  <meta property="og:title" content="Zylo — Cloud Video Streaming & Discord Infrastructure">
+  <meta property="og:description" content="Shatter Discord's 10MB limit with instant R2 direct streaming, Zylo Studio in-browser capture, and client-side WebCodecs transcoding.">
   <meta property="og:image" content="assets/logo.png">
   
   <!-- Favicon -->
@@ -75,7 +75,7 @@
       background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
     }
 
-    /* Navigation */
+    /* Header & Navigation */
     header {
       position: sticky;
       top: 0;
@@ -236,7 +236,7 @@
 
     /* Hero Section */
     .hero {
-      padding: 80px 0 60px;
+      padding: 70px 0 50px;
       text-align: center;
       position: relative;
     }
@@ -345,7 +345,7 @@
       transform: translateY(-2px);
     }
 
-    /* Live Stat Bar */
+    /* Live Stat Bar (Technically Accurate Metrics) */
     .stat-bar {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -429,77 +429,372 @@
       font-size: 1rem;
     }
 
-    /* Architecture Pipeline Section */
-    .arch-section {
-      padding: 80px 0;
+    /* ========================================================
+       1. ANIMATED INTERACTIVE PIPELINE (USER JOURNEY SIMULATION)
+       ======================================================== */
+    .pipeline-interactive-section {
+      padding: 70px 0;
     }
 
-    .pipeline-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-      position: relative;
-    }
-
-    .pipe-card {
+    .pipe-sim-container {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 28px 24px;
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+
+    .pipe-timeline-track {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
       position: relative;
+      margin-bottom: 30px;
+    }
+
+    /* Animated connecting laser line behind steps */
+    .pipe-laser-bg {
+      position: absolute;
+      top: 36px;
+      left: 12%;
+      right: 12%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 1;
+      border-radius: 2px;
+    }
+
+    .pipe-laser-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-orange), var(--accent-cyan));
+      box-shadow: 0 0 12px var(--accent-orange-glow);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    .pipe-step-node {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .pipe-node-icon-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     }
 
-    .pipe-card:hover {
-      border-color: var(--border-active);
-      transform: translateY(-6px);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-orange-glow);
+    .pipe-step-node.active .pipe-node-icon-circle {
+      border-color: var(--accent-orange);
+      background: rgba(255, 109, 0, 0.15);
+      box-shadow: 0 0 25px var(--accent-orange-glow), inset 0 0 15px rgba(255, 109, 0, 0.2);
+      transform: scale(1.1);
     }
 
-    .pipe-step-num {
+    .pipe-step-node.completed .pipe-node-icon-circle {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: 0 0 15px var(--accent-cyan-glow);
+    }
+
+    .pipe-step-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .pipe-step-timing {
       font-family: var(--font-mono);
       font-size: 0.75rem;
+      color: var(--accent-cyan);
+    }
+
+    /* Pipeline Animated Stage Details Screen */
+    .pipe-display-screen {
+      background: #090c13;
+      border: 1px solid var(--border-active);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      align-items: center;
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pipe-display-left h4 {
+      font-size: 1.4rem;
       font-weight: 800;
-      color: var(--accent-orange);
-      background: rgba(255, 109, 0, 0.12);
-      border: 1px solid rgba(255, 109, 0, 0.25);
+      color: #fff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pipe-display-left p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .pipe-hud-tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pipe-hud-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 4px 10px;
       border-radius: 6px;
-      display: inline-block;
-      margin-bottom: 16px;
+      color: #cbd5e1;
     }
 
-    .pipe-icon {
-      font-size: 2.2rem;
-      margin-bottom: 16px;
-      display: block;
+    .pipe-display-right {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
     }
 
-    .pipe-card h3 {
-      font-size: 1.18rem;
+    .pipe-controls-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .pipe-btn-ctrl {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
       font-weight: 700;
-      margin-bottom: 10px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .pipe-btn-ctrl:hover {
+      border-color: var(--accent-orange);
       color: #fff;
     }
 
-    .pipe-card p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.55;
+    /* ========================================================
+       2. DEDICATED ZYLO STUDIO SECTION (IN-BROWSER RECORDER)
+       ======================================================== */
+    .studio-section {
+      padding: 80px 0;
+      position: relative;
     }
 
-    .pipe-tag {
-      margin-top: 18px;
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .studio-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 28px 0;
+    }
+
+    .studio-bullets li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+    }
+
+    .studio-bullets li .bullet-icon {
+      background: rgba(255, 109, 0, 0.15);
+      color: var(--accent-orange);
+      border: 1px solid rgba(255, 109, 0, 0.3);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1rem;
+    }
+
+    /* Studio Interface Viewfinder Mockup */
+    .studio-mockup-frame {
+      background: #0b0e14;
+      border: 1px solid var(--border-active);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 35px var(--accent-orange-glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .studio-mockup-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .studio-seg-switch {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 2px;
+    }
+
+    .studio-seg-opt {
+      padding: 5px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 6px;
+      color: var(--text-muted);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .studio-seg-opt.active {
+      background: var(--accent-orange);
+      color: #fff;
+    }
+
+    .studio-viewfinder {
+      background: #111520;
+      border: 2px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      height: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .studio-rec-indicator {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(220, 38, 38, 0.85);
+      color: #fff;
       font-family: var(--font-mono);
-      font-size: 0.74rem;
-      color: var(--accent-cyan);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 20px;
       display: flex;
       align-items: center;
       gap: 6px;
+      animation: blink 1.2s infinite;
     }
 
-    /* Feature Tabs */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .studio-rec-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .studio-btn-record-main {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .studio-btn-record-main:hover {
+      transform: scale(1.08);
+    }
+
+    .studio-bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+
+    .quality-pill-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .quality-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      cursor: pointer;
+    }
+
+    .quality-pill.active {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: rgba(0, 229, 255, 0.1);
+    }
+
+    /* ========================================================
+       3. FEATURE TABS & AD-RESISTANT SPONSOR REPLACEMENT
+       ======================================================== */
     .features-section {
       padding: 70px 0;
     }
@@ -607,7 +902,6 @@
       box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
     }
 
-    /* Native Interactive Mockups for Tabs (Replacing Ads/Banners) */
     /* Discord Chat Mockup */
     .discord-mockup {
       font-family: var(--font-sans);
@@ -752,6 +1046,27 @@
     .url-type-pub { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
     .url-type-creator { background: rgba(255, 109, 0, 0.2); color: var(--accent-orange); border: 1px solid var(--accent-orange); }
 
+    /* Native AdBlock-Resistant Sponsor Mockup */
+    .sponsor-card-mockup {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 109, 0, 0.3);
+      border-radius: 10px;
+      padding: 16px;
+      position: relative;
+    }
+
+    .sponsor-badge-top {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      background: rgba(255, 109, 0, 0.15);
+      color: var(--accent-orange);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
     /* Interactive Simulator */
     .sim-box {
       font-family: var(--font-mono);
@@ -835,9 +1150,74 @@
       animation: fadeIn 0.3s ease;
     }
 
+    /* ========================================================
+       4. HIGH SCALABILITY ARCHITECTURE SECTION (CANVAS BACKGROUND)
+       ======================================================== */
+    .scale-section {
+      padding: 100px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #scaleCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.65;
+    }
+
+    .scale-content-wrapper {
+      position: relative;
+      z-index: 2;
+    }
+
+    .scale-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .scale-card {
+      background: rgba(14, 18, 27, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 30px;
+      backdrop-filter: blur(20px);
+      transition: all 0.3s ease;
+    }
+
+    .scale-card:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px var(--accent-cyan-glow);
+    }
+
+    .scale-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .scale-card h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .scale-card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
     /* Final CTA */
     .final-cta {
-      padding: 80px 0 100px;
+      padding: 60px 0 90px;
       text-align: center;
     }
 
@@ -885,12 +1265,19 @@
     }
 
     /* Mobile Responsive */
-    @media (max-width: 860px) {
+    @media (max-width: 900px) {
       .nav-links {
         display: none;
       }
-      .tab-content.active {
+      .studio-grid, .tab-content.active, .pipe-display-screen {
         grid-template-columns: 1fr;
+      }
+      .pipe-timeline-track {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      .pipe-laser-bg {
+        display: none;
       }
     }
   </style>
@@ -906,9 +1293,10 @@
       </a>
 
       <ul class="nav-links">
-        <li><a href="#architecture" data-i18n="nav_arch">Architecture</a></li>
-        <li><a href="#features" data-i18n="nav_features">Capabilities</a></li>
-        <li><a href="#simulator" data-i18n="nav_demo">Interactive Pipeline</a></li>
+        <li><a href="#pipeline" data-i18n="nav_pipeline">Pipeline</a></li>
+        <li><a href="#studio" data-i18n="nav_studio">Zylo Studio</a></li>
+        <li><a href="#capabilities" data-i18n="nav_features">Capabilities</a></li>
+        <li><a href="#scalability" data-i18n="nav_scalability">Scalability</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -941,32 +1329,32 @@
 
       <h1>
         <span data-i18n="hero_h1_part1">Instant Clip Sharing with</span><br>
-        <span class="gradient-text" data-i18n="hero_h1_part2">Zero-Egress Direct Delivery</span> &amp; 
+        <span class="gradient-text" data-i18n="hero_h1_part2">Zero Bandwidth Egress Fees</span> &amp; 
         <span class="cyan-text" data-i18n="hero_h1_part3">In-Browser GPU Transcode</span>
       </h1>
 
       <p data-i18n="hero_subtitle">
-        Engineered to shatter Discord's 10MB limit with zero egress fees. Zylo pairs Cloudflare R2 object storage with browser-native WebCodecs GPU transcoding for sub-second, uncompressed video delivery across communities and the web.
+        Engineered to shatter Discord's 10MB limit with zero egress bandwidth penalties. Zylo pairs Cloudflare R2 object storage with browser-native WebCodecs GPU transcoding for sub-second, uncompressed video delivery across communities and the web.
       </p>
 
       <div class="hero-ctas">
         <a href="https://zylo.stream" class="btn-hero-main">
           <span>🚀</span> <span data-i18n="hero_btn_main">Enter Platform (zylo.stream)</span>
         </a>
-        <a href="#architecture" class="btn-hero-sec">
-          <span>⚙️</span> <span data-i18n="hero_btn_sec">Explore Tech Architecture</span>
+        <a href="#studio" class="btn-hero-sec">
+          <span>🎬</span> <span data-i18n="hero_btn_studio">Explore Zylo Studio</span>
         </a>
       </div>
 
-      <!-- Live Metric Badges -->
+      <!-- Live Stat Bar (Technically Accurate Metrics) -->
       <div class="stat-bar">
         <div class="stat-item">
-          <div class="stat-val accent">$0.00</div>
-          <div class="stat-lbl" data-i18n="stat_egress">Cloud Egress Fees (R2)</div>
+          <div class="stat-val accent">100MB+</div>
+          <div class="stat-lbl" data-i18n="stat_limit">10x Discord Clip Limit</div>
         </div>
         <div class="stat-item">
-          <div class="stat-val cyan">100MB+</div>
-          <div class="stat-lbl" data-i18n="stat_limit">10x Discord Clip Size</div>
+          <div class="stat-val cyan">0 Egress</div>
+          <div class="stat-lbl" data-i18n="stat_egress">Zero Bandwidth Surcharges</div>
         </div>
         <div class="stat-item">
           <div class="stat-val">100%</div>
@@ -979,51 +1367,192 @@
       </div>
     </section>
 
-    <!-- Architecture Section -->
-    <section class="arch-section" id="architecture">
+    <!-- ========================================================
+         1. ANIMATED USER JOURNEY PIPELINE SECTION
+         ======================================================== -->
+    <section class="pipeline-interactive-section" id="pipeline">
       <div class="section-header">
-        <span class="section-tag" data-i18n="arch_tag">Systems Engineering</span>
-        <h2 class="section-title" data-i18n="arch_title">End-to-End Scalable Pipeline</h2>
-        <p class="section-desc" data-i18n="arch_desc">A streamlined four-stage architecture engineered for high concurrency, zero server transcoding load, and instant Discord playback.</p>
+        <span class="section-tag" data-i18n="pipe_tag">End-to-End Simulation</span>
+        <h2 class="section-title" data-i18n="pipe_title">How Zylo Works in Seconds</h2>
+        <p class="section-desc" data-i18n="pipe_desc">Follow the real-time journey from the moment a gamer records or drops a raw clip to instantaneous playback in Discord.</p>
       </div>
 
-      <div class="pipeline-grid">
-        <div class="pipe-card">
-          <span class="pipe-step-num">STAGE 01</span>
-          <span class="pipe-icon">⚡</span>
-          <h3 data-i18n="pipe1_title">WebCodecs Transcoding</h3>
-          <p data-i18n="pipe1_desc">Videos are processed directly in the user's browser using MediaBunny and WebCodecs GPU pipelines. Compresses files locally without spending server CPU cycles.</p>
-          <div class="pipe-tag">⚙️ Client GPU / 60 FPS / H.264</div>
+      <div class="pipe-sim-container">
+        <!-- Stepper Track -->
+        <div class="pipe-timeline-track">
+          <div class="pipe-laser-bg">
+            <div class="pipe-laser-fill" id="pipeLaserFill"></div>
+          </div>
+
+          <div class="pipe-step-node active" data-step="0">
+            <div class="pipe-node-icon-circle">🎥</div>
+            <div class="pipe-step-label" data-i18n="step1_title">1. Capture / Drop</div>
+            <div class="pipe-step-timing">T: 0.00s</div>
+          </div>
+
+          <div class="pipe-step-node" data-step="1">
+            <div class="pipe-node-icon-circle">⚡</div>
+            <div class="pipe-step-label" data-i18n="step2_title">2. GPU Transcode</div>
+            <div class="pipe-step-timing">T: 0.35s</div>
+          </div>
+
+          <div class="pipe-step-node" data-step="2">
+            <div class="pipe-node-icon-circle">☁️</div>
+            <div class="pipe-step-label" data-i18n="step3_title">3. Direct R2 Pipe</div>
+            <div class="pipe-step-timing">T: 0.75s</div>
+          </div>
+
+          <div class="pipe-step-node" data-step="3">
+            <div class="pipe-node-icon-circle">💬</div>
+            <div class="pipe-step-label" data-i18n="step4_title">4. Discord Unfurl</div>
+            <div class="pipe-step-timing">T: 1.10s</div>
+          </div>
         </div>
 
-        <div class="pipe-card">
-          <span class="pipe-step-num">STAGE 02</span>
-          <span class="pipe-icon">☁️</span>
-          <h3 data-i18n="pipe2_title">Direct Cloudflare R2 Upload</h3>
-          <p data-i18n="pipe2_desc">Pre-signed S3-compatible URLs pipe media directly to Cloudflare R2. Bypasses application server bottlenecks and completely eliminates outbound egress bandwidth costs.</p>
-          <div class="pipe-tag">🛡️ S3 API / Zero Egress Fees</div>
+        <!-- Dynamic Screen for Selected Stage -->
+        <div class="pipe-display-screen" id="pipeDisplayScreen">
+          <div class="pipe-display-left">
+            <h4 id="pipeStageTitle">🎥 Stage 1: High-Definition Capture &amp; Ingestion</h4>
+            <p id="pipeStageDesc">The user either records directly in browser with Zylo Studio (Screen/Webcam @ 60 FPS) or drops a raw 1080p/4K gameplay file up to 100MB+.</p>
+            <div class="pipe-hud-tags">
+              <span class="pipe-hud-tag" id="pipeTag1">Target: Screen / Camera</span>
+              <span class="pipe-hud-tag" id="pipeTag2">Zero Install Required</span>
+              <span class="pipe-hud-tag" id="pipeTag3">Format: MP4/WebM/MKV</span>
+            </div>
+          </div>
+
+          <div class="pipe-display-right" id="pipeStageTelemetry">
+            <div style="color:var(--accent-orange); margin-bottom:8px; font-weight:700;">STAGE BENCHMARK</div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span>Memory Overhead:</span>
+              <strong style="color:var(--accent-green);">Zero Server Allocation</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span>Resolution:</span>
+              <strong>1080p 60FPS Native</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span>Status:</span>
+              <strong style="color:var(--accent-cyan);">ACTIVE INGESTION</strong>
+            </div>
+          </div>
         </div>
 
-        <div class="pipe-card">
-          <span class="pipe-step-num">STAGE 03</span>
-          <span class="pipe-icon">🤖</span>
-          <h3 data-i18n="pipe3_title">Discord Bot v14 &amp; /clip</h3>
-          <p data-i18n="pipe3_desc">Built on Discord.js v14 with slash commands, ephemeral administrative controls, and top.gg automated verification. Returns rich embed video cards instantaneously.</p>
-          <div class="pipe-tag">💬 Discord REST v10 / Webhooks</div>
-        </div>
-
-        <div class="pipe-card">
-          <span class="pipe-step-num">STAGE 04</span>
-          <span class="pipe-icon">🔒</span>
-          <h3 data-i18n="pipe4_title">Dual-Mode Security &amp; Stream</h3>
-          <p data-i18n="pipe4_desc">Separates public playback links from permanent HMAC-signed Creator management URLs. Enables instant one-click link revocation and tamper protection.</p>
-          <div class="pipe-tag">🔑 HMAC Signatures / Killswitch</div>
+        <!-- Controls: Auto-Cycle / Step -->
+        <div class="pipe-controls-bar">
+          <button class="pipe-btn-ctrl" id="pipePrevBtn">◀ <span data-i18n="btn_prev">Previous</span></button>
+          <button class="pipe-btn-ctrl" id="pipePlayPauseBtn">⏸ <span data-i18n="btn_pause">Pause Animation</span></button>
+          <button class="pipe-btn-ctrl" id="pipeNextBtn"><span data-i18n="btn_next">Next</span> ▶</button>
         </div>
       </div>
     </section>
 
-    <!-- Capabilities / Features Tabs -->
-    <section class="features-section" id="features">
+    <!-- ========================================================
+         2. DEDICATED ZYLO STUDIO SECTION (IN-BROWSER RECORDER)
+         ======================================================== -->
+    <section class="studio-section" id="studio">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="studio_tag">In-Browser Recording Studio</span>
+        <h2 class="section-title" data-i18n="studio_title">Zylo Studio: No Downloads, No Setup</h2>
+        <p class="section-desc" data-i18n="studio_desc">A complete recording studio right inside your web browser. Capture desktop screens, game windows, and webcams with synchronized multi-audio mixing.</p>
+      </div>
+
+      <div class="studio-grid">
+        <!-- Left: Capabilities & Details -->
+        <div class="studio-left">
+          <div style="display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-orange); background:rgba(255,109,0,0.12); border:1px solid rgba(255,109,0,0.3); padding:4px 10px; border-radius:6px; margin-bottom:16px;">
+            STUDIO ENGINE • ZERO INSTALL
+          </div>
+          <h3 style="font-size:1.9rem; font-weight:800; color:#fff; line-height:1.2; margin-bottom:16px;" data-i18n="studio_h3">
+            Instant Capture from Any Screen or Webcam
+          </h3>
+          <p style="color:var(--text-muted); font-size:1rem; line-height:1.6;" data-i18n="studio_p">
+            Forget complex software configurations like OBS or heavy desktop apps. Zylo Studio leverages modern browser MediaStream and Canvas APIs to record instantly with zero latency.
+          </p>
+
+          <ul class="studio-bullets">
+            <li>
+              <div class="bullet-icon">🖥️</div>
+              <div>
+                <strong style="color:#fff;" data-i18n="studio_b1_title">Dual Source Ingestion:</strong>
+                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b1_desc">Toggle seamlessly between full screen, window, or face camera with responsive picture-in-picture.</p>
+              </div>
+            </li>
+            <li>
+              <div class="bullet-icon">🎙️</div>
+              <div>
+                <strong style="color:#fff;" data-i18n="studio_b2_title">Multi-Track Audio Mixing:</strong>
+                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b2_desc">Combines microphone voice commentary and desktop game sound with real-time waveform normalization.</p>
+              </div>
+            </li>
+            <li>
+              <div class="bullet-icon">⏳</div>
+              <div>
+                <strong style="color:#fff;" data-i18n="studio_b3_title">6-Hour Auto-Destruct Protection:</strong>
+                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b3_desc">Built-in ephemeral lifecycles purge temporary clips automatically, keeping your storage clean and private.</p>
+              </div>
+            </li>
+          </ul>
+
+          <a href="https://zylo.stream" class="btn-hero-main" style="padding:12px 28px; font-size:0.95rem;">
+            <span>🎬</span> <span data-i18n="studio_cta">Open Zylo Studio Live</span> ↗
+          </a>
+        </div>
+
+        <!-- Right: Studio UI Viewfinder Mockup -->
+        <div class="studio-mockup-frame">
+          <div class="studio-mockup-top">
+            <!-- Source Selector Buttons matching real Zylo Studio -->
+            <div class="studio-seg-switch">
+              <button class="studio-seg-opt active" id="btnStudioScreen">🖥️ Screen</button>
+              <button class="studio-seg-opt" id="btnStudioCamera">📷 Camera</button>
+            </div>
+            <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-cyan);">
+              FPS: <strong>60.0</strong> • RES: <strong>1920x1080</strong>
+            </div>
+          </div>
+
+          <!-- Studio Viewfinder -->
+          <div class="studio-viewfinder">
+            <div class="studio-rec-indicator">
+              <span class="studio-rec-dot"></span>
+              <span>LIVE RECORDING</span>
+            </div>
+
+            <div class="studio-btn-record-main" title="Click to Stop & Transcode">
+              ⏹
+            </div>
+
+            <div style="font-family:var(--font-mono); font-size:0.88rem; color:#fff; font-weight:700; margin-top:14px;">
+              00:42.18 / 06:00
+            </div>
+            <div style="font-size:0.78rem; color:var(--text-dim); margin-top:4px;">
+              Audio Waveform Active • System + Mic Synced
+            </div>
+          </div>
+
+          <!-- Studio Bottom Controls -->
+          <div class="studio-bottom-bar">
+            <div>
+              <span style="color:var(--text-dim); margin-right:6px;">MODE:</span>
+              <div class="quality-pill-group" style="display:inline-flex;">
+                <span class="quality-pill">Fast (30FPS)</span>
+                <span class="quality-pill active">Balanced (60FPS)</span>
+                <span class="quality-pill">Lossless</span>
+              </div>
+            </div>
+            <div style="color:var(--accent-orange);">
+              ⏱ 6h Ephemeral Destroy Active
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         3. CORE CAPABILITIES (WITH AD-BLOCK RESISTANT SPONSOR TECH)
+         ======================================================== -->
+    <section class="features-section" id="capabilities">
       <div class="section-header">
         <span class="section-tag" data-i18n="feat_tag">Core Platform Highlights</span>
         <h2 class="section-title" data-i18n="feat_title">Designed for Creators &amp; Communities</h2>
@@ -1034,7 +1563,7 @@
         <button class="tab-btn active" data-tab="discord-tab">🤖 <span data-i18n="tab_btn_discord">Discord Native</span></button>
         <button class="tab-btn" data-tab="encoder-tab">⚡ <span data-i18n="tab_btn_encoder">Hardware Encoder</span></button>
         <button class="tab-btn" data-tab="privacy-tab">🛡️ <span data-i18n="tab_btn_privacy">Privacy Engine</span></button>
-        <button class="tab-btn" data-tab="admin-tab">📊 <span data-i18n="tab_btn_admin">Telemetry &amp; Admin</span></button>
+        <button class="tab-btn" data-tab="monetization-tab">✨ <span data-i18n="tab_btn_monetize">Native Sponsorships</span></button>
       </div>
 
       <!-- Tab 1: Discord Native -->
@@ -1153,89 +1682,65 @@
         </div>
       </div>
 
-      <!-- Tab 4: Telemetry & Admin -->
-      <div class="tab-content" id="admin-tab">
+      <!-- Tab 4: Native Non-Intrusive & AdBlock-Resistant Monetization -->
+      <div class="tab-content" id="monetization-tab">
         <div class="tab-left">
-          <h3 data-i18n="tab4_title">Real-Time Moderation &amp; Telemetry Console</h3>
-          <p data-i18n="tab4_desc">A built-in administrative suite protected by HMAC session cookies. Provides platform operators with live visibility into bandwidth consumption, active links, and security alerts.</p>
+          <h3 data-i18n="tab4_title">Native, Non-Intrusive &amp; AdBlock-Resistant Sponsorships</h3>
+          <p data-i18n="tab4_desc">Say goodbye to annoying video pre-rolls, third-party trackers, and intrusive popups. Zylo delivers respectful, first-party sponsored placements natively rendered right within the player shell.</p>
           <ul class="tab-bullets">
-            <li><span class="check">✓</span> <strong data-i18n="tab4_b1_title">Live Storage Tracker:</strong> <span data-i18n="tab4_b1_desc">Monitors exact Megabytes stored in Cloudflare R2.</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab4_b2_title">Instant Search &amp; Filter:</strong> <span data-i18n="tab4_b2_desc">Look up clips by unique ID, date, or status.</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab4_b3_title">Security Audit Log:</strong> <span data-i18n="tab4_b3_desc">Tracks IP hashes, views, and automated abuse reports.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab4_b1_title">100% AdBlock-Immune:</strong> <span data-i18n="tab4_b1_desc">Delivered first-party from the same origin without third-party ad network scripts.</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab4_b2_title">Multi-Language &amp; Region Aware:</strong> <span data-i18n="tab4_b2_desc">Placements automatically adapt to the viewer's language (EN, ES, PT, JA).</span></li>
+            <li><span class="check">✓</span> <strong data-i18n="tab4_b3_title">Zero Viewing Interruption:</strong> <span data-i18n="tab4_b3_desc">No 30-second unskippable video ads. Gaming clips start playing instantly.</span></li>
           </ul>
           <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Open zylo.stream</span> ↗</a>
         </div>
         <div class="tab-right">
-          <!-- Live Telemetry HUD -->
-          <div class="hud-console">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px;">
-              <span style="color:var(--accent-cyan); font-weight:700;">PLATFORM HEALTH TELEMETRY</span>
-              <span class="hud-chip" style="background:rgba(16,185,129,0.15); color:var(--accent-green); border-color:var(--accent-green);">100% OPERATIONAL</span>
-            </div>
-            <div class="hud-line">
-              <span>Cloudflare R2 Bucket:</span>
-              <strong style="color:#fff;">zylo-production-edge</strong>
-            </div>
-            <div class="hud-line">
-              <span>Global CDN Edge POPs:</span>
-              <strong>310+ Locations (Direct)</strong>
-            </div>
-            <div class="hud-line">
-              <span>Cumulative Egress Cost:</span>
-              <strong style="color:var(--accent-green);">$0.00 (Zero Egress Guarantee)</strong>
-            </div>
-            <div class="hud-line">
-              <span>Active Discord Sessions:</span>
-              <strong style="color:var(--accent-cyan);">Multi-Guild Ready</strong>
-            </div>
-            <div class="hud-line">
-              <span>Avg Link Response:</span>
-              <strong style="color:var(--accent-orange);">&lt; 42 ms</strong>
+          <!-- Native Non-Intrusive Sponsor Mockup -->
+          <div class="sponsor-card-mockup">
+            <span class="sponsor-badge-top">FIRST-PARTY NATIVE PLACEMENT</span>
+            <div style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:6px;">Integrated Community Showcase</div>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">
+              Rendered directly by the Zylo template engine. No cookies, no privacy invasions, and zero impact on video loading speeds.
+            </p>
+            <div style="background:rgba(0,0,0,0.4); border-radius:6px; padding:10px; font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-green); display:flex; justify-content:space-between; align-items:center;">
+              <span>Target: EN / ES / PT / JA</span>
+              <span style="color:var(--accent-cyan);">ADBLOCK BYPASSED (NATIVE)</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Interactive Simulator Demo -->
-    <section class="features-section" id="simulator">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="sim_tag">Interactive Live Simulator</span>
-        <h2 class="section-title" data-i18n="sim_title">Experience the Zylo Pipeline</h2>
-        <p class="section-desc" data-i18n="sim_desc">Click the trigger below to simulate how Zylo compresses, uploads, and generates an instant Discord embed in real time.</p>
-      </div>
+    <!-- ========================================================
+         4. HIGH SCALABILITY ARCHITECTURE SECTION
+         ======================================================== -->
+    <section class="scale-section" id="scalability">
+      <canvas id="scaleCanvas"></canvas>
 
-      <div style="max-width: 780px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 32px; backdrop-filter: blur(16px);">
-        <div class="sim-box">
-          <div class="sim-header">
-            <div class="sim-dots"><span></span><span></span><span></span></div>
-            <span>zylo_webcodecs_engine.js — GPU Pipeline</span>
-            <span id="simStatusText" style="color:var(--accent-cyan);">READY</span>
+      <div class="scale-content-wrapper container">
+        <div class="section-header">
+          <span class="section-tag" data-i18n="scale_tag">Extreme Elasticity</span>
+          <h2 class="section-title" data-i18n="scale_title">Infinite Edge Scalability</h2>
+          <p class="section-desc" data-i18n="scale_desc">Engineered so that 10 users or 100,000 concurrent streamers cost practically the same to operate, with zero CPU bottlenecks.</p>
+        </div>
+
+        <div class="scale-grid">
+          <div class="scale-card">
+            <span class="scale-icon">💻</span>
+            <h3 data-i18n="scale1_title">Distributed Client GPU Compute</h3>
+            <p data-i18n="scale1_desc">By leveraging WebCodecs in the browser, each user encodes their own video using their own hardware. The central server CPU load remains flat at ~0% regardless of traffic spikes.</p>
           </div>
 
-          <div style="display:flex; justify-content:space-between; color:var(--text-muted); font-size:0.8rem;">
-            <span>Simulated Clip: <strong>gameplay_clutch_4k.mp4 (84.2 MB)</strong></span>
-            <span id="simPctText">0%</span>
+          <div class="scale-card">
+            <span class="scale-icon">🌐</span>
+            <h3 data-i18n="scale2_title">310+ Global Edge Locations</h3>
+            <p data-i18n="scale2_desc">Video playback streams directly from Cloudflare R2's global edge network. Viewers in North America, Europe, or Asia stream from the closest datacenter with sub-millisecond TTFB.</p>
           </div>
 
-          <div class="sim-progress-track">
-            <div class="sim-progress-fill" id="simProgressBar"></div>
-          </div>
-
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; flex-wrap:wrap; gap:12px;">
-            <button class="sim-btn-trigger" id="simStartBtn">⚡ <span data-i18n="sim_btn_run">Run Simulated Transcode &amp; Upload</span></button>
-            <span style="font-size:0.78rem; color:var(--text-dim);" id="simElapsedText">Latency: 0.00s</span>
-          </div>
-
-          <!-- Result Preview -->
-          <div class="sim-embed-preview" id="simEmbedPreview">
-            <div style="font-size:0.75rem; text-transform:uppercase; color:#949ba4; font-weight:700; margin-bottom:4px;">Discord Bot Embed Preview • zylo.stream</div>
-            <div style="font-size:1.05rem; font-weight:700; color:#fff; margin-bottom:4px;">🎥 Gameplay Clutch Highlight [1080p 60FPS]</div>
-            <div style="font-size:0.85rem; color:#b5bac1; margin-bottom:10px;">Streamed via Cloudflare R2 • Transcoded locally in 1.1s (Compressed 84MB ➔ 7.8MB)</div>
-            <div style="background:#1e1f22; border-radius:4px; padding:10px; font-family:var(--font-mono); font-size:0.82rem; color:var(--accent-cyan); display:flex; justify-content:space-between; align-items:center;">
-              <span>https://zylo.stream/v/clutch-x8f2a</span>
-              <a href="https://zylo.stream" style="color:var(--accent-orange); text-decoration:none; font-weight:700;">Open Live ↗</a>
-            </div>
+          <div class="scale-card">
+            <span class="scale-icon">📉</span>
+            <h3 data-i18n="scale3_title">Zero Bandwidth Surcharges</h3>
+            <p data-i18n="scale3_desc">Traditional cloud providers (AWS S3) charge up to $0.09/GB for outgoing video traffic. Zylo avoids data egress fees, ensuring sustainable community growth without financial risk.</p>
           </div>
         </div>
       </div>
@@ -1245,7 +1750,7 @@
     <section class="final-cta">
       <div class="final-cta-card">
         <h2 data-i18n="cta_title">Ready to Experience Zero-Egress Video?</h2>
-        <p data-i18n="cta_desc">Join gamers and creators using Zylo to share uncompressed, high-definition clips effortlessly across Discord and the web.</p>
+        <p data-i18n="cta_desc">Join gamers and creators using Zylo to record in-browser and share uncompressed, high-definition clips effortlessly across Discord and the web.</p>
         <a href="https://zylo.stream" class="btn-hero-main">
           <span>🚀</span> <span data-i18n="cta_btn">Go Directly to zylo.stream</span>
         </a>
@@ -1265,44 +1770,56 @@
     </div>
   </footer>
 
-  <!-- Internationalization (i18n) & Interactive Logic -->
+  <!-- Interactive Scripts & i18n -->
   <script>
-    // 1. Multilingual Dictionary (Default: English)
+    // 1. Multilingual Dictionary
     const translations = {
       en: {
-        nav_arch: "Architecture",
+        nav_pipeline: "Pipeline",
+        nav_studio: "Zylo Studio",
         nav_features: "Capabilities",
-        nav_demo: "Interactive Pipeline",
+        nav_scalability: "Scalability",
         nav_launch: "Launch App",
         hero_badge: "CLOUD-NATIVE VIDEO STREAMING ARCHITECTURE",
         hero_h1_part1: "Instant Clip Sharing with",
-        hero_h1_part2: "Zero-Egress Direct Delivery",
+        hero_h1_part2: "Zero Bandwidth Egress Fees",
         hero_h1_part3: "In-Browser GPU Transcode",
-        hero_subtitle: "Engineered to shatter Discord's 10MB limit with zero egress fees. Zylo pairs Cloudflare R2 object storage with browser-native WebCodecs GPU transcoding for sub-second, uncompressed video delivery across communities and the web.",
+        hero_subtitle: "Engineered to shatter Discord's 10MB limit with zero egress bandwidth penalties. Zylo pairs Cloudflare R2 object storage with browser-native WebCodecs GPU transcoding for sub-second, uncompressed video delivery across communities and the web.",
         hero_btn_main: "Enter Platform (zylo.stream)",
-        hero_btn_sec: "Explore Tech Architecture",
-        stat_egress: "Cloud Egress Fees (R2)",
-        stat_limit: "10x Discord Clip Size",
+        hero_btn_studio: "Explore Zylo Studio",
+        stat_limit: "10x Discord Clip Limit",
+        stat_egress: "Zero Bandwidth Surcharges",
         stat_gpu: "Client WebCodecs Offload",
         stat_speed: "Discord Embed Response",
-        arch_tag: "Systems Engineering",
-        arch_title: "End-to-End Scalable Pipeline",
-        arch_desc: "A streamlined four-stage architecture engineered for high concurrency, zero server transcoding load, and instant Discord playback.",
-        pipe1_title: "WebCodecs Transcoding",
-        pipe1_desc: "Videos are processed directly in the user's browser using MediaBunny and WebCodecs GPU pipelines. Compresses files locally without spending server CPU cycles.",
-        pipe2_title: "Direct Cloudflare R2 Upload",
-        pipe2_desc: "Pre-signed S3-compatible URLs pipe media directly to Cloudflare R2. Bypasses application server bottlenecks and completely eliminates outbound egress bandwidth costs.",
-        pipe3_title: "Discord Bot v14 & /clip",
-        pipe3_desc: "Built on Discord.js v14 with slash commands, ephemeral administrative controls, and top.gg automated verification. Returns rich embed video cards instantaneously.",
-        pipe4_title: "Dual-Mode Security & Stream",
-        pipe4_desc: "Separates public playback links from permanent HMAC-signed Creator management URLs. Enables instant one-click link revocation and tamper protection.",
+        pipe_tag: "End-to-End Simulation",
+        pipe_title: "How Zylo Works in Seconds",
+        pipe_desc: "Follow the real-time journey from the moment a gamer records or drops a raw clip to instantaneous playback in Discord.",
+        step1_title: "1. Capture / Drop",
+        step2_title: "2. GPU Transcode",
+        step3_title: "3. Direct R2 Pipe",
+        step4_title: "4. Discord Unfurl",
+        btn_prev: "Previous",
+        btn_pause: "Pause Animation",
+        btn_next: "Next",
+        studio_tag: "In-Browser Recording Studio",
+        studio_title: "Zylo Studio: No Downloads, No Setup",
+        studio_desc: "A complete recording studio right inside your web browser. Capture desktop screens, game windows, and webcams with synchronized multi-audio mixing.",
+        studio_h3: "Instant Capture from Any Screen or Webcam",
+        studio_p: "Forget complex software configurations like OBS or heavy desktop apps. Zylo Studio leverages modern browser MediaStream and Canvas APIs to record instantly with zero latency.",
+        studio_b1_title: "Dual Source Ingestion:",
+        studio_b1_desc: "Toggle seamlessly between full screen, window, or face camera with responsive picture-in-picture.",
+        studio_b2_title: "Multi-Track Audio Mixing:",
+        studio_b2_desc: "Combines microphone voice commentary and desktop game sound with real-time waveform normalization.",
+        studio_b3_title: "6-Hour Auto-Destruct Protection:",
+        studio_b3_desc: "Built-in ephemeral lifecycles purge temporary clips automatically, keeping your storage clean and private.",
+        studio_cta: "Open Zylo Studio Live",
         feat_tag: "Core Platform Highlights",
         feat_title: "Designed for Creators & Communities",
         feat_desc: "Explore the specific modular subsystems powering the production deployment of zylo.stream.",
         tab_btn_discord: "Discord Native",
         tab_btn_encoder: "Hardware Encoder",
         tab_btn_privacy: "Privacy Engine",
-        tab_btn_admin: "Telemetry & Admin",
+        tab_btn_monetize: "Native Sponsorships",
         tab1_title: "Interactive Discord Slash Integration",
         tab1_desc: "Gamers and creators can share high-definition highlights directly from Discord without paying for Nitro subscriptions. Zylo embeds auto-unfurl with inline HTML5 video players.",
         tab1_b1_title: "/clip Slash Command:",
@@ -1327,57 +1844,74 @@
         tab3_b2_desc: "Permanent access to delete or revoke links at any moment.",
         tab3_b3_title: "Instant Revoke:",
         tab3_b3_desc: "Deactivates public viewing instantly without deleting audit records.",
-        tab4_title: "Real-Time Moderation & Telemetry Console",
-        tab4_desc: "A built-in administrative suite protected by HMAC session cookies. Provides platform operators with live visibility into bandwidth consumption, active links, and security alerts.",
-        tab4_b1_title: "Live Storage Tracker:",
-        tab4_b1_desc: "Monitors exact Megabytes stored in Cloudflare R2.",
-        tab4_b2_title: "Instant Search & Filter:",
-        tab4_b2_desc: "Look up clips by unique ID, date, or status.",
-        tab4_b3_title: "Security Audit Log:",
-        tab4_b3_desc: "Tracks IP hashes, views, and automated abuse reports.",
+        tab4_title: "Native, Non-Intrusive & AdBlock-Resistant Sponsorships",
+        tab4_desc: "Say goodbye to annoying video pre-rolls, third-party trackers, and intrusive popups. Zylo delivers respectful, first-party sponsored placements natively rendered right within the player shell.",
+        tab4_b1_title: "100% AdBlock-Immune:",
+        tab4_b1_desc: "Delivered first-party from the same origin without third-party ad network scripts.",
+        tab4_b2_title: "Multi-Language & Region Aware:",
+        tab4_b2_desc: "Placements automatically adapt to the viewer's language (EN, ES, PT, JA).",
+        tab4_b3_title: "Zero Viewing Interruption:",
+        tab4_b3_desc: "No 30-second unskippable video ads. Gaming clips start playing instantly.",
         tab_cta: "Open zylo.stream",
-        sim_tag: "Interactive Live Simulator",
-        sim_title: "Experience the Zylo Pipeline",
-        sim_desc: "Click the trigger below to simulate how Zylo compresses, uploads, and generates an instant Discord embed in real time.",
-        sim_btn_run: "Run Simulated Transcode & Upload",
+        scale_tag: "Extreme Elasticity",
+        scale_title: "Infinite Edge Scalability",
+        scale_desc: "Engineered so that 10 users or 100,000 concurrent streamers cost practically the same to operate, with zero CPU bottlenecks.",
+        scale1_title: "Distributed Client GPU Compute",
+        scale1_desc: "By leveraging WebCodecs in the browser, each user encodes their own video using their own hardware. The central server CPU load remains flat at ~0% regardless of traffic spikes.",
+        scale2_title: "310+ Global Edge Locations",
+        scale2_desc: "Video playback streams directly from Cloudflare R2's global edge network. Viewers in North America, Europe, or Asia stream from the closest datacenter with sub-millisecond TTFB.",
+        scale3_title: "Zero Bandwidth Surcharges",
+        scale3_desc: "Traditional cloud providers (AWS S3) charge up to $0.09/GB for outgoing video traffic. Zylo avoids data egress fees, ensuring sustainable community growth without financial risk.",
         cta_title: "Ready to Experience Zero-Egress Video?",
-        cta_desc: "Join gamers and creators using Zylo to share uncompressed, high-definition clips effortlessly across Discord and the web.",
+        cta_desc: "Join gamers and creators using Zylo to record in-browser and share uncompressed, high-definition clips effortlessly across Discord and the web.",
         cta_btn: "Go Directly to zylo.stream"
       },
       es: {
-        nav_arch: "Arquitectura",
+        nav_pipeline: "Pipeline",
+        nav_studio: "Zylo Studio",
         nav_features: "Capacidades",
-        nav_demo: "Pipeline Interactivo",
+        nav_scalability: "Escalabilidad",
         nav_launch: "Lanzar App",
         hero_badge: "ARQUITECTURA DE STREAMING CLOUD-NATIVE",
         hero_h1_part1: "Comparte Clips al Instante con",
-        hero_h1_part2: "Entrega Directa Sin Costos de Salida",
+        hero_h1_part2: "Cero Recargos de Ancho de Banda",
         hero_h1_part3: "Transcodificación GPU en Navegador",
-        hero_subtitle: "Diseñado para superar de forma definitiva el límite de 10MB de Discord sin costes de salida. Zylo combina almacenamiento Cloudflare R2 con codificación WebCodecs del lado del cliente para una distribución de video en alta definición.",
+        hero_subtitle: "Diseñado para superar el límite de 10MB de Discord sin penalizaciones de salida. Zylo combina almacenamiento Cloudflare R2 con codificación WebCodecs en el navegador para una distribución rápida y sin fricción.",
         hero_btn_main: "Entrar a la Plataforma (zylo.stream)",
-        hero_btn_sec: "Explorar Arquitectura Técnica",
-        stat_egress: "Costes de Egress en Cloud (R2)",
+        hero_btn_studio: "Explorar Zylo Studio",
         stat_limit: "10x Límite de Clips de Discord",
+        stat_egress: "Sin Recargos de Ancho de Banda",
         stat_gpu: "Descarga 100% GPU del Cliente",
         stat_speed: "Respuesta de Embeds Discord",
-        arch_tag: "Ingeniería de Sistemas",
-        arch_title: "Pipeline Escalable de Extremo a Extremo",
-        arch_desc: "Una arquitectura en 4 etapas creada para alta concurrencia, cero carga de transcodificación en el servidor y reproducción inmediata en Discord.",
-        pipe1_title: "Transcodificación WebCodecs",
-        pipe1_desc: "Los videos se procesan directamente en el navegador del usuario con MediaBunny y pipelines GPU WebCodecs. Comprime localmente sin consumir CPU del servidor.",
-        pipe2_title: "Subida Directa a Cloudflare R2",
-        pipe2_desc: "URLs prefirmadas compatibles con S3 envían los medios directo a Cloudflare R2. Elimina cuellos de botella y costes de ancho de banda de salida.",
-        pipe3_title: "Bot de Discord v14 y /clip",
-        pipe3_desc: "Construido en Discord.js v14 con comandos de barra, controles administrativos y verificación automática de Top.gg. Genera tarjetas de video al instante.",
-        pipe4_title: "Seguridad Dual y Streaming",
-        pipe4_desc: "Separa los enlaces públicos de reproducción de los enlaces permanentes de Creador con HMAC. Permite revocación inmediata con un solo clic.",
+        pipe_tag: "Simulación de Extremo a Extremo",
+        pipe_title: "Cómo Funciona Zylo en Segundos",
+        pipe_desc: "Sigue el recorrido en tiempo real desde que un usuario graba o arrastra un clip hasta su reproducción instantánea en Discord.",
+        step1_title: "1. Captura / Arrastre",
+        step2_title: "2. Transcode GPU",
+        step3_title: "3. Directo a R2",
+        step4_title: "4. Embed Discord",
+        btn_prev: "Anterior",
+        btn_pause: "Pausar Animación",
+        btn_next: "Siguiente",
+        studio_tag: "Estudio de Grabación en el Navegador",
+        studio_title: "Zylo Studio: Sin Descargas, Sin Configuración",
+        studio_desc: "Un estudio completo dentro de tu navegador web. Captura pantallas, ventanas de juegos y cámaras web con mezcla de audio sincronizada.",
+        studio_h3: "Captura Instantánea de Pantalla o Cámara",
+        studio_p: "Olvídate de programas pesados como OBS. Zylo Studio utiliza las APIs modernas de MediaStream y Canvas para grabar de inmediato y sin lag.",
+        studio_b1_title: "Captura Dual:",
+        studio_b1_desc: "Cambia fácilmente entre pantalla completa, ventana o cámara con picture-in-picture.",
+        studio_b2_title: "Mezcla de Audio Multicanal:",
+        studio_b2_desc: "Sincroniza micrófono y sonido del juego con normalización de ondas en vivo.",
+        studio_b3_title: "Autodestrucción en 6 Horas:",
+        studio_b3_desc: "Ciclos de vida efímeros que purgan clips temporales automáticamente.",
+        studio_cta: "Abrir Zylo Studio en Vivo",
         feat_tag: "Puntos Clave de la Plataforma",
         feat_title: "Diseñado para Creadores y Comunidades",
         feat_desc: "Explora los subsistemas modulares que impulsan el despliegue en producción de zylo.stream.",
         tab_btn_discord: "Nativo en Discord",
         tab_btn_encoder: "Codificador Hardware",
         tab_btn_privacy: "Motor de Privacidad",
-        tab_btn_admin: "Telemetría y Admin",
+        tab_btn_monetize: "Patrocinios Nativos",
         tab1_title: "Integración Nativa con Comandos de Discord",
         tab1_desc: "Gamers y creadores pueden compartir momentos destacados en alta definición directamente en Discord sin pagar Nitro. Los embeds se reproducen automáticamente.",
         tab1_b1_title: "Comando Slash /clip:",
@@ -1402,57 +1936,74 @@
         tab3_b2_desc: "Acceso permanente para borrar o revocar el enlace cuando quieras.",
         tab3_b3_title: "Revocación Instantánea:",
         tab3_b3_desc: "Desactiva la visualización pública en el acto sin borrar el registro de auditoría.",
-        tab4_title: "Consola de Moderación y Telemetría en Tiempo Real",
-        tab4_desc: "Panel administrativo protegido con cookies de sesión HMAC. Proporciona visibilidad en vivo del consumo de almacenamiento, enlaces activos y alertas.",
-        tab4_b1_title: "Monitor de Almacenamiento:",
-        tab4_b1_desc: "Rastrea los megabytes exactos alojados en Cloudflare R2.",
-        tab4_b2_title: "Búsqueda y Filtro Instantáneo:",
-        tab4_b2_desc: "Localiza clips por ID único, fecha o estado.",
-        tab4_b3_title: "Registro de Auditoría:",
-        tab4_b3_desc: "Monitorea hashes de IP, reproducciones y reportes.",
+        tab4_title: "Patrocinios Nativos, No Intrusivos y Resistentes a AdBlock",
+        tab4_desc: "Dile adiós a los anuncios molestos antes del video, rastreadores y popups. Zylo entrega patrocinios respetuosos de primer origen integrados directamente en el reproductor.",
+        tab4_b1_title: "100% Inmune a AdBlock:",
+        tab4_b1_desc: "Servido desde el mismo dominio sin scripts externos de redes publicitarias.",
+        tab4_b2_title: "Segmentado por Idioma y Región:",
+        tab4_b2_desc: "Los espacios se adaptan al idioma del espectador (EN, ES, PT, JA).",
+        tab4_b3_title: "Sin Interrupciones de Reproducción:",
+        tab4_b3_desc: "Sin anuncios obligatorios de 30 segundos. El clip comienza al instante.",
         tab_cta: "Abrir zylo.stream",
-        sim_tag: "Simulador Interactivo en Vivo",
-        sim_title: "Experimenta el Pipeline de Zylo",
-        sim_desc: "Haz clic abajo para simular cómo Zylo comprime, sube y genera un embed de Discord al instante.",
-        sim_btn_run: "Ejecutar Transcodificación y Subida Simulada",
+        scale_tag: "Elasticidad Extrema",
+        scale_title: "Escalabilidad Infinita en el Borde",
+        scale_desc: "Diseñado para que 10 usuarios o 100,000 streamers simultáneos cuesten prácticamente lo mismo de operar, sin saturar la CPU.",
+        scale1_title: "Cómputo GPU Distribuido en el Cliente",
+        scale1_desc: "Con WebCodecs en el navegador, cada usuario codifica su propio video en su hardware. La carga del servidor permanece en ~0% sin importar el tráfico.",
+        scale2_title: "Más de 310 Ubicaciones Globales",
+        scale2_desc: "El video se transmite directamente desde la red edge de Cloudflare R2 con mínima latencia en cualquier continente.",
+        scale3_title: "Sin Penalizaciones de Tráfico",
+        scale3_desc: "Evita los costosos cobros de salida ($0.09/GB en nubes tradicionales), permitiendo un crecimiento sostenible sin sorpresas en la factura.",
         cta_title: "¿Listo para Experimentar Video Sin Límites?",
-        cta_desc: "Únete a los gamers y creadores que usan Zylo para compartir clips en alta definición en Discord y en la web.",
+        cta_desc: "Únete a los gamers y creadores que usan Zylo para grabar en el navegador y compartir clips en alta definición en Discord.",
         cta_btn: "Ir Directamente a zylo.stream"
       },
       pt: {
-        nav_arch: "Arquitetura",
+        nav_pipeline: "Pipeline",
+        nav_studio: "Zylo Studio",
         nav_features: "Recursos",
-        nav_demo: "Pipeline Interativo",
+        nav_scalability: "Escalabilidade",
         nav_launch: "Abrir App",
         hero_badge: "ARQUITETURA DE STREAMING CLOUD-NATIVE",
         hero_h1_part1: "Compartilhamento Instantâneo com",
-        hero_h1_part2: "Entrega Direta Sem Taxas de Egress",
+        hero_h1_part2: "Sem Sobretaxas de Tráfego",
         hero_h1_part3: "Transcodificação GPU no Navegador",
-        hero_subtitle: "Projetado para superar o limite de 10MB do Discord. Combina Cloudflare R2 com WebCodecs no cliente para distribuição ultrarrápida e sem custos de saída.",
+        hero_subtitle: "Desenvolvido para superar o limite de 10MB do Discord. Combina Cloudflare R2 com WebCodecs no cliente para distribuição ultrarrápida e econômica.",
         hero_btn_main: "Entrar na Plataforma (zylo.stream)",
-        hero_btn_sec: "Explorar Arquitetura Técnica",
-        stat_egress: "Taxas de Egress em Nuvem (R2)",
+        hero_btn_studio: "Explorar Zylo Studio",
         stat_limit: "10x Limite de Clips do Discord",
+        stat_egress: "Sem Taxas Abusivas de Saída",
         stat_gpu: "Descarga 100% GPU no Cliente",
         stat_speed: "Resposta de Embeds Discord",
-        arch_tag: "Engenharia de Sistemas",
-        arch_title: "Pipeline Escalável de Ponta a Ponta",
-        arch_desc: "Uma arquitetura em 4 etapas criada para alta concorrência e reprodução imediata no Discord.",
-        pipe1_title: "Transcodificação WebCodecs",
-        pipe1_desc: "Vídeos são processados no navegador com GPU local, sem gastar CPU do servidor.",
-        pipe2_title: "Envio Direto para Cloudflare R2",
-        pipe2_desc: "URLs pré-assinadas enviam mídias diretamente ao R2 sem custo de tráfego de saída.",
-        pipe3_title: "Bot Discord v14 e /clip",
-        pipe3_desc: "Construído em Discord.js com cartões de vídeo instantâneos.",
-        pipe4_title: "Segurança Dual e Streaming",
-        pipe4_desc: "Separa links públicos de links de criadores assinados com HMAC.",
+        pipe_tag: "Simulação Completa",
+        pipe_title: "Como o Zylo Funciona em Segundos",
+        pipe_desc: "Acompanhe a jornada desde a gravação até a reprodução direta no Discord.",
+        step1_title: "1. Captura / Envio",
+        step2_title: "2. Transcode GPU",
+        step3_title: "3. Direct Cloud R2",
+        step4_title: "4. Embed Discord",
+        btn_prev: "Anterior",
+        btn_pause: "Pausar Animação",
+        btn_next: "Próximo",
+        studio_tag: "Estúdio de Gravação no Navegador",
+        studio_title: "Zylo Studio: Sem Instalações",
+        studio_desc: "Grave telas e webcams com áudio sincronizado direto pelo navegador.",
+        studio_h3: "Captura Imediata sem Softwares Pesados",
+        studio_p: "Grave suas partidas sem precisar de programas complexos como o OBS.",
+        studio_b1_title: "Fontes Duplas:",
+        studio_b1_desc: "Alterne entre tela cheia, janela ou câmera com picture-in-picture.",
+        studio_b2_title: "Mixagem de Áudio:",
+        studio_b2_desc: "Sincroniza microfone e som do sistema com visualizador de ondas.",
+        studio_b3_title: "Destruição em 6 Horas:",
+        studio_b3_desc: "Ciclo de vida temporário para manter o armazenamento limpo.",
+        studio_cta: "Abrir Zylo Studio Ao Vivo",
         feat_tag: "Destaques da Plataforma",
         feat_title: "Projetado para Criadores e Comunidades",
         feat_desc: "Conheça os subsistemas que alimentam o zylo.stream.",
         tab_btn_discord: "Nativo no Discord",
         tab_btn_encoder: "Codificador Hardware",
         tab_btn_privacy: "Motor de Privacidade",
-        tab_btn_admin: "Telemetria e Admin",
+        tab_btn_monetize: "Patrocínios Nativos",
         tab1_title: "Comandos Nativos do Discord",
         tab1_desc: "Compartilhe clipes em alta resolução diretamente no Discord.",
         tab1_b1_title: "Comando /clip:",
@@ -1477,57 +2028,74 @@
         tab3_b2_desc: "Acesso permanente para apagar ou pausar.",
         tab3_b3_title: "Revogação Instantânea:",
         tab3_b3_desc: "Bloqueia o link imediatamente.",
-        tab4_title: "Console de Moderação em Tempo Real",
-        tab4_desc: "Painel protegido para acompanhar armazenamento e visualizações.",
-        tab4_b1_title: "Medidor de Armazenamento:",
-        tab4_b1_desc: "Monitora o uso no Cloudflare R2.",
-        tab4_b2_title: "Busca Rápida:",
-        tab4_b2_desc: "Encontre qualquer clipe em segundos.",
-        tab4_b3_title: "Auditoria:",
-        tab4_b3_desc: "Registros de segurança e acessos.",
+        tab4_title: "Patrocínios Nativos e Resistentes a AdBlock",
+        tab4_desc: "Anúncios integrados de primeiro nível sem rastreadores nem pop-ups incômodos.",
+        tab4_b1_title: "100% Imune a AdBlock:",
+        tab4_b1_desc: "Entregue pelo mesmo domínio sem scripts externos de terceiros.",
+        tab4_b2_title: "Segmentado por Idioma:",
+        tab4_b2_desc: "Adapta-se ao idioma do usuário.",
+        tab4_b3_title: "Sem Interrupções:",
+        tab4_b3_desc: "Os vídeos iniciam de forma imediata.",
         tab_cta: "Abrir zylo.stream",
-        sim_tag: "Simulador Interativo",
-        sim_title: "Experimente o Pipeline",
-        sim_desc: "Clique abaixo para simular a compressão e envio de um clipe.",
-        sim_btn_run: "Executar Simulação de Transcode e Upload",
+        scale_tag: "Elasticidade Extrema",
+        scale_title: "Escalabilidade Infinita",
+        scale_desc: "Projetado para manter o consumo de CPU em ~0% mesmo sob tráfego massivo.",
+        scale1_title: "GPU no Cliente",
+        scale1_desc: "Cada usuário processa seu próprio vídeo localmente.",
+        scale2_title: "310+ Pontos Globais",
+        scale2_desc: "Streaming direto pelos datacenters edge do Cloudflare R2.",
+        scale3_title: "Sem Taxas de Saída",
+        scale3_desc: "Elimina cobranças de tráfego de saída comuns em outras nuvens.",
         cta_title: "Pronto para Vídeos Sem Limites?",
-        cta_desc: "Junte-se aos criadores que utilizam o Zylo para compartilhar clipes em alta definição.",
+        cta_desc: "Grave pelo navegador e compartilhe seus clipes em alta definição no Discord.",
         cta_btn: "Ir Diretamente para zylo.stream"
       },
       ja: {
-        nav_arch: "アーキテクチャ",
+        nav_pipeline: "パイプライン",
+        nav_studio: "Zylo Studio",
         nav_features: "機能と特徴",
-        nav_demo: "パイプライン体験",
+        nav_scalability: "スケーラビリティ",
         nav_launch: "アプリを起動",
         hero_badge: "クラウドネイティブ・動画ストリーミング設計",
         hero_h1_part1: "Discordの制限を突破する",
-        hero_h1_part2: "エグレス転送無料・高速配信",
+        hero_h1_part2: "転送手数料ゼロの高速配信",
         hero_h1_part3: "ブラウザ内GPU動画トランスコード",
-        hero_subtitle: "Discordの10MB制限を完全解消。Cloudflare R2とクライアント側WebCodecsを連携させ、極限の低遅延・ゼロコストで高品質な動画を共有できる動画配信プラットフォーム。",
+        hero_subtitle: "Discordの10MB制限を完全解消。Cloudflare R2とクライアント側WebCodecsを連携させ、極限の低遅延・持続可能なコストで高品質な動画を共有できます。",
         hero_btn_main: "zylo.stream を利用する",
-        hero_btn_sec: "技術設計を見る",
-        stat_egress: "クラウド転送料金 (R2)",
+        hero_btn_studio: "Zylo Studio を見る",
         stat_limit: "Discord制限の10倍以上の容量",
+        stat_egress: "追加の下り転送料金ゼロ",
         stat_gpu: "クライアントGPUオフロード",
         stat_speed: "Discord埋め込み応答速度",
-        arch_tag: "システム設計",
-        arch_title: "高スケーラブル・パイプライン",
-        arch_desc: "サーバー負荷ゼロ・高速再生を実現する4段階のパイプラインアーキテクチャ。",
-        pipe1_title: "WebCodecs トランスコード",
-        pipe1_desc: "ユーザーのブラウザ内GPUで直接H.264圧縮を行い、サーバーのCPU負荷をゼロにします。",
-        pipe2_title: "Cloudflare R2 直通アップロード",
-        pipe2_desc: "署名付きURLを用いてR2へ直通転送。下り転送コストを完全にゼロ化します。",
-        pipe3_title: "Discord Bot v14 & /clip",
-        pipe3_desc: "スラッシュコマンド対応。モバイル・PCどちらのDiscordでもインライン再生されます。",
-        pipe4_title: "デュアルモード・セキュリティ",
-        pipe4_desc: "公開URLとHMAC署名付きクリエイター管理URLを分離し、即時取り消しに対応。",
+        pipe_tag: "シミュレーション",
+        pipe_title: "Zylo の高速パイプライン",
+        pipe_desc: "録画・アップロードからDiscord内での即時再生までの全工程をご覧ください。",
+        step1_title: "1. 録画 / 投入",
+        step2_title: "2. GPU圧縮",
+        step3_title: "3. R2 直通",
+        step4_title: "4. Discord再生",
+        btn_prev: "前へ",
+        btn_pause: "一時停止",
+        btn_next: "次へ",
+        studio_tag: "ブラウザ内録画スタジオ",
+        studio_title: "Zylo Studio: インストール不要",
+        studio_desc: "ブラウザ上で直接画面やウェブカメラを高画質キャプチャ。音声ミキシングも自動処理。",
+        studio_h3: "ブラウザだけで即座に画面録画",
+        studio_p: "OBSなどの重いソフトを使わずに、ワンクリックでデスクトップやゲームをキャプチャ可能。",
+        studio_b1_title: "デュアル入力:",
+        studio_b1_desc: "画面全体、個別ウィンドウ、カメラのピクチャーインピクチャーに対応。",
+        studio_b2_title: "音声ミキシング:",
+        studio_b2_desc: "マイク音声とPCのシステム音声をリアルタイムで合成。",
+        studio_b3_title: "6時間自動消滅:",
+        studio_b3_desc: "一時的な動画は自動破棄されプライバシーを保護。",
+        studio_cta: "Zylo Studio を開く",
         feat_tag: "コアプラットフォーム特徴",
         feat_title: "クリエイターとコミュニティのために",
         feat_desc: "zylo.stream の本番環境を支えるモジュール構造をご覧ください。",
         tab_btn_discord: "Discord連携",
         tab_btn_encoder: "GPUエンコーダー",
         tab_btn_privacy: "プライバシー機構",
-        tab_btn_admin: "監査と管理",
+        tab_btn_monetize: "ネイティブ広告",
         tab1_title: "Discord スラッシュコマンド統合",
         tab1_desc: "Nitro不要で高画質ハイライト動画をチャンネルに共有可能。",
         tab1_b1_title: "/clip コマンド:",
@@ -1552,19 +2120,24 @@
         tab3_b2_desc: "動画を削除・停止できるマスターキー。",
         tab3_b3_title: "ワンクリック停止:",
         tab3_b3_desc: "瞬時に公開を停止。",
-        tab4_title: "リアルタイム管理コンソール",
-        tab4_desc: "ストレージ容量や通信量を一目で監視可能。",
-        tab4_b1_title: "容量トラッカー:",
-        tab4_b1_desc: "Cloudflare R2の保存量をリアルタイム表示。",
-        tab4_b2_title: "即時検索:",
-        tab4_b2_desc: "IDやステータスで即時絞り込み。",
-        tab4_b3_title: "セキュリティログ:",
-        tab4_b3_desc: "アクセス記録と通報対応。",
+        tab4_title: "邪魔にならない AdBlock 耐性ネイティブ広告",
+        tab4_desc: "動画前の不快な広告を排除。ファーストパーティ提供で快適な視聴体験を実現。",
+        tab4_b1_title: "AdBlock 影響なし:",
+        tab4_b1_desc: "外部スクリプトを使わず同一ドメインから直接配信。",
+        tab4_b2_title: "言語・地域対応:",
+        tab4_b2_desc: "視聴者の言語に合わせたスポンサー枠。",
+        tab4_b3_title: "待ち時間ゼロ:",
+        tab4_b3_desc: "動画が中断されることなく即座に再生。",
         tab_cta: "zylo.stream で体験",
-        sim_tag: "ライブ体験シミュレータ",
-        sim_title: "パイプラインを疑似体験",
-        sim_desc: "下のボタンをクリックして、ローカル圧縮からアップロードまでの流れを試せます。",
-        sim_btn_run: "シミュレーション開始",
+        scale_tag: "極限の伸縮性",
+        scale_title: "無限のエッジスケーラビリティ",
+        scale_desc: "同時接続が増加してもサーバーCPU負荷をほぼ0%に維持する設計。",
+        scale1_title: "分散型クライアントGPU計算",
+        scale1_desc: "WebCodecsにより各ユーザーの端末で処理し、サーバー負担を回避。",
+        scale2_title: "310以上のグローバル拠点",
+        scale2_desc: "Cloudflare R2のグローバルエッジから世界中へ最短で配信。",
+        scale3_title: "データ転送追加料金なし",
+        scale3_desc: "AWS S3などの過剰なデータ転送コストを回避し持続可能に運用。",
         cta_title: "高画質な動画共有をはじめましょう",
         cta_desc: "zylo.stream で快適なクリップ共有を今すぐ体感してください。",
         cta_btn: "zylo.stream へ移動する"
@@ -1588,7 +2161,6 @@
         }
       });
 
-      // Update current label
       const labels = {
         en: 'English (EN)',
         es: 'Español (ES)',
@@ -1597,10 +2169,12 @@
       };
       document.getElementById('currentLangLabel').textContent = labels[lang] || 'English (EN)';
 
-      // Update active option
       document.querySelectorAll('.lang-opt').forEach(opt => {
         opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
       });
+
+      // Update current pipeline stage text with active language
+      updatePipelineStage(currentPipeStep);
     }
 
     // Toggle Dropdown
@@ -1625,7 +2199,166 @@
       });
     });
 
-    // 3. Feature Tabs Logic
+    // 3. Animated Interactive Pipeline Engine
+    const pipelineStages = [
+      {
+        title: {
+          en: "🎥 Stage 1: High-Definition Capture & Ingestion",
+          es: "🎥 Etapa 1: Captura en Alta Definición o Subida",
+          pt: "🎥 Etapa 1: Captura em Alta Resolução ou Envio",
+          ja: "🎥 ステージ 1: 高解像度キャプチャ / 投入"
+        },
+        desc: {
+          en: "The user records directly in browser with Zylo Studio (Screen/Webcam @ 60 FPS) or drops a raw 1080p/4K gameplay file up to 100MB+.",
+          es: "El usuario graba directo en el navegador con Zylo Studio (Pantalla/Cámara a 60 FPS) o arrastra un archivo 1080p/4K de más de 100MB.",
+          pt: "O usuário grava direto pelo navegador com o Zylo Studio (Tela/Câmera a 60 FPS) ou envia um arquivo de até 100MB+.",
+          ja: "ユーザーはZylo Studioでブラウザ録画するか、100MB以上の1080p/4Kファイルを直接ドロップします。"
+        },
+        tags: ["Target: Screen / Camera", "Zero Install Required", "Format: MP4/WebM/MKV"],
+        overhead: "Zero Server Allocation",
+        res: "1080p 60FPS Native",
+        status: "ACTIVE INGESTION",
+        progressPct: 15
+      },
+      {
+        title: {
+          en: "⚡ Stage 2: In-Browser GPU WebCodecs Transcoding",
+          es: "⚡ Etapa 2: Transcodificación GPU WebCodecs en Navegador",
+          pt: "⚡ Etapa 2: Transcodificação GPU WebCodecs no Navegador",
+          ja: "⚡ ステージ 2: ブラウザ内GPUトランスコード"
+        },
+        desc: {
+          en: "Hardware-accelerated MediaBunny & WebCodecs compress raw video on the user's GPU into streaming-optimized H.264 in ~0.35s.",
+          es: "MediaBunny y WebCodecs acelerados por hardware comprimen el video en la GPU del usuario a H.264 optimizado en ~0.35s.",
+          pt: "MediaBunny e WebCodecs utilizam a GPU do usuário para comprimir o vídeo em H.264 otimizado em cerca de 0.35s.",
+          ja: "ハードウェア加速されたWebCodecsがユーザーのGPUでH.264へ約0.35秒で高速事前圧縮。"
+        },
+        tags: ["Hardware VideoEncoder", "avc1.640028 High Profile", "Throughput: 142 FPS"],
+        overhead: "0% Server CPU Overhead",
+        res: "Bitrate Optimized (7.8MB)",
+        status: "GPU PROCESSING",
+        progressPct: 45
+      },
+      {
+        title: {
+          en: "☁️ Stage 3: Direct-to-Storage Cloudflare R2 Stream",
+          es: "☁️ Etapa 3: Subida Directa a Cloudflare R2 sin Servidor",
+          pt: "☁️ Etapa 3: Envio Direto ao Cloudflare R2",
+          ja: "☁️ ステージ 3: Cloudflare R2 への直通転送"
+        },
+        desc: {
+          en: "Pre-signed S3 URLs transfer encoded chunks directly to Cloudflare R2 object storage, completely avoiding server bandwidth bottlenecks.",
+          es: "URLs prefirmadas S3 transfieren los paquetes codificados directo a Cloudflare R2, evitando cuellos de botella de ancho de banda.",
+          pt: "URLs pré-assinadas enviam os blocos de vídeo diretamente ao R2 sem sobrecarregar a largura de banda do servidor.",
+          ja: "署名付きURLを用いてCloudflare R2へ直通アップロード。サーバーの帯域ボトルネックを完全回避。"
+        },
+        tags: ["Direct S3 Presigned URL", "Zero Egress Surcharge", "Multi-Region Edge Sync"],
+        overhead: "Bypasses Node.js App Server",
+        res: "Global CDN Edge Ready",
+        status: "STREAMING TO EDGE",
+        progressPct: 75
+      },
+      {
+        title: {
+          en: "💬 Stage 4: Instant Discord Unfurl & Playback",
+          es: "💬 Etapa 4: Tarjeta Embed Instantánea en Discord",
+          pt: "💬 Etapa 4: Reprodução Direta no Discord",
+          ja: "💬 ステージ 4: Discord内での即時展開と再生"
+        },
+        desc: {
+          en: "Discord Bot posts a lightweight preview card. Desktop, iOS, and Android clients unfurl the stream in < 1.2s without downloading raw 100MB files.",
+          es: "El bot de Discord publica la tarjeta embed. Usuarios de PC, iOS y Android reproducen el video en < 1.2s sin descargar el archivo pesado.",
+          pt: "O Bot do Discord gera o cartão incorporado. Usuários em qualquer dispositivo assistem em < 1.2s sem baixar arquivos pesados.",
+          ja: "Discord Botが軽量カードを即時展開。スマホやPCで1.2秒以内にシームレス再生。"
+        },
+        tags: ["zylo.stream/v/... Shortlink", "HTML5 Inline Video", "HMAC Tamper-Proof"],
+        overhead: "Sub-Second Unfurl (< 1.2s)",
+        res: "Multi-Platform Compatible",
+        status: "BROADCAST COMPLETE",
+        progressPct: 100
+      }
+    ];
+
+    let currentPipeStep = 0;
+    let isPipePlaying = true;
+    let pipeInterval;
+
+    const pipeNodes = document.querySelectorAll('.pipe-step-node');
+    const pipeLaserFill = document.getElementById('pipeLaserFill');
+    const pipeStageTitle = document.getElementById('pipeStageTitle');
+    const pipeStageDesc = document.getElementById('pipeStageDesc');
+    const pipeTag1 = document.getElementById('pipeTag1');
+    const pipeTag2 = document.getElementById('pipeTag2');
+    const pipeTag3 = document.getElementById('pipeTag3');
+    const pipePrevBtn = document.getElementById('pipePrevBtn');
+    const pipeNextBtn = document.getElementById('pipeNextBtn');
+    const pipePlayPauseBtn = document.getElementById('pipePlayPauseBtn');
+
+    function updatePipelineStage(idx) {
+      currentPipeStep = idx;
+      const stage = pipelineStages[idx];
+      const lang = currentLang;
+
+      pipeNodes.forEach((node, i) => {
+        node.classList.toggle('active', i === idx);
+        node.classList.toggle('completed', i < idx);
+      });
+
+      pipeLaserFill.style.width = stage.progressPct + '%';
+
+      pipeStageTitle.textContent = stage.title[lang] || stage.title['en'];
+      pipeStageDesc.textContent = stage.desc[lang] || stage.desc['en'];
+      pipeTag1.textContent = stage.tags[0];
+      pipeTag2.textContent = stage.tags[1];
+      pipeTag3.textContent = stage.tags[2];
+    }
+
+    function startPipeCycle() {
+      if (pipeInterval) clearInterval(pipeInterval);
+      pipeInterval = setInterval(() => {
+        if (!isPipePlaying) return;
+        currentPipeStep = (currentPipeStep + 1) % pipelineStages.length;
+        updatePipelineStage(currentPipeStep);
+      }, 3500);
+    }
+
+    pipeNodes.forEach(node => {
+      node.addEventListener('click', () => {
+        const step = parseInt(node.getAttribute('data-step'), 10);
+        updatePipelineStage(step);
+      });
+    });
+
+    pipePrevBtn.addEventListener('click', () => {
+      currentPipeStep = (currentPipeStep - 1 + pipelineStages.length) % pipelineStages.length;
+      updatePipelineStage(currentPipeStep);
+    });
+
+    pipeNextBtn.addEventListener('click', () => {
+      currentPipeStep = (currentPipeStep + 1) % pipelineStages.length;
+      updatePipelineStage(currentPipeStep);
+    });
+
+    pipePlayPauseBtn.addEventListener('click', () => {
+      isPipePlaying = !isPipePlaying;
+      pipePlayPauseBtn.innerHTML = isPipePlaying ? '⏸ Pause Animation' : '▶ Play Animation';
+    });
+
+    startPipeCycle();
+
+    // 4. Studio Segmented Switcher Interaction (Mock)
+    const btnStudioScreen = document.getElementById('btnStudioScreen');
+    const btnStudioCamera = document.getElementById('btnStudioCamera');
+    btnStudioScreen.addEventListener('click', () => {
+      btnStudioScreen.classList.add('active');
+      btnStudioCamera.classList.remove('active');
+    });
+    btnStudioCamera.addEventListener('click', () => {
+      btnStudioCamera.classList.add('active');
+      btnStudioScreen.classList.remove('active');
+    });
+
+    // 5. Feature Tabs Logic
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -1652,60 +2385,73 @@
       });
     }
 
-    // 4. Interactive Pipeline Simulator
-    const simStartBtn = document.getElementById('simStartBtn');
-    const simProgressBar = document.getElementById('simProgressBar');
-    const simPctText = document.getElementById('simPctText');
-    const simStatusText = document.getElementById('simStatusText');
-    const simElapsedText = document.getElementById('simElapsedText');
-    const simEmbedPreview = document.getElementById('simEmbedPreview');
+    // 6. Interactive Scalability Canvas Background
+    const canvas = document.getElementById('scaleCanvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let w, h;
+      const particles = [];
+      const particleCount = 42;
 
-    let isSimulating = false;
+      function resizeCanvas() {
+        w = canvas.width = canvas.parentElement.offsetWidth;
+        h = canvas.height = canvas.parentElement.offsetHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
 
-    simStartBtn.addEventListener('click', () => {
-      if (isSimulating) return;
-      isSimulating = true;
-      simStartBtn.disabled = true;
-      simStartBtn.style.opacity = '0.5';
-      simEmbedPreview.classList.remove('show');
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.7,
+          vy: (Math.random() - 0.5) * 0.7,
+          radius: Math.random() * 2 + 1.2
+        });
+      }
 
-      simProgressBar.style.width = '0%';
-      simPctText.textContent = '0%';
-      simStatusText.textContent = 'TRANSCODING (GPU)';
-      simStatusText.style.color = '#ff6d00';
+      function drawParticles() {
+        ctx.clearRect(0, 0, w, h);
 
-      const startTime = performance.now();
-      let step = 0;
+        // Draw connections
+        for (let i = 0; i < particleCount; i++) {
+          for (let j = i + 1; j < particleCount; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-      const simInterval = setInterval(() => {
-        step += 4;
-        if (step <= 65) {
-          simStatusText.textContent = `WEBM/MP4 TRANSCODE [${step}%]`;
-        } else if (step <= 90) {
-          simStatusText.textContent = `UPLOADING TO R2 [${step}%]`;
-          simStatusText.style.color = '#00e5ff';
-        } else {
-          simStatusText.textContent = `FINALIZING DISCORD EMBED [${Math.min(100, step)}%]`;
+            if (dist < 130) {
+              const alpha = (1 - dist / 130) * 0.25;
+              ctx.strokeStyle = `rgba(0, 229, 255, ${alpha})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.stroke();
+            }
+          }
         }
 
-        const curWidth = Math.min(100, step);
-        simProgressBar.style.width = curWidth + '%';
-        simPctText.textContent = curWidth + '%';
+        // Draw and update particles
+        particles.forEach(p => {
+          ctx.fillStyle = '#ff6d00';
+          ctx.shadowColor = 'rgba(255, 109, 0, 0.5)';
+          ctx.shadowBlur = 6;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
 
-        const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
-        simElapsedText.textContent = `Latency: ${elapsed}s`;
+          p.x += p.vx;
+          p.y += p.vy;
 
-        if (step >= 100) {
-          clearInterval(simInterval);
-          simStatusText.textContent = 'COMPLETE (READY ON ZYLO.STREAM)';
-          simStatusText.style.color = '#10b981';
-          simEmbedPreview.classList.add('show');
-          isSimulating = false;
-          simStartBtn.disabled = false;
-          simStartBtn.style.opacity = '1';
-        }
-      }, 45);
-    });
+          if (p.x < 0 || p.x > w) p.vx *= -1;
+          if (p.y < 0 || p.y > h) p.vy *= -1;
+        });
+
+        requestAnimationFrame(drawParticles);
+      }
+      drawParticles();
+    }
 
     // Initialize Default Language
     setLanguage(currentLang);
