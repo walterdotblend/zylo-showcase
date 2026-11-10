@@ -1882,17 +1882,17 @@
           </div>
 
           <div class="pipe-display-right" id="pipeStageTelemetry">
-            <div style="color:var(--accent-orange); margin-bottom:8px; font-weight:700;">STAGE BENCHMARK</div>
+            <div style="color:var(--accent-orange); margin-bottom:8px; font-weight:700;" data-i18n="pipe_telemetry_title">STAGE BENCHMARK</div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-              <span>Memory Overhead:</span>
-              <strong style="color:var(--accent-green);">Zero Server Allocation</strong>
+              <span data-i18n="pipe_lbl_memory">Memory Overhead:</span>
+              <strong style="color:var(--accent-green);" id="pipeMetricMemory">Zero Server Allocation</strong>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-              <span>Encoding Output:</span>
+              <span data-i18n="pipe_lbl_output">Encoding Output:</span>
               <strong id="pipeMetricRes">720p 30 FPS Standard</strong>
             </div>
             <div style="display:flex; justify-content:space-between;">
-              <span>Pipeline State:</span>
+              <span data-i18n="pipe_lbl_state">Pipeline State:</span>
               <strong style="color:var(--accent-cyan);" id="pipeMetricState">ACTIVE INGESTION</strong>
             </div>
           </div>
@@ -1900,7 +1900,7 @@
 
         <!-- Controls: Hover Tip + Step Buttons -->
         <div class="pipe-controls-bar">
-          <span class="pipe-hover-hint">💡 Hover over any node to inspect that step instantly</span>
+          <span class="pipe-hover-hint" data-i18n="pipe_hover_tip">💡 Hover over any node to inspect that step instantly</span>
           <div class="pipe-btn-group">
             <button class="pipe-btn-ctrl" id="pipePrevBtn">◀ <span data-i18n="btn_prev">Previous</span></button>
             <button class="pipe-btn-ctrl" id="pipePlayPauseBtn">⏸ <span data-i18n="btn_pause">Pause</span></button>
@@ -1970,8 +1970,8 @@
           <div class="studio-mockup-top">
             <!-- Source Selector Buttons matching real Zylo Studio -->
             <div class="studio-seg-switch">
-              <button class="studio-seg-opt active" id="btnStudioScreen">🖥️ Screen</button>
-              <button class="studio-seg-opt" id="btnStudioCamera">📷 Camera</button>
+              <button class="studio-seg-opt active" id="btnStudioScreen"><span data-i18n="studio_src_screen">🖥️ Screen</span></button>
+              <button class="studio-seg-opt" id="btnStudioCamera"><span data-i18n="studio_src_camera">📷 Camera</span></button>
             </div>
             <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-cyan);" id="studioLiveSpecs">
               RES: <strong>720p</strong> • FPS: <strong>30.0</strong> • <strong>2 Mbps</strong>
@@ -2076,18 +2076,18 @@
           <!-- Studio Bottom Controls with Honest Profiles -->
           <div class="studio-bottom-bar">
             <div>
-              <span style="color:var(--text-dim); margin-right:6px;">MODE:</span>
+              <span style="color:var(--text-dim); margin-right:6px;" data-i18n="studio_mode_lbl">MODE:</span>
               <div class="quality-pill-group" style="display:inline-flex;">
-                <span class="quality-pill active" id="pillFast" title="720p @ 2 Mbps, 30 FPS, Max 6 min">Fast (720p • 2 Mbps)</span>
-                <span class="quality-pill" id="pillQuality" title="720p @ 4 Mbps, 30 FPS, Max 3 min">Quality (720p • 4 Mbps)</span>
-                <span class="quality-pill" id="pillVoter" title="Unlocked via Top.gg /vote">1080p60 (Voter)</span>
+                <span class="quality-pill active" id="pillFast" data-i18n="studio_pill_fast" title="720p @ 2 Mbps, 30 FPS, Max 6 min">Fast (720p • 2 Mbps)</span>
+                <span class="quality-pill" id="pillQuality" data-i18n="studio_pill_quality" title="720p @ 4 Mbps, 30 FPS, Max 3 min">Quality (720p • 4 Mbps)</span>
+                <span class="quality-pill" id="pillVoter" data-i18n="studio_pill_voter" title="Unlocked via Top.gg /vote">1080p60 (Voter)</span>
               </div>
             </div>
             <div style="display:flex; align-items:center; gap:12px;">
               <button class="studio-btn-stop-rec" id="btnStudioStopRec" title="Simulate finish recording">
-                ⏹ <span id="studioStopLabel">Stop &amp; Trim</span>
+                ⏹ <span id="studioStopLabel" data-i18n="studio_stop_btn">Stop &amp; Trim</span>
               </button>
-              <div style="color:var(--accent-orange); font-size:0.82rem;">
+              <div style="color:var(--accent-orange); font-size:0.82rem;" data-i18n="studio_destroy_badge">
                 ⏱ 6h Ephemeral Destroy
               </div>
             </div>
@@ -2134,19 +2134,19 @@
                 <span class="discord-bot-badge">APP</span>
               </div>
             </div>
-            <div style="font-size:0.88rem; color:#dbdee1; margin-bottom:6px;">
+            <div style="font-size:0.88rem; color:#dbdee1; margin-bottom:6px;" data-i18n="discord_shared_via">
               Shared a high-definition clip via <strong>/clip</strong>:
             </div>
             <div class="discord-embed-card">
               <div style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:4px;">Apex Legends • Triple Clutch 1v3</div>
-              <div style="font-size:0.78rem; color:#949ba4;">Streamed directly via Cloudflare R2 • 720p 30FPS</div>
+              <div style="font-size:0.78rem; color:#949ba4;" data-i18n="discord_stream_info">Streamed directly via Cloudflare R2 • 720p 30FPS</div>
               <div class="discord-video-frame">
                 <div class="discord-quality-tag">720P • 30FPS</div>
                 <div class="discord-play-btn">▶</div>
               </div>
               <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:0.8rem;">
                 <span style="color:#00e5ff; font-family:var(--font-mono);">zylo.stream/v/apex-c98x</span>
-                <span style="color:var(--text-dim);">Inline Player Ready</span>
+                <span style="color:var(--text-dim);" data-i18n="discord_player_ready">Inline Player Ready</span>
               </div>
             </div>
           </div>
@@ -2168,28 +2168,28 @@
           <!-- WebCodecs GPU Telemetry HUD -->
           <div class="hud-console">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px;">
-              <span style="color:var(--accent-orange); font-weight:700;">GPU ACCELERATION ACTIVE</span>
+              <span style="color:var(--accent-orange); font-weight:700;" data-i18n="hud_gpu_active">GPU ACCELERATION ACTIVE</span>
               <span class="hud-chip">WebCodecs v2</span>
             </div>
             <div class="hud-line">
-              <span>Hardware VideoEncoder:</span>
+              <span data-i18n="hud_encoder_lbl">Hardware VideoEncoder:</span>
               <strong>avc1.64001f (720p Profile)</strong>
             </div>
             <div class="hud-line">
-              <span>Encoding Throughput:</span>
-              <strong style="color:var(--accent-cyan);">95 FPS (Real-Time 3.1x)</strong>
+              <span data-i18n="hud_throughput_lbl">Encoding Throughput:</span>
+              <strong style="color:var(--accent-cyan);" data-i18n="hud_realtime">95 FPS (Real-Time 3.1x)</strong>
             </div>
             <div class="hud-line">
-              <span>Original Clip Size:</span>
-              <span>84.2 MB (Raw Desktop Stream)</span>
+              <span data-i18n="hud_orig_size_lbl">Original Clip Size:</span>
+              <span data-i18n="hud_raw_stream">84.2 MB (Raw Desktop Stream)</span>
             </div>
             <div class="hud-line">
-              <span>Optimized Stream Size:</span>
+              <span data-i18n="hud_opt_size_lbl">Optimized Stream Size:</span>
               <strong style="color:var(--accent-green);">6.2 MB (-92.6%)</strong>
             </div>
             <div class="hud-line">
-              <span>Server CPU Overhead:</span>
-              <strong style="color:var(--accent-green);">0.00% (Client Offloaded)</strong>
+              <span data-i18n="hud_cpu_lbl">Server CPU Overhead:</span>
+              <strong style="color:var(--accent-green);" data-i18n="hud_offloaded">0.00% (Client Offloaded)</strong>
             </div>
           </div>
         </div>
@@ -2209,19 +2209,19 @@
         <div class="tab-right">
           <!-- Dual-URL Security Architecture Mockup -->
           <div class="url-spec-box">
-            <span class="url-type-badge url-type-pub">PUBLIC STREAMING URL</span>
+            <span class="url-type-badge url-type-pub" data-i18n="sec_pub_url">PUBLIC STREAMING URL</span>
             <div style="color:#fff; word-break:break-all; font-size:0.85rem; margin:4px 0;">https://zylo.stream/v/c7a10f</div>
-            <div style="font-size:0.75rem; color:var(--text-dim);">Safe to share on Discord, Twitter, and Reddit. No controls exposed.</div>
+            <div style="font-size:0.75rem; color:var(--text-dim);" data-i18n="sec_pub_desc">Safe to share on Discord, Twitter, and Reddit. No controls exposed.</div>
           </div>
 
           <div class="url-spec-box" style="border-color:rgba(255,109,0,0.3);">
-            <span class="url-type-badge url-type-creator">CREATOR MASTER KEY (HMAC)</span>
+            <span class="url-type-badge url-type-creator" data-i18n="sec_key_title">CREATOR MASTER KEY (HMAC)</span>
             <div style="color:var(--accent-orange); word-break:break-all; font-size:0.85rem; margin:4px 0;">https://zylo.stream/v/c7a10f?key=sec_8f9a2b1c4d...</div>
-            <div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:8px;">Grants creator authority to instantly revoke or delete clip from R2 storage.</div>
-            <button id="btnMockRevoke" style="background:#ef4444; color:#fff; border:none; padding:5px 12px; border-radius:4px; font-family:var(--font-mono); font-size:0.72rem; cursor:pointer; font-weight:700;">
+            <div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:8px;" data-i18n="sec_key_desc">Grants creator authority to instantly revoke or delete clip from R2 storage.</div>
+            <button id="btnMockRevoke" style="background:#ef4444; color:#fff; border:none; padding:5px 12px; border-radius:4px; font-family:var(--font-mono); font-size:0.72rem; cursor:pointer; font-weight:700;" data-i18n="sec_killswitch_btn">
               🛑 TEST ONE-CLICK KILLSWITCH
             </button>
-            <span id="mockRevokeStatus" style="font-size:0.75rem; color:#10b981; margin-left:8px; display:none;">LINK REVOKED (404)</span>
+            <span id="mockRevokeStatus" style="font-size:0.75rem; color:#10b981; margin-left:8px; display:none;" data-i18n="sec_revoked_status">LINK REVOKED (404)</span>
           </div>
         </div>
       </div>
@@ -2240,14 +2240,14 @@
         <div class="tab-right">
           <!-- Native Non-Intrusive Sponsor Mockup -->
           <div class="sponsor-card-mockup">
-            <span class="sponsor-badge-top">FIRST-PARTY NATIVE PLACEMENT</span>
-            <div style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:6px;">Integrated Community Showcase</div>
-            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">
+            <span class="sponsor-badge-top" data-i18n="ad_tag">FIRST-PARTY NATIVE PLACEMENT</span>
+            <div style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:6px;" data-i18n="ad_title">Integrated Community Showcase</div>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.5; margin-bottom:12px;" data-i18n="ad_desc">
               Rendered directly by the Zylo template engine. No cookies, no privacy invasions, and zero impact on video loading speeds.
             </p>
             <div style="background:rgba(0,0,0,0.4); border-radius:6px; padding:10px; font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-green); display:flex; justify-content:space-between; align-items:center;">
               <span>Target: EN / ES / PT / JA</span>
-              <span style="color:var(--accent-cyan);">ADBLOCK IMMUNE (FIRST-PARTY)</span>
+              <span style="color:var(--accent-cyan);" data-i18n="ad_badge">ADBLOCK IMMUNE (FIRST-PARTY)</span>
             </div>
           </div>
         </div>
@@ -2307,7 +2307,7 @@
       <p style="margin-bottom:8px;">
         <strong>Zylo Platform</strong> • <a href="https://zylo.stream">zylo.stream</a>
       </p>
-      <p style="font-size:0.78rem;">
+      <p style="font-size:0.78rem;" data-i18n="footer_sub">
         Next-Generation Video Streaming &amp; Discord Infrastructure • Powered by Cloudflare R2 &amp; WebCodecs
       </p>
     </div>
@@ -2407,7 +2407,43 @@
         scale3_desc: "Traditional cloud providers (AWS S3) charge up to $0.09/GB for outgoing video traffic. Zylo avoids data egress fees, ensuring sustainable community growth without financial risk.",
         cta_title: "Ready to Experience Zero-Egress Video?",
         cta_desc: "Join gamers and creators using Zylo to record in-browser and share uncompressed, high-definition clips effortlessly across Discord and the web.",
-        cta_btn: "Go Directly to zylo.stream"
+        cta_btn: "Go Directly to zylo.stream",
+        pipe_hover_tip: "💡 Hover over any node to inspect that step instantly",
+        pipe_telemetry_title: "STAGE BENCHMARK",
+        pipe_lbl_memory: "Memory Overhead:",
+        pipe_lbl_output: "Encoding Output:",
+        pipe_lbl_state: "Pipeline State:",
+        studio_src_screen: "🖥️ Screen",
+        studio_src_camera: "📷 Camera",
+        studio_mode_lbl: "MODE:",
+        studio_pill_fast: "Fast (720p • 2 Mbps)",
+        studio_pill_quality: "Quality (720p • 4 Mbps)",
+        studio_pill_voter: "1080p60 (Voter)",
+        studio_stop_btn: "Stop & Trim",
+        studio_destroy_badge: "⏱ 6h Ephemeral Destroy",
+        discord_shared_via: "Shared a high-definition clip via <strong>/clip</strong>:",
+        discord_stream_info: "Streamed directly via Cloudflare R2 • 720p 30FPS",
+        discord_player_ready: "Inline Player Ready",
+        hud_gpu_active: "GPU ACCELERATION ACTIVE",
+        hud_encoder_lbl: "Hardware VideoEncoder:",
+        hud_throughput_lbl: "Encoding Throughput:",
+        hud_realtime: "95 FPS (Real-Time 3.1x)",
+        hud_orig_size_lbl: "Original Clip Size:",
+        hud_raw_stream: "84.2 MB (Raw Desktop Stream)",
+        hud_opt_size_lbl: "Optimized Stream Size:",
+        hud_cpu_lbl: "Server CPU Overhead:",
+        hud_offloaded: "0.00% (Client Offloaded)",
+        sec_pub_url: "PUBLIC STREAMING URL",
+        sec_pub_desc: "Safe to share on Discord, Twitter, and Reddit. No controls exposed.",
+        sec_key_title: "CREATOR MASTER KEY (HMAC)",
+        sec_key_desc: "Grants creator authority to instantly revoke or delete clip from R2 storage.",
+        sec_killswitch_btn: "🛑 TEST ONE-CLICK KILLSWITCH",
+        sec_revoked_status: "LINK REVOKED (404)",
+        ad_tag: "FIRST-PARTY NATIVE PLACEMENT",
+        ad_title: "Integrated Community Showcase",
+        ad_desc: "Rendered directly by the Zylo template engine. No cookies, no privacy invasions, and zero impact on video loading speeds.",
+        ad_badge: "ADBLOCK IMMUNE (FIRST-PARTY)",
+        footer_sub: "Next-Generation Video Streaming & Discord Infrastructure • Powered by Cloudflare R2 & WebCodecs"
       },
       es: {
         nav_pipeline: "Pipeline",
@@ -2499,7 +2535,43 @@
         scale3_desc: "Evita los costosos cobros de salida ($0.09/GB en nubes tradicionales), permitiendo un crecimiento sostenible sin sorpresas en la factura.",
         cta_title: "¿Listo para Experimentar Video Sin Límites?",
         cta_desc: "Únete a los gamers y creadores que usan Zylo para grabar en el navegador y compartir clips en alta definición en Discord.",
-        cta_btn: "Ir Directamente a zylo.stream"
+        cta_btn: "Ir Directamente a zylo.stream",
+        pipe_hover_tip: "💡 Pasa el ratón sobre cualquier etapa para inspeccionarla al instante",
+        pipe_telemetry_title: "MÉTRICAS DE LA ETAPA",
+        pipe_lbl_memory: "Consumo de Memoria:",
+        pipe_lbl_output: "Salida de Video:",
+        pipe_lbl_state: "Estado del Pipeline:",
+        studio_src_screen: "🖥️ Pantalla",
+        studio_src_camera: "📷 Cámara",
+        studio_mode_lbl: "MODO:",
+        studio_pill_fast: "Rápido (720p • 2 Mbps)",
+        studio_pill_quality: "Calidad (720p • 4 Mbps)",
+        studio_pill_voter: "1080p60 (Votante)",
+        studio_stop_btn: "Detener y Cortar",
+        studio_destroy_badge: "⏱ Autodestrucción en 6h",
+        discord_shared_via: "Compartió un clip en alta definición vía <strong>/clip</strong>:",
+        discord_stream_info: "Transmitido directo por Cloudflare R2 • 720p 30FPS",
+        discord_player_ready: "Reproductor Directo Listo",
+        hud_gpu_active: "ACELERACIÓN GPU ACTIVA",
+        hud_encoder_lbl: "Codificador Hardware:",
+        hud_throughput_lbl: "Rendimiento de Codificación:",
+        hud_realtime: "95 FPS (Tiempo Real 3.1x)",
+        hud_orig_size_lbl: "Tamaño Original del Clip:",
+        hud_raw_stream: "84.2 MB (Flujo Crudo de Pantalla)",
+        hud_opt_size_lbl: "Tamaño Optimizado:",
+        hud_cpu_lbl: "Carga en Servidor:",
+        hud_offloaded: "0.00% (Descargado al Cliente)",
+        sec_pub_url: "URL PÚBLICA DE STREAMING",
+        sec_pub_desc: "Segura para compartir en Discord, Twitter y Reddit. Sin controles expuestos.",
+        sec_key_title: "CLAVE MAESTRA DEL CREADOR (HMAC)",
+        sec_key_desc: "Permite al creador revocar o eliminar el clip de Cloudflare R2 en cualquier instante.",
+        sec_killswitch_btn: "🛑 PROBAR INTERRUPTOR DE REVOCACIÓN",
+        sec_revoked_status: "ENLACE REVOCADO (404)",
+        ad_tag: "PATROCINIO NATIVO DE PRIMER ORIGEN",
+        ad_title: "Muestra Comunitaria Integrada",
+        ad_desc: "Generado directamente por el motor de plantillas de Zylo. Sin cookies, sin invasión a la privacidad y sin ralentizar la carga del video.",
+        ad_badge: "INMUNE A ADBLOCK (1ER ORIGEN)",
+        footer_sub: "Infraestructura de Streaming y Discord de Nueva Generación • Impulsada por Cloudflare R2 y WebCodecs"
       },
       pt: {
         nav_pipeline: "Pipeline",
@@ -2591,7 +2663,43 @@
         scale3_desc: "Elimina cobranças de tráfego de saída comuns em outras nuvens.",
         cta_title: "Pronto para Vídeos Sem Limites?",
         cta_desc: "Grave pelo navegador e compartilhe seus clipes em alta definição no Discord.",
-        cta_btn: "Ir Diretamente para zylo.stream"
+        cta_btn: "Ir Diretamente para zylo.stream",
+        pipe_hover_tip: "💡 Passe o mouse em qualquer etapa para inspecionar instantaneamente",
+        pipe_telemetry_title: "MÉTRICAS DA ETAPA",
+        pipe_lbl_memory: "Consumo de Memória:",
+        pipe_lbl_output: "Saída de Vídeo:",
+        pipe_lbl_state: "Estado do Pipeline:",
+        studio_src_screen: "🖥️ Tela",
+        studio_src_camera: "📷 Câmera",
+        studio_mode_lbl: "MODO:",
+        studio_pill_fast: "Rápido (720p • 2 Mbps)",
+        studio_pill_quality: "Qualidade (720p • 4 Mbps)",
+        studio_pill_voter: "1080p60 (Votante)",
+        studio_stop_btn: "Parar e Cortar",
+        studio_destroy_badge: "⏱ Autodestruição em 6h",
+        discord_shared_via: "Compartilhou um clip em alta definição via <strong>/clip</strong>:",
+        discord_stream_info: "Transmitido direto via Cloudflare R2 • 720p 30FPS",
+        discord_player_ready: "Player Embutido Pronto",
+        hud_gpu_active: "ACELERAÇÃO POR GPU ATIVA",
+        hud_encoder_lbl: "Codificador por Hardware:",
+        hud_throughput_lbl: "Velocidade de Codificação:",
+        hud_realtime: "95 FPS (Tempo Real 3.1x)",
+        hud_orig_size_lbl: "Tamanho Original do Clip:",
+        hud_raw_stream: "84.2 MB (Fluxo Bruto de Tela)",
+        hud_opt_size_lbl: "Tamanho Otimizado:",
+        hud_cpu_lbl: "Carga no Servidor:",
+        hud_offloaded: "0.00% (Processado no Cliente)",
+        sec_pub_url: "URL PÚBLICA DE REPRODUÇÃO",
+        sec_pub_desc: "Segura para compartilhar no Discord, Twitter e Reddit. Sem controles expostos.",
+        sec_key_title: "CHAVE MESTRA DO CRIADOR (HMAC)",
+        sec_key_desc: "Permite ao criador revogar ou apagar o clip do Cloudflare R2 a qualquer momento.",
+        sec_killswitch_btn: "🛑 TESTAR BOTÃO DE REVOGAÇÃO",
+        sec_revoked_status: "LINK REVOGADO (404)",
+        ad_tag: "PATROCÍNIO NATIVO DIRETO",
+        ad_title: "Espaço Comunitário Integrado",
+        ad_desc: "Renderizado direto pelo mecanismo do Zylo. Sem cookies, sem rastreadores e sem lentidão no carregamento do vídeo.",
+        ad_badge: "IMUNE A ADBLOCK (1º ORIGEM)",
+        footer_sub: "Infraestrutura de Streaming e Discord de Nova Geração • Desenvolvida com Cloudflare R2 e WebCodecs"
       },
       ja: {
         nav_pipeline: "パイプライン",
@@ -2683,7 +2791,43 @@
         scale3_desc: "AWS S3などの過剰なデータ転送コストを回避し持続可能に運用。",
         cta_title: "高画質な動画共有をはじめましょう",
         cta_desc: "zylo.stream で快適なクリップ共有を今すぐ体感してください。",
-        cta_btn: "zylo.stream へ移動する"
+        cta_btn: "zylo.stream へ移動する",
+        pipe_hover_tip: "💡 各ノードにホバーするとそのステップを即時確認できます",
+        pipe_telemetry_title: "ステージ指標",
+        pipe_lbl_memory: "メモリ負荷:",
+        pipe_lbl_output: "出力品質:",
+        pipe_lbl_state: "パイプライン状態:",
+        studio_src_screen: "🖥️ 画面",
+        studio_src_camera: "📷 カメラ",
+        studio_mode_lbl: "モード:",
+        studio_pill_fast: "高速 (720p • 2 Mbps)",
+        studio_pill_quality: "高画質 (720p • 4 Mbps)",
+        studio_pill_voter: "1080p60 (投票特典)",
+        studio_stop_btn: "停止してトリム",
+        studio_destroy_badge: "⏱ 6時間で自動消滅",
+        discord_shared_via: "<strong>/clip</strong> で高画質クリップを共有しました:",
+        discord_stream_info: "Cloudflare R2 直通配信 • 720p 30FPS",
+        discord_player_ready: "インライン再生準備完了",
+        hud_gpu_active: "GPUアクセラレーション有効",
+        hud_encoder_lbl: "ハードウェアエンコーダ:",
+        hud_throughput_lbl: "エンコード速度:",
+        hud_realtime: "95 FPS (リアルタイム 3.1x)",
+        hud_orig_size_lbl: "元のクリップ容量:",
+        hud_raw_stream: "84.2 MB (デスクトップ未圧縮)",
+        hud_opt_size_lbl: "最適化後の容量:",
+        hud_cpu_lbl: "サーバーCPU負荷:",
+        hud_offloaded: "0.00% (クライアント側処理)",
+        sec_pub_url: "公開ストリーミングURL",
+        sec_pub_desc: "Discord、Twitter、Redditで安全に共有可能。管理権限は露出しません。",
+        sec_key_title: "クリエイターマスターキー (HMAC)",
+        sec_key_desc: "クリエイターはいつでもR2ストレージからリンクを無効化または削除できます。",
+        sec_killswitch_btn: "🛑 即時無効化スイッチを試す",
+        sec_revoked_status: "リンク無効化完了 (404)",
+        ad_tag: "ファーストパーティネイティブ配置",
+        ad_title: "統合コミュニティショーケース",
+        ad_desc: "Zyloテンプレートエンジンによって直接描画。Cookie不要、プライバシー侵害なし、動画読み込みへの影響ゼロ。",
+        ad_badge: "ADBLOCK完全耐性 (内部配信)",
+        footer_sub: "次世代動画ストリーミング & Discordインフラ • Cloudflare R2 & WebCodecs採用"
       }
     };
 
@@ -2700,7 +2844,11 @@
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) {
-          el.textContent = dict[key];
+          if (dict[key].includes('<') || dict[key].includes('&')) {
+            el.innerHTML = dict[key];
+          } else {
+            el.textContent = dict[key];
+          }
         }
       });
 
@@ -2757,10 +2905,30 @@
           pt: "O usuário grava direto pelo navegador com o Zylo Studio (Tela/Câmera a 30 FPS) ou envia um arquivo de até 100MB+.",
           ja: "ユーザーはZylo Studioでブラウザ録画するか、100MB以上の720p/1080pファイルを直接ドロップします。"
         },
-        tags: ["Target: Screen / Camera", "Zero Install Required", "Format: MP4/WebM/MKV"],
-        overhead: "Zero Server Allocation",
-        res: "720p 30 FPS Standard",
-        status: "ACTIVE INGESTION",
+        tags: {
+          en: ["Target: Screen / Camera", "Zero Install Required", "Format: MP4/WebM/MKV"],
+          es: ["Origen: Pantalla / Cámara", "Sin Instalación Requerida", "Formato: MP4/WebM/MKV"],
+          pt: ["Origem: Tela / Câmera", "Sem Instalação", "Formato: MP4/WebM/MKV"],
+          ja: ["ソース: 画面 / カメラ", "インストール不要", "形式: MP4/WebM/MKV"]
+        },
+        overhead: {
+          en: "Zero Server Allocation",
+          es: "Cero Carga en Servidor",
+          pt: "Zero Carga no Servidor",
+          ja: "サーバー負荷ゼロ"
+        },
+        res: {
+          en: "720p 30 FPS Standard",
+          es: "720p 30 FPS Estándar",
+          pt: "720p 30 FPS Padrão",
+          ja: "720p 30 FPS 標準"
+        },
+        status: {
+          en: "ACTIVE INGESTION",
+          es: "INGESTA ACTIVA",
+          pt: "INGESTÃO ATIVA",
+          ja: "取り込み中"
+        },
         progressPct: 15
       },
       {
@@ -2776,10 +2944,30 @@
           pt: "MediaBunny e WebCodecs utilizam a GPU do usuário para comprimir o vídeo em H.264 otimizado em cerca de 0.35s.",
           ja: "ハードウェア加速されたWebCodecsがユーザーのGPUでH.264へ約0.35秒で高速事前圧縮。"
         },
-        tags: ["Hardware VideoEncoder", "avc1.64001f 720p Profile", "Throughput: 95 FPS"],
-        overhead: "0% Server CPU Overhead",
-        res: "Bitrate Optimized (6.2MB)",
-        status: "GPU PROCESSING",
+        tags: {
+          en: ["Hardware VideoEncoder", "avc1.64001f 720p Profile", "Throughput: 95 FPS"],
+          es: ["VideoEncoder por Hardware", "Perfil avc1 720p", "Velocidad: 95 FPS"],
+          pt: ["VideoEncoder por Hardware", "Perfil avc1 720p", "Velocidade: 95 FPS"],
+          ja: ["ハードウェアVideoEncoder", "avc1 720pプロファイル", "処理速度: 95 FPS"]
+        },
+        overhead: {
+          en: "0% Server CPU Overhead",
+          es: "0% Carga CPU en Servidor",
+          pt: "0% Carga CPU no Servidor",
+          ja: "サーバーCPU負荷 0%"
+        },
+        res: {
+          en: "Bitrate Optimized (6.2MB)",
+          es: "Bitrate Optimizado (6.2MB)",
+          pt: "Bitrate Otimizado (6.2MB)",
+          ja: "ビットレート最適化 (6.2MB)"
+        },
+        status: {
+          en: "GPU PROCESSING",
+          es: "PROCESAMIENTO GPU",
+          pt: "PROCESSAMENTO GPU",
+          ja: "GPU処理中"
+        },
         progressPct: 45
       },
       {
@@ -2795,10 +2983,30 @@
           pt: "URLs pré-assinadas enviam os blocos de vídeo diretamente ao R2 sem sobrecarregar a largura de banda do servidor.",
           ja: "署名付きURLを用いてCloudflare R2へ直通アップロード。サーバーの帯域ボトルネックを完全回避。"
         },
-        tags: ["Direct S3 Presigned URL", "Zero Egress Surcharge", "Multi-Region Edge Sync"],
-        overhead: "Bypasses Node.js App Server",
-        res: "Global CDN Edge Ready",
-        status: "STREAMING TO EDGE",
+        tags: {
+          en: ["Direct S3 Presigned URL", "Zero Egress Surcharge", "Multi-Region Edge Sync"],
+          es: ["URL S3 Prefirmada Directa", "Cero Recargos de Salida", "Sincronización Global"],
+          pt: ["URL S3 Pré-assinada Direta", "Sem Taxas de Saída", "Sincronização Global"],
+          ja: ["S3署名付き直通URL", "下り転送料金ゼロ", "エッジ即時同期"]
+        },
+        overhead: {
+          en: "Bypasses Node.js App Server",
+          es: "Bypasea Servidor Node.js",
+          pt: "Ignora Servidor Node.js",
+          ja: "Node.jsサーバー完全回避"
+        },
+        res: {
+          en: "Global CDN Edge Ready",
+          es: "Listo en CDN Global",
+          pt: "Pronto na CDN Global",
+          ja: "グローバルCDN即時利用可能"
+        },
+        status: {
+          en: "STREAMING TO EDGE",
+          es: "ENVIANDO AL BORDE",
+          pt: "ENVIANDO AO EDGE",
+          ja: "エッジへ転送中"
+        },
         progressPct: 75
       },
       {
@@ -2814,10 +3022,30 @@
           pt: "O Bot do Discord gera o cartão incorporado. Usuários em qualquer dispositivo assistem em < 1.2s sem baixar arquivos pesados.",
           ja: "Discord Botが軽量カードを即時展開。スマホやPCで1.2秒以内にシームレス再生。"
         },
-        tags: ["zylo.stream/v/... Shortlink", "HTML5 Inline Video", "HMAC Tamper-Proof"],
-        overhead: "Sub-Second Unfurl (< 1.2s)",
-        res: "Multi-Platform Compatible",
-        status: "BROADCAST COMPLETE",
+        tags: {
+          en: ["zylo.stream/v/... Shortlink", "HTML5 Inline Video", "HMAC Tamper-Proof"],
+          es: ["Enlace Corto zylo.stream", "Video HTML5 en Discord", "Protección HMAC"],
+          pt: ["Link Curto zylo.stream", "Vídeo HTML5 Integrado", "Proteção HMAC"],
+          ja: ["zylo.stream短縮リンク", "HTML5インライン再生", "HMAC改ざん防止"]
+        },
+        overhead: {
+          en: "Sub-Second Unfurl (< 1.2s)",
+          es: "Despliegue Rápido (< 1.2s)",
+          pt: "Abertura Instantânea (< 1.2s)",
+          ja: "1.2秒以内の高速展開"
+        },
+        res: {
+          en: "Multi-Platform Compatible",
+          es: "Compatible Multiplataforma",
+          pt: "Compatível Multiplataforma",
+          ja: "マルチプラットフォーム対応"
+        },
+        status: {
+          en: "BROADCAST COMPLETE",
+          es: "TRANSMISIÓN COMPLETA",
+          pt: "TRANSMISSÃO CONCLUÍDA",
+          ja: "配信完了"
+        },
         progressPct: 100
       }
     ];
@@ -2834,6 +3062,7 @@
     const pipeTag1 = document.getElementById('pipeTag1');
     const pipeTag2 = document.getElementById('pipeTag2');
     const pipeTag3 = document.getElementById('pipeTag3');
+    const pipeMetricMemory = document.getElementById('pipeMetricMemory');
     const pipeMetricRes = document.getElementById('pipeMetricRes');
     const pipeMetricState = document.getElementById('pipeMetricState');
     const pipePrevBtn = document.getElementById('pipePrevBtn');
@@ -2854,11 +3083,17 @@
 
       pipeStageTitle.textContent = stage.title[lang] || stage.title['en'];
       pipeStageDesc.textContent = stage.desc[lang] || stage.desc['en'];
-      pipeTag1.textContent = stage.tags[0];
-      pipeTag2.textContent = stage.tags[1];
-      pipeTag3.textContent = stage.tags[2];
-      pipeMetricRes.textContent = stage.res;
-      pipeMetricState.textContent = stage.status;
+      
+      const tagsList = stage.tags[lang] || stage.tags['en'] || stage.tags;
+      pipeTag1.textContent = tagsList[0];
+      pipeTag2.textContent = tagsList[1];
+      pipeTag3.textContent = tagsList[2];
+
+      if (pipeMetricMemory && stage.overhead) {
+        pipeMetricMemory.textContent = typeof stage.overhead === 'object' ? (stage.overhead[lang] || stage.overhead['en']) : stage.overhead;
+      }
+      pipeMetricRes.textContent = typeof stage.res === 'object' ? (stage.res[lang] || stage.res['en']) : stage.res;
+      pipeMetricState.textContent = typeof stage.status === 'object' ? (stage.status[lang] || stage.status['en']) : stage.status;
     }
 
     function startPipeCycle() {
