@@ -529,17 +529,20 @@
       color: var(--accent-cyan);
     }
 
-    /* Pipeline Screen - FIXED MIN-HEIGHT PREVENTS JITTER / RESIZING */
+    /* Pipeline Screen - ABSOLUTE ROCK-SOLID LOCK PREVENTS ANY JITTER OR PAGE SHIFT */
     .pipe-display-screen {
       background: #090c13;
       border: 1px solid var(--border-active);
       border-radius: var(--radius-md);
-      padding: 26px 28px;
+      padding: 22px 28px;
       display: grid;
       grid-template-columns: 1.25fr 1fr;
-      gap: 32px;
+      gap: 28px;
       align-items: center;
-      min-height: 220px; /* Crucial: Locks container height so the page never moves! */
+      height: 250px; /* Strictly locked height on desktop: Never grows or shrinks */
+      min-height: 250px;
+      max-height: 250px;
+      box-sizing: border-box;
       box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
       position: relative;
       overflow: hidden;
@@ -549,54 +552,74 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      height: 100%;
+      overflow: hidden;
     }
 
     .pipe-display-left h4 {
-      font-size: 1.35rem;
+      font-size: 1.18rem;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 8px;
-      min-height: 32px;
+      margin-bottom: 6px;
+      height: 48px;
+      min-height: 48px;
+      max-height: 48px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      line-height: 1.25;
+      overflow: hidden;
     }
 
     .pipe-display-left p {
       color: var(--text-muted);
-      font-size: 0.92rem;
-      line-height: 1.6;
-      margin-bottom: 16px;
-      min-height: 52px; /* Fixed paragraph height locks vertical rhythm */
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      height: 60px;
+      min-height: 60px;
+      max-height: 60px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
 
     .pipe-hud-tags {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      gap: 8px;
+      flex-wrap: nowrap;
+      height: 30px;
+      min-height: 30px;
+      max-height: 30px;
+      overflow: hidden;
     }
 
     .pipe-hud-tag {
       font-family: var(--font-mono);
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 6px;
       color: #cbd5e1;
+      white-space: nowrap;
     }
 
     .pipe-display-right {
       background: rgba(0, 0, 0, 0.5);
       border: 1px solid var(--border-subtle);
       border-radius: 10px;
-      padding: 18px 20px;
+      padding: 16px 20px;
       font-family: var(--font-mono);
       font-size: 0.82rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      min-height: 140px;
+      height: 154px;
+      min-height: 154px;
+      max-height: 154px;
+      box-sizing: border-box;
+      overflow: hidden;
     }
 
     .pipe-controls-bar {
@@ -731,38 +754,270 @@
     }
 
     .studio-viewfinder {
-      background: #111520;
-      border: 2px dashed rgba(255, 255, 255, 0.12);
+      background: #090c15;
+      border: 1px solid var(--border-active);
       border-radius: 12px;
-      height: 240px;
+      height: 270px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.85);
+      user-select: none;
+    }
+
+    .game-sim-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Game HUD Overlay (Gaming Simil) */
+    .game-hud-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      padding: 12px 14px;
+      box-sizing: border-box;
+      transition: opacity 0.3s ease;
+    }
+
+    .game-hud-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 28px; /* Below REC badge */
+    }
+
+    .game-hud-player-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+    }
+
+    .hud-bar-row {
+      display: flex;
       align-items: center;
-      justify-content: center;
-      position: relative;
+      gap: 6px;
+      color: #94a3b8;
+    }
+
+    .hud-label {
+      font-weight: 700;
+      width: 26px;
+    }
+
+    .hud-bar-track {
+      width: 65px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
       overflow: hidden;
     }
 
+    .hud-bar-fill.hp-fill {
+      width: 88%;
+      height: 100%;
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+    }
+
+    .hud-bar-fill.shd-fill {
+      width: 100%;
+      height: 100%;
+      background: #00e5ff;
+      box-shadow: 0 0 8px rgba(0, 229, 255, 0.8);
+    }
+
+    .hud-val {
+      color: #fff;
+      font-size: 0.65rem;
+    }
+
+    .game-hud-radar {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+    }
+
+    .radar-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      background: rgba(0, 229, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    }
+
+    .radar-sweep {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      background: conic-gradient(from 0deg, rgba(0, 229, 255, 0.6) 0deg, transparent 60deg);
+      transform-origin: 0% 0%;
+      animation: radarRotate 2.5s linear infinite;
+    }
+
+    @keyframes radarRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .radar-dot {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: 0 0 6px #ef4444;
+    }
+    .radar-dot.dot-1 { top: 10px; left: 20px; }
+    .radar-dot.dot-2 { top: 22px; left: 8px; background: #10b981; box-shadow: 0 0 6px #10b981; }
+
+    .radar-fps {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: #94a3b8;
+    }
+
+    /* Crosshair Center */
+    .game-crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    .crosshair-reticle {
+      width: 40px;
+      height: 40px;
+      position: relative;
+      animation: crosshairPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes crosshairPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .ch-bracket {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-color: rgba(0, 229, 255, 0.7);
+      border-style: solid;
+    }
+    .ch-tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+    .ch-tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+    .ch-bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+    .ch-br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+    .ch-center-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      background: #ff6d00;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px #ff6d00;
+    }
+
+    .crosshair-target-tag {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: #00e5ff;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1px 6px;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    /* Bottom Game Stats */
+    .game-hud-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .game-ammo-box {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ammo-num {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .ammo-num small {
+      color: var(--text-dim);
+      font-size: 0.7rem;
+    }
+
+    .ammo-type {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--accent-orange);
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    .game-killfeed {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: #cbd5e1;
+      background: rgba(0, 0, 0, 0.55);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border-left: 2px solid var(--accent-orange);
+    }
+
+    /* Studio Software Overlays */
     .studio-rec-indicator {
       position: absolute;
-      top: 14px;
-      left: 14px;
-      background: rgba(220, 38, 38, 0.85);
+      top: 10px;
+      left: 12px;
+      background: rgba(220, 38, 38, 0.9);
       color: #fff;
       font-family: var(--font-mono);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 800;
-      padding: 3px 9px;
+      padding: 3px 8px;
       border-radius: 20px;
       display: flex;
       align-items: center;
       gap: 6px;
-      animation: blink 1.2s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      z-index: 5;
+      box-shadow: 0 0 12px rgba(220, 38, 38, 0.5);
     }
 
     .studio-rec-dot {
@@ -770,26 +1025,252 @@
       height: 7px;
       border-radius: 50%;
       background: #fff;
+      animation: blink 1s infinite;
     }
 
-    .studio-btn-record-main {
-      width: 68px;
-      height: 68px;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .studio-audio-hud {
+      position: absolute;
+      bottom: 12px;
+      left: 120px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 3px 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 5;
+    }
+
+    .audio-hud-icon {
+      font-size: 0.75rem;
+    }
+
+    .audio-vu-meter {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+    }
+
+    .vu-bar {
+      width: 3px;
+      border-radius: 1px;
+      background: #10b981;
+      animation: vuAnim 0.8s ease-in-out infinite alternate;
+    }
+    .vu-bar.v1 { height: 40%; animation-delay: 0.1s; }
+    .vu-bar.v2 { height: 80%; animation-delay: 0.3s; }
+    .vu-bar.v3 { height: 100%; background: #eab308; animation-delay: 0.2s; }
+    .vu-bar.v4 { height: 60%; animation-delay: 0.4s; }
+    .vu-bar.v5 { height: 30%; animation-delay: 0.15s; }
+    .vu-bar.v6 { height: 70%; animation-delay: 0.35s; }
+
+    @keyframes vuAnim {
+      0% { transform: scaleY(0.3); }
+      100% { transform: scaleY(1); }
+    }
+
+    /* Picture-in-Picture (PiP) Camera Wrapper - matching real Zylo Studio */
+    .pip-camera-wrapper {
+      position: absolute;
+      right: 14px;
+      bottom: 14px;
+      width: 124px;
+      height: 80px;
+      border: 2px solid #ff7b00;
+      border-radius: 10px;
+      box-shadow: 0 0 22px rgba(255, 123, 0, 0.5), 0 8px 24px rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+      background: #090b10;
+      z-index: 15;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      opacity: 0;
+      transform: scale(0.75);
+      pointer-events: none;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pip-camera-wrapper.pip-active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .pip-camera-wrapper.solo-camera-mode {
+      top: 50% !important;
+      left: 50% !important;
+      right: auto !important;
+      bottom: auto !important;
+      transform: translate(-50%, -50%) scale(1.6) !important;
+      border-color: #ff7b00;
+      box-shadow: 0 0 35px rgba(255, 123, 0, 0.6), 0 10px 40px rgba(0, 0, 0, 0.95);
+      z-index: 20;
+    }
+
+    .pip-camera-header {
+      position: absolute;
+      top: 4px;
+      left: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.65);
+      padding: 1px 5px;
+      border-radius: 4px;
+      z-index: 3;
+    }
+
+    .pip-live-dot {
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      border: 4px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.5);
+      background: #ef4444;
+      animation: blink 1s infinite;
+    }
+
+    .pip-camera-badge {
+      position: absolute;
+      bottom: 4px;
+      right: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.54rem;
+      color: var(--accent-cyan);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 1px 4px;
+      border-radius: 3px;
+      z-index: 3;
+    }
+
+    .pip-webcam-feed {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #18112a, #0b1329);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      transition: transform 0.2s ease;
+      overflow: hidden;
     }
 
-    .studio-btn-record-main:hover {
-      transform: scale(1.08);
+    .streamer-room-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 75% 30%, rgba(168, 85, 247, 0.3), transparent 60%),
+                  radial-gradient(circle at 20% 80%, rgba(0, 229, 255, 0.25), transparent 50%);
+    }
+
+    .streamer-silhouette {
+      position: relative;
+      width: 44px;
+      height: 54px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+      z-index: 2;
+    }
+
+    .streamer-head {
+      width: 20px;
+      height: 22px;
+      border-radius: 50%;
+      background: #334155;
+      position: relative;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4);
+    }
+
+    .headset-arc {
+      position: absolute;
+      top: -2px;
+      width: 24px;
+      height: 13px;
+      border: 3px solid #ff7b00;
+      border-bottom: none;
+      border-radius: 13px 13px 0 0;
+      box-shadow: 0 0 8px rgba(255, 123, 0, 0.6);
+    }
+
+    .headset-arc::before, .headset-arc::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      width: 4px;
+      height: 7px;
+      background: #ff7b00;
+      border-radius: 2px;
+    }
+    .headset-arc::before { left: -4px; }
+    .headset-arc::after { right: -4px; }
+
+    .mic-boom {
+      position: absolute;
+      bottom: 0px;
+      left: 8px;
+      width: 10px;
+      height: 2px;
+      background: #00e5ff;
+      transform: rotate(25deg);
+      box-shadow: 0 0 6px #00e5ff;
+    }
+
+    .streamer-body {
+      width: 38px;
+      height: 24px;
+      background: #1e293b;
+      border-radius: 12px 12px 0 0;
+      margin-top: -2px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .pip-face-track {
+      position: absolute;
+      top: 16px;
+      left: 42px;
+      width: 38px;
+      height: 42px;
+      border: 1px dashed rgba(0, 229, 255, 0.5);
+      border-radius: 4px;
+      pointer-events: none;
+      animation: faceTrackPulse 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes faceTrackPulse {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(2px, -3px); }
+    }
+
+    .studio-btn-stop-rec {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #ef4444;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .studio-btn-stop-rec:hover {
+      background: #ef4444;
+      color: #fff;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
     }
 
     .studio-bottom-bar {
@@ -1229,7 +1710,34 @@
         display: none;
       }
       .pipe-display-screen {
-        min-height: auto;
+        height: 380px;
+        min-height: 380px;
+        max-height: 380px;
+        gap: 16px;
+        padding: 20px;
+      }
+      .pipe-display-left h4 {
+        height: auto;
+        min-height: 44px;
+        max-height: 44px;
+      }
+      .pipe-display-left p {
+        height: auto;
+        min-height: 54px;
+        max-height: 54px;
+      }
+      .pipe-display-right {
+        height: 140px;
+        min-height: 140px;
+        max-height: 140px;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .pipe-display-screen {
+        height: 420px;
+        min-height: 420px;
+        max-height: 420px;
       }
     }
   </style>
@@ -1470,22 +1978,98 @@
             </div>
           </div>
 
-          <!-- Studio Viewfinder -->
-          <div class="studio-viewfinder">
+          <!-- Studio Viewfinder: Simulated Gameplay Capture with Live PiP Camera -->
+          <div class="studio-viewfinder" id="studioViewfinder">
+            <!-- Simulated Gameplay Canvas -->
+            <canvas id="gameSimCanvas" class="game-sim-canvas"></canvas>
+
+            <!-- Game HUD Overlay (Gaming Capture Simil) -->
+            <div class="game-hud-overlay" id="gameHudOverlay">
+              <!-- Top Game Telemetry -->
+              <div class="game-hud-top">
+                <div class="game-hud-player-stats">
+                  <div class="hud-bar-row">
+                    <span class="hud-label">HP</span>
+                    <div class="hud-bar-track"><div class="hud-bar-fill hp-fill"></div></div>
+                    <span class="hud-val">88%</span>
+                  </div>
+                  <div class="hud-bar-row">
+                    <span class="hud-label">SHD</span>
+                    <div class="hud-bar-track"><div class="hud-bar-fill shd-fill"></div></div>
+                    <span class="hud-val">100%</span>
+                  </div>
+                </div>
+
+                <div class="game-hud-radar">
+                  <div class="radar-circle">
+                    <div class="radar-sweep"></div>
+                    <div class="radar-dot dot-1"></div>
+                    <div class="radar-dot dot-2"></div>
+                  </div>
+                  <span class="radar-fps">FPS: 60 • 16ms</span>
+                </div>
+              </div>
+
+              <!-- Center Crosshair Target Lock -->
+              <div class="game-crosshair">
+                <div class="crosshair-reticle">
+                  <span class="ch-bracket ch-tl"></span>
+                  <span class="ch-bracket ch-tr"></span>
+                  <span class="ch-bracket ch-bl"></span>
+                  <span class="ch-bracket ch-br"></span>
+                  <span class="ch-center-dot"></span>
+                </div>
+                <div class="crosshair-target-tag">TARGET LOCK [210m]</div>
+              </div>
+
+              <!-- Bottom Game Stats -->
+              <div class="game-hud-bottom">
+                <div class="game-ammo-box">
+                  <span class="ammo-num">30<small>/120</small></span>
+                  <span class="ammo-type">⚡ PLASMA RIFLE</span>
+                </div>
+                <div class="game-killfeed">
+                  <span>💥 ROUND 4: CLUTCH MATCH</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Zylo Studio Software HUD: Recording Indicator -->
             <div class="studio-rec-indicator">
               <span class="studio-rec-dot"></span>
-              <span>LIVE RECORDING</span>
+              <span id="studioRecTimer">REC 00:42.18</span>
             </div>
 
-            <div class="studio-btn-record-main" title="Click to Stop & Transcode">
-              ⏹
+            <!-- Studio Audio Equalizer VU Meters -->
+            <div class="studio-audio-hud" title="System Sound + Mic Normalized">
+              <span class="audio-hud-icon">🎙️</span>
+              <div class="audio-vu-meter">
+                <span class="vu-bar v1"></span>
+                <span class="vu-bar v2"></span>
+                <span class="vu-bar v3"></span>
+                <span class="vu-bar v4"></span>
+                <span class="vu-bar v5"></span>
+                <span class="vu-bar v6"></span>
+              </div>
             </div>
 
-            <div style="font-family:var(--font-mono); font-size:0.88rem; color:#fff; font-weight:700; margin-top:14px;">
-              00:42.18 / 06:00
-            </div>
-            <div style="font-size:0.78rem; color:var(--text-dim); margin-top:4px;">
-              Audio Waveform Active • System + Mic Synced
+            <!-- Mini Camera in PiP (Faithful to Zylo Studio) -->
+            <div class="pip-camera-wrapper" id="pipCameraWrapper" title="Streamer Webcam PiP (Click to switch corners)">
+              <div class="pip-camera-header">
+                <span class="pip-live-dot"></span>
+                <span>CAM PiP</span>
+              </div>
+              <div class="pip-webcam-feed">
+                <div class="streamer-room-bg"></div>
+                <div class="streamer-silhouette">
+                  <div class="headset-arc"></div>
+                  <div class="streamer-head"></div>
+                  <div class="streamer-body"></div>
+                  <div class="mic-boom"></div>
+                </div>
+                <div class="pip-face-track"></div>
+              </div>
+              <div class="pip-camera-badge">720p • 30fps</div>
             </div>
           </div>
 
@@ -1499,8 +2083,13 @@
                 <span class="quality-pill" id="pillVoter" title="Unlocked via Top.gg /vote">1080p60 (Voter)</span>
               </div>
             </div>
-            <div style="color:var(--accent-orange);">
-              ⏱ 6h Ephemeral Destroy
+            <div style="display:flex; align-items:center; gap:12px;">
+              <button class="studio-btn-stop-rec" id="btnStudioStopRec" title="Simulate finish recording">
+                ⏹ <span id="studioStopLabel">Stop &amp; Trim</span>
+              </button>
+              <div style="color:var(--accent-orange); font-size:0.82rem;">
+                ⏱ 6h Ephemeral Destroy
+              </div>
             </div>
           </div>
         </div>
@@ -2318,23 +2907,282 @@
 
     startPipeCycle();
 
-    // 4. Studio Mockup Interactive Controls
+    // 4. Studio Simulated Gameplay Capture & PiP Camera Engine
     const btnStudioScreen = document.getElementById('btnStudioScreen');
     const btnStudioCamera = document.getElementById('btnStudioCamera');
     const studioLiveSpecs = document.getElementById('studioLiveSpecs');
     const pillFast = document.getElementById('pillFast');
     const pillQuality = document.getElementById('pillQuality');
     const pillVoter = document.getElementById('pillVoter');
+    const pipCameraWrapper = document.getElementById('pipCameraWrapper');
+    const gameHudOverlay = document.getElementById('gameHudOverlay');
+    const gameSimCanvas = document.getElementById('gameSimCanvas');
+    const studioRecTimer = document.getElementById('studioRecTimer');
+    const btnStudioStopRec = document.getElementById('btnStudioStopRec');
+    const studioStopLabel = document.getElementById('studioStopLabel');
 
-    if (btnStudioScreen && btnStudioCamera) {
-      btnStudioScreen.addEventListener('click', () => {
-        btnStudioScreen.classList.add('active');
-        btnStudioCamera.classList.remove('active');
+    let isScreenActive = true;
+    let isCameraActive = false; // Camera starts OFF; user clicks 'Camera' to toggle PiP!
+    let pipCornerIdx = 0;
+    const pipCorners = [
+      { bottom: '14px', right: '14px', top: 'auto', left: 'auto' },
+      { top: '34px', right: '14px', bottom: 'auto', left: 'auto' },
+      { top: '34px', left: '14px', bottom: 'auto', right: 'auto' },
+      { bottom: '14px', left: '14px', top: 'auto', right: 'auto' }
+    ];
+
+    function applyPipCorner(idx) {
+      if (!pipCameraWrapper) return;
+      const c = pipCorners[idx % pipCorners.length];
+      pipCameraWrapper.style.top = c.top;
+      pipCameraWrapper.style.right = c.right;
+      pipCameraWrapper.style.bottom = c.bottom;
+      pipCameraWrapper.style.left = c.left;
+    }
+
+    // Clicking PiP camera rotates corners (bottom-right -> top-right -> top-left -> bottom-left)
+    if (pipCameraWrapper) {
+      pipCameraWrapper.addEventListener('click', (e) => {
+        e.stopPropagation();
+        pipCornerIdx = (pipCornerIdx + 1) % pipCorners.length;
+        applyPipCorner(pipCornerIdx);
       });
+    }
+
+    function updateStudioSources() {
+      if (btnStudioCamera) btnStudioCamera.classList.toggle('active', isCameraActive);
+      if (btnStudioScreen) btnStudioScreen.classList.toggle('active', isScreenActive);
+
+      if (pipCameraWrapper) {
+        pipCameraWrapper.classList.toggle('pip-active', isCameraActive);
+        if (!isScreenActive && isCameraActive) {
+          pipCameraWrapper.classList.add('solo-camera-mode');
+        } else {
+          pipCameraWrapper.classList.remove('solo-camera-mode');
+          applyPipCorner(pipCornerIdx);
+        }
+      }
+
+      if (gameHudOverlay) {
+        gameHudOverlay.style.opacity = isScreenActive ? '1' : '0.12';
+      }
+      if (gameSimCanvas) {
+        gameSimCanvas.style.opacity = isScreenActive ? '1' : '0.18';
+      }
+    }
+
+    if (btnStudioCamera) {
       btnStudioCamera.addEventListener('click', () => {
-        btnStudioCamera.classList.add('active');
-        btnStudioScreen.classList.remove('active');
+        isCameraActive = !isCameraActive;
+        updateStudioSources();
       });
+    }
+
+    if (btnStudioScreen) {
+      btnStudioScreen.addEventListener('click', () => {
+        if (isScreenActive && !isCameraActive) {
+          // If only screen is active, toggling it switches to Camera
+          isScreenActive = false;
+          isCameraActive = true;
+        } else {
+          isScreenActive = !isScreenActive;
+          if (!isScreenActive && !isCameraActive) {
+            isCameraActive = true;
+          }
+        }
+        updateStudioSources();
+      });
+    }
+
+    // Stop / Trim simulation button
+    if (btnStudioStopRec) {
+      btnStudioStopRec.addEventListener('click', () => {
+        const originalText = studioStopLabel.textContent;
+        studioStopLabel.textContent = '✓ Trimmed (0.35s)';
+        btnStudioStopRec.style.borderColor = 'var(--accent-green)';
+        btnStudioStopRec.style.color = 'var(--accent-green)';
+        setTimeout(() => {
+          studioStopLabel.textContent = originalText;
+          btnStudioStopRec.style.borderColor = '';
+          btnStudioStopRec.style.color = '';
+        }, 1800);
+      });
+    }
+
+    // Real-Time Studio Timer Ticker
+    let recElapsed = 42.18;
+    setInterval(() => {
+      recElapsed += 0.08;
+      if (recElapsed > 359) recElapsed = 1.00;
+      const mins = String(Math.floor(recElapsed / 60)).padStart(2, '0');
+      const secs = (recElapsed % 60).toFixed(2).padStart(5, '0');
+      if (studioRecTimer) studioRecTimer.textContent = `REC ${mins}:${secs}`;
+    }, 80);
+
+    // Simulated 60 FPS Game Canvas (3D Perspective Grid, Target Drone, Laser Tracers)
+    if (gameSimCanvas) {
+      const gCtx = gameSimCanvas.getContext('2d');
+      let gw = 0, gh = 0;
+      let gridOffset = 0;
+      let lasers = [];
+      let sparks = [];
+      let lastShotTime = 0;
+
+      function resizeGameCanvas() {
+        if (!gameSimCanvas.parentElement) return;
+        gw = gameSimCanvas.width = gameSimCanvas.parentElement.clientWidth;
+        gh = gameSimCanvas.height = gameSimCanvas.parentElement.clientHeight;
+      }
+      window.addEventListener('resize', resizeGameCanvas);
+      resizeGameCanvas();
+
+      function spawnLaser() {
+        lasers.push({
+          x: gw * 0.5 + (Math.random() - 0.5) * 40,
+          y: gh,
+          tx: gw * 0.5 + (Math.random() - 0.5) * 30,
+          ty: gh * 0.5,
+          progress: 0
+        });
+      }
+
+      function spawnHit(x, y) {
+        for (let i = 0; i < 8; i++) {
+          sparks.push({
+            x, y,
+            vx: (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4,
+            alpha: 1,
+            color: Math.random() > 0.5 ? '#ff6d00' : '#00e5ff'
+          });
+        }
+      }
+
+      function renderGameSim(t) {
+        if (gw === 0 || gh === 0) {
+          resizeGameCanvas();
+          requestAnimationFrame(renderGameSim);
+          return;
+        }
+
+        // Sky gradient
+        const skyGrad = gCtx.createLinearGradient(0, 0, 0, gh);
+        skyGrad.addColorStop(0, '#040711');
+        skyGrad.addColorStop(0.5, '#0b1122');
+        skyGrad.addColorStop(1, '#050813');
+        gCtx.fillStyle = skyGrad;
+        gCtx.fillRect(0, 0, gw, gh);
+
+        const horizonY = gh * 0.5;
+
+        // 3D Perspective Grid Floor
+        gridOffset = (gridOffset + 1.2) % 24;
+        gCtx.save();
+        gCtx.strokeStyle = 'rgba(0, 229, 255, 0.22)';
+        gCtx.lineWidth = 1;
+
+        // Converging perspective lines
+        const numLines = 14;
+        for (let i = -numLines; i <= numLines; i++) {
+          const bottomX = (gw * 0.5) + (i * 45);
+          gCtx.beginPath();
+          gCtx.moveTo(gw * 0.5, horizonY);
+          gCtx.lineTo(bottomX, gh);
+          gCtx.stroke();
+        }
+
+        // Horizontal moving lines with perspective spacing
+        for (let y = horizonY + 2; y < gh; y += 4) {
+          const depth = (y - horizonY) / (gh - horizonY);
+          const dynamicSpacing = Math.pow(depth, 2) * (gh - horizonY);
+          const currentY = horizonY + dynamicSpacing + (gridOffset * depth);
+          if (currentY >= horizonY && currentY <= gh) {
+            gCtx.strokeStyle = `rgba(0, 229, 255, ${0.08 + depth * 0.35})`;
+            gCtx.beginPath();
+            gCtx.moveTo(0, currentY);
+            gCtx.lineTo(gw, currentY);
+            gCtx.stroke();
+          }
+        }
+        gCtx.restore();
+
+        // Target Drone at center horizon
+        const droneY = horizonY - 12 + Math.sin(t * 0.003) * 6;
+        const droneX = gw * 0.5 + Math.cos(t * 0.002) * 18;
+
+        gCtx.save();
+        gCtx.translate(droneX, droneY);
+        // Drone Shield Glow
+        gCtx.shadowColor = '#00e5ff';
+        gCtx.shadowBlur = 10;
+        gCtx.strokeStyle = '#00e5ff';
+        gCtx.lineWidth = 1.5;
+        gCtx.beginPath();
+        gCtx.moveTo(0, -10);
+        gCtx.lineTo(14, 0);
+        gCtx.lineTo(0, 10);
+        gCtx.lineTo(-14, 0);
+        gCtx.closePath();
+        gCtx.stroke();
+
+        // Core
+        gCtx.fillStyle = '#ff6d00';
+        gCtx.beginPath();
+        gCtx.arc(0, 0, 3, 0, Math.PI * 2);
+        gCtx.fill();
+        gCtx.restore();
+
+        // Periodic laser firing
+        if (t - lastShotTime > 1600) {
+          spawnLaser();
+          lastShotTime = t;
+        }
+
+        // Render Lasers
+        for (let i = lasers.length - 1; i >= 0; i--) {
+          const l = lasers[i];
+          l.progress += 0.055;
+          const curX = l.x + (l.tx - l.x) * l.progress;
+          const curY = l.y + (l.ty - l.y) * l.progress;
+
+          gCtx.save();
+          gCtx.shadowColor = '#ff6d00';
+          gCtx.shadowBlur = 8;
+          gCtx.strokeStyle = '#ffb74d';
+          gCtx.lineWidth = 3;
+          gCtx.beginPath();
+          gCtx.moveTo(curX, curY);
+          gCtx.lineTo(curX, curY + 14);
+          gCtx.stroke();
+          gCtx.restore();
+
+          if (l.progress >= 1) {
+            spawnHit(l.tx, l.ty);
+            lasers.splice(i, 1);
+          }
+        }
+
+        // Render Impact Sparks
+        for (let i = sparks.length - 1; i >= 0; i--) {
+          const s = sparks[i];
+          s.x += s.vx;
+          s.y += s.vy;
+          s.alpha -= 0.04;
+          if (s.alpha <= 0) {
+            sparks.splice(i, 1);
+            continue;
+          }
+          gCtx.fillStyle = s.color;
+          gCtx.globalAlpha = s.alpha;
+          gCtx.beginPath();
+          gCtx.arc(s.x, s.y, 1.8, 0, Math.PI * 2);
+          gCtx.fill();
+          gCtx.globalAlpha = 1;
+        }
+
+        requestAnimationFrame(renderGameSim);
+      }
+      requestAnimationFrame(renderGameSim);
     }
 
     if (pillFast && pillQuality && pillVoter) {
