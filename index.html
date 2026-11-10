@@ -430,7 +430,7 @@
     }
 
     /* ========================================================
-       1. ANIMATED INTERACTIVE PIPELINE (USER JOURNEY SIMULATION)
+       1. ANIMATED INTERACTIVE PIPELINE (ROCK-SOLID HEIGHT & HOVER)
        ======================================================== */
     .pipeline-interactive-section {
       padding: 70px 0;
@@ -443,6 +443,7 @@
       padding: 36px;
       backdrop-filter: blur(16px);
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
     }
 
     .pipe-timeline-track {
@@ -450,7 +451,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       position: relative;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
     }
 
     /* Animated connecting laser line behind steps */
@@ -463,15 +464,16 @@
       background: rgba(255, 255, 255, 0.08);
       z-index: 1;
       border-radius: 2px;
+      overflow: hidden;
     }
 
     .pipe-laser-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, var(--accent-orange), var(--accent-cyan));
-      box-shadow: 0 0 12px var(--accent-orange-glow);
+      box-shadow: 0 0 14px var(--accent-orange-glow);
       border-radius: 2px;
-      transition: width 0.4s ease;
+      transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .pipe-step-node {
@@ -479,7 +481,12 @@
       z-index: 2;
       text-align: center;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      user-select: none;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pipe-step-node:hover {
+      transform: translateY(-3px);
     }
 
     .pipe-node-icon-circle {
@@ -488,25 +495,24 @@
       border-radius: 50%;
       background: var(--bg-surface);
       border: 2px solid rgba(255, 255, 255, 0.15);
-      margin: 0 auto 14px;
+      margin: 0 auto 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.8rem;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     }
 
     .pipe-step-node.active .pipe-node-icon-circle {
       border-color: var(--accent-orange);
-      background: rgba(255, 109, 0, 0.15);
-      box-shadow: 0 0 25px var(--accent-orange-glow), inset 0 0 15px rgba(255, 109, 0, 0.2);
-      transform: scale(1.1);
+      background: rgba(255, 109, 0, 0.18);
+      box-shadow: 0 0 25px var(--accent-orange-glow), inset 0 0 15px rgba(255, 109, 0, 0.3);
+      transform: scale(1.12);
     }
 
     .pipe-step-node.completed .pipe-node-icon-circle {
       border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
       box-shadow: 0 0 15px var(--accent-cyan-glow);
     }
 
@@ -514,7 +520,7 @@
       font-size: 0.95rem;
       font-weight: 700;
       color: #fff;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .pipe-step-timing {
@@ -523,26 +529,34 @@
       color: var(--accent-cyan);
     }
 
-    /* Pipeline Animated Stage Details Screen */
+    /* Pipeline Screen - FIXED MIN-HEIGHT PREVENTS JITTER / RESIZING */
     .pipe-display-screen {
       background: #090c13;
       border: 1px solid var(--border-active);
       border-radius: var(--radius-md);
-      padding: 28px;
+      padding: 26px 28px;
       display: grid;
-      grid-template-columns: 1.2fr 1fr;
+      grid-template-columns: 1.25fr 1fr;
       gap: 32px;
       align-items: center;
+      min-height: 220px; /* Crucial: Locks container height so the page never moves! */
       box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
       position: relative;
       overflow: hidden;
     }
 
+    .pipe-display-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     .pipe-display-left h4 {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      min-height: 32px;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -550,9 +564,10 @@
 
     .pipe-display-left p {
       color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       line-height: 1.6;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      min-height: 52px; /* Fixed paragraph height locks vertical rhythm */
     }
 
     .pipe-hud-tags {
@@ -563,7 +578,7 @@
 
     .pipe-hud-tag {
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 4px 10px;
@@ -575,17 +590,34 @@
       background: rgba(0, 0, 0, 0.5);
       border: 1px solid var(--border-subtle);
       border-radius: 10px;
-      padding: 20px;
+      padding: 18px 20px;
       font-family: var(--font-mono);
       font-size: 0.82rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 140px;
     }
 
     .pipe-controls-bar {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      gap: 14px;
-      margin-top: 24px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pipe-hover-hint {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .pipe-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .pipe-btn-ctrl {
@@ -593,14 +625,14 @@
       border: 1px solid var(--border-subtle);
       color: var(--text-main);
       font-family: var(--font-mono);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      padding: 8px 18px;
+      padding: 6px 14px;
       border-radius: 8px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.2s ease;
     }
 
@@ -610,8 +642,8 @@
     }
 
     /* ========================================================
-       2. DEDICATED ZYLO STUDIO SECTION (IN-BROWSER RECORDER)
-       ======================================================== */
+         2. DEDICATED ZYLO STUDIO SECTION (ACCURATE SPECS)
+         ======================================================== */
     .studio-section {
       padding: 80px 0;
       position: relative;
@@ -619,7 +651,7 @@
 
     .studio-grid {
       display: grid;
-      grid-template-columns: 1fr 1.25fr;
+      grid-template-columns: 1fr 1.2fr;
       gap: 40px;
       align-items: center;
     }
@@ -629,7 +661,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
-      margin: 28px 0;
+      margin: 24px 0 0;
     }
 
     .studio-bullets li {
@@ -702,7 +734,7 @@
       background: #111520;
       border: 2px dashed rgba(255, 255, 255, 0.12);
       border-radius: 12px;
-      height: 250px;
+      height: 240px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -741,8 +773,8 @@
     }
 
     .studio-btn-record-main {
-      width: 70px;
-      height: 70px;
+      width: 68px;
+      height: 68px;
       border-radius: 50%;
       background: linear-gradient(135deg, #ef4444, #dc2626);
       border: 4px solid rgba(255, 255, 255, 0.2);
@@ -784,6 +816,7 @@
       border-radius: 6px;
       font-size: 0.74rem;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
 
     .quality-pill.active {
@@ -876,7 +909,6 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-bottom: 28px;
     }
 
     .tab-bullets li {
@@ -1067,89 +1099,6 @@
       font-weight: 700;
     }
 
-    /* Interactive Simulator */
-    .sim-box {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-    }
-
-    .sim-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 12px;
-      margin-bottom: 16px;
-      color: var(--text-dim);
-    }
-
-    .sim-dots {
-      display: flex;
-      gap: 6px;
-    }
-
-    .sim-dots span {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .sim-dots span:nth-child(1) { background: #ef4444; }
-    .sim-dots span:nth-child(2) { background: #f59e0b; }
-    .sim-dots span:nth-child(3) { background: #10b981; }
-
-    .sim-progress-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 6px;
-      height: 10px;
-      overflow: hidden;
-      margin: 14px 0 8px;
-    }
-
-    .sim-progress-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent-orange), var(--accent-cyan));
-      border-radius: 6px;
-      transition: width 0.1s linear;
-    }
-
-    .sim-btn-trigger {
-      background: var(--accent-orange);
-      color: #fff;
-      font-family: var(--font-sans);
-      font-size: 0.84rem;
-      font-weight: 700;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 14px;
-      transition: all 0.2s ease;
-    }
-
-    .sim-btn-trigger:hover {
-      background: #ff8524;
-      transform: translateY(-1px);
-    }
-
-    .sim-embed-preview {
-      background: #2b2d31;
-      border-left: 4px solid var(--accent-orange);
-      border-radius: 4px;
-      padding: 14px;
-      margin-top: 16px;
-      color: #dbdee1;
-      font-family: var(--font-sans);
-      display: none;
-    }
-
-    .sim-embed-preview.show {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-
     /* ========================================================
        4. HIGH SCALABILITY ARCHITECTURE SECTION (CANVAS BACKGROUND)
        ======================================================== */
@@ -1279,6 +1228,9 @@
       .pipe-laser-bg {
         display: none;
       }
+      .pipe-display-screen {
+        min-height: auto;
+      }
     }
   </style>
 </head>
@@ -1368,7 +1320,7 @@
     </section>
 
     <!-- ========================================================
-         1. ANIMATED USER JOURNEY PIPELINE SECTION
+         1. ANIMATED USER JOURNEY PIPELINE (ROCK-SOLID HEIGHT & HOVER)
          ======================================================== -->
     <section class="pipeline-interactive-section" id="pipeline">
       <div class="section-header">
@@ -1377,7 +1329,7 @@
         <p class="section-desc" data-i18n="pipe_desc">Follow the real-time journey from the moment a gamer records or drops a raw clip to instantaneous playback in Discord.</p>
       </div>
 
-      <div class="pipe-sim-container">
+      <div class="pipe-sim-container" id="pipeSimContainer">
         <!-- Stepper Track -->
         <div class="pipe-timeline-track">
           <div class="pipe-laser-bg">
@@ -1409,11 +1361,11 @@
           </div>
         </div>
 
-        <!-- Dynamic Screen for Selected Stage -->
+        <!-- Dynamic Screen for Selected Stage (Height Locked: No Screen Resizing or Jumping) -->
         <div class="pipe-display-screen" id="pipeDisplayScreen">
           <div class="pipe-display-left">
             <h4 id="pipeStageTitle">🎥 Stage 1: High-Definition Capture &amp; Ingestion</h4>
-            <p id="pipeStageDesc">The user either records directly in browser with Zylo Studio (Screen/Webcam @ 60 FPS) or drops a raw 1080p/4K gameplay file up to 100MB+.</p>
+            <p id="pipeStageDesc">The user either records directly in browser with Zylo Studio (Screen/Webcam @ 30 FPS) or drops a raw 720p/1080p gameplay file up to 100MB+.</p>
             <div class="pipe-hud-tags">
               <span class="pipe-hud-tag" id="pipeTag1">Target: Screen / Camera</span>
               <span class="pipe-hud-tag" id="pipeTag2">Zero Install Required</span>
@@ -1428,27 +1380,30 @@
               <strong style="color:var(--accent-green);">Zero Server Allocation</strong>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-              <span>Resolution:</span>
-              <strong>1080p 60FPS Native</strong>
+              <span>Encoding Output:</span>
+              <strong id="pipeMetricRes">720p 30 FPS Standard</strong>
             </div>
             <div style="display:flex; justify-content:space-between;">
-              <span>Status:</span>
-              <strong style="color:var(--accent-cyan);">ACTIVE INGESTION</strong>
+              <span>Pipeline State:</span>
+              <strong style="color:var(--accent-cyan);" id="pipeMetricState">ACTIVE INGESTION</strong>
             </div>
           </div>
         </div>
 
-        <!-- Controls: Auto-Cycle / Step -->
+        <!-- Controls: Hover Tip + Step Buttons -->
         <div class="pipe-controls-bar">
-          <button class="pipe-btn-ctrl" id="pipePrevBtn">◀ <span data-i18n="btn_prev">Previous</span></button>
-          <button class="pipe-btn-ctrl" id="pipePlayPauseBtn">⏸ <span data-i18n="btn_pause">Pause Animation</span></button>
-          <button class="pipe-btn-ctrl" id="pipeNextBtn"><span data-i18n="btn_next">Next</span> ▶</button>
+          <span class="pipe-hover-hint">💡 Hover over any node to inspect that step instantly</span>
+          <div class="pipe-btn-group">
+            <button class="pipe-btn-ctrl" id="pipePrevBtn">◀ <span data-i18n="btn_prev">Previous</span></button>
+            <button class="pipe-btn-ctrl" id="pipePlayPauseBtn">⏸ <span data-i18n="btn_pause">Pause</span></button>
+            <button class="pipe-btn-ctrl" id="pipeNextBtn"><span data-i18n="btn_next">Next</span> ▶</button>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ========================================================
-         2. DEDICATED ZYLO STUDIO SECTION (IN-BROWSER RECORDER)
+         2. DEDICATED ZYLO STUDIO SECTION (ACCURATE SPECS)
          ======================================================== -->
     <section class="studio-section" id="studio">
       <div class="section-header">
@@ -1475,28 +1430,31 @@
               <div class="bullet-icon">🖥️</div>
               <div>
                 <strong style="color:#fff;" data-i18n="studio_b1_title">Dual Source Ingestion:</strong>
-                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b1_desc">Toggle seamlessly between full screen, window, or face camera with responsive picture-in-picture.</p>
+                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b1_desc">Toggle seamlessly between full screen, window, or camera with picture-in-picture.</p>
               </div>
             </li>
             <li>
               <div class="bullet-icon">🎙️</div>
               <div>
                 <strong style="color:#fff;" data-i18n="studio_b2_title">Multi-Track Audio Mixing:</strong>
-                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b2_desc">Combines microphone voice commentary and desktop game sound with real-time waveform normalization.</p>
+                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b2_desc">Combines microphone commentary and desktop game sound with real-time waveform normalization.</p>
+              </div>
+            </li>
+            <li>
+              <div class="bullet-icon">✂️</div>
+              <div>
+                <strong style="color:#fff;" data-i18n="studio_b3_title">Keyframe Fast Trimmer:</strong>
+                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b3_desc">Built-in lossless trimmer cuts clip start and end on keyframes in seconds without long re-encoding delays.</p>
               </div>
             </li>
             <li>
               <div class="bullet-icon">⏳</div>
               <div>
-                <strong style="color:#fff;" data-i18n="studio_b3_title">6-Hour Auto-Destruct Protection:</strong>
-                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b3_desc">Built-in ephemeral lifecycles purge temporary clips automatically, keeping your storage clean and private.</p>
+                <strong style="color:#fff;" data-i18n="studio_b4_title">6-Hour Auto-Destruct Protection:</strong>
+                <p style="color:var(--text-muted); font-size:0.88rem;" data-i18n="studio_b4_desc">Built-in ephemeral lifecycles purge temporary clips automatically, keeping your storage clean and private.</p>
               </div>
             </li>
           </ul>
-
-          <a href="https://zylo.stream" class="btn-hero-main" style="padding:12px 28px; font-size:0.95rem;">
-            <span>🎬</span> <span data-i18n="studio_cta">Open Zylo Studio Live</span> ↗
-          </a>
         </div>
 
         <!-- Right: Studio UI Viewfinder Mockup -->
@@ -1507,8 +1465,8 @@
               <button class="studio-seg-opt active" id="btnStudioScreen">🖥️ Screen</button>
               <button class="studio-seg-opt" id="btnStudioCamera">📷 Camera</button>
             </div>
-            <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-cyan);">
-              FPS: <strong>60.0</strong> • RES: <strong>1920x1080</strong>
+            <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-cyan);" id="studioLiveSpecs">
+              RES: <strong>720p</strong> • FPS: <strong>30.0</strong> • <strong>2 Mbps</strong>
             </div>
           </div>
 
@@ -1531,18 +1489,18 @@
             </div>
           </div>
 
-          <!-- Studio Bottom Controls -->
+          <!-- Studio Bottom Controls with Honest Profiles -->
           <div class="studio-bottom-bar">
             <div>
               <span style="color:var(--text-dim); margin-right:6px;">MODE:</span>
               <div class="quality-pill-group" style="display:inline-flex;">
-                <span class="quality-pill">Fast (30FPS)</span>
-                <span class="quality-pill active">Balanced (60FPS)</span>
-                <span class="quality-pill">Lossless</span>
+                <span class="quality-pill active" id="pillFast" title="720p @ 2 Mbps, 30 FPS, Max 6 min">Fast (720p • 2 Mbps)</span>
+                <span class="quality-pill" id="pillQuality" title="720p @ 4 Mbps, 30 FPS, Max 3 min">Quality (720p • 4 Mbps)</span>
+                <span class="quality-pill" id="pillVoter" title="Unlocked via Top.gg /vote">1080p60 (Voter)</span>
               </div>
             </div>
             <div style="color:var(--accent-orange);">
-              ⏱ 6h Ephemeral Destroy Active
+              ⏱ 6h Ephemeral Destroy
             </div>
           </div>
         </div>
@@ -1550,7 +1508,7 @@
     </section>
 
     <!-- ========================================================
-         3. CORE CAPABILITIES (WITH AD-BLOCK RESISTANT SPONSOR TECH)
+         3. CORE CAPABILITIES (WITH NATIVE MONETIZATION)
          ======================================================== -->
     <section class="features-section" id="capabilities">
       <div class="section-header">
@@ -1572,11 +1530,10 @@
           <h3 data-i18n="tab1_title">Interactive Discord Slash Integration</h3>
           <p data-i18n="tab1_desc">Gamers and creators can share high-definition highlights directly from Discord without paying for Nitro subscriptions. Zylo embeds auto-unfurl with inline HTML5 video players.</p>
           <ul class="tab-bullets">
-            <li><span class="check">✓</span> <strong data-i18n="tab1_b1_title">`/clip` Slash Command:</strong> <span data-i18n="tab1_b1_desc">Converts raw media into lightweight streaming cards.</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab1_b2_title">Embed Video Previews:</strong> <span data-i18n="tab1_b2_desc">Instant playback on desktop, iOS, and Android Discord clients.</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab1_b3_title">Automated Top.gg Verification:</strong> <span data-i18n="tab1_b3_desc">Unlocks tier rewards and perks dynamically upon user votes.</span></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab1_b1_title">`/clip` Slash Command:</strong> <span data-i18n="tab1_b1_desc">Converts raw media into lightweight streaming cards.</span></div></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab1_b2_title">Embed Video Previews:</strong> <span data-i18n="tab1_b2_desc">Instant playback on desktop, iOS, and Android Discord clients.</span></div></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab1_b3_title">Automated Top.gg Verification:</strong> <span data-i18n="tab1_b3_desc">Unlocks tier rewards and perks dynamically upon user votes.</span></div></li>
           </ul>
-          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Open zylo.stream</span> ↗</a>
         </div>
         <div class="tab-right">
           <!-- Live Interactive Discord Message Mockup -->
@@ -1593,14 +1550,14 @@
             </div>
             <div class="discord-embed-card">
               <div style="font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:4px;">Apex Legends • Triple Clutch 1v3</div>
-              <div style="font-size:0.78rem; color:#949ba4;">Streamed directly via Cloudflare R2 • 1080p 60FPS</div>
+              <div style="font-size:0.78rem; color:#949ba4;">Streamed directly via Cloudflare R2 • 720p 30FPS</div>
               <div class="discord-video-frame">
-                <div class="discord-quality-tag">1080P • 60FPS</div>
+                <div class="discord-quality-tag">720P • 30FPS</div>
                 <div class="discord-play-btn">▶</div>
               </div>
               <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:0.8rem;">
                 <span style="color:#00e5ff; font-family:var(--font-mono);">zylo.stream/v/apex-c98x</span>
-                <a href="https://zylo.stream" style="color:var(--accent-orange); text-decoration:none; font-weight:700;">Watch HD ↗</a>
+                <span style="color:var(--text-dim);">Inline Player Ready</span>
               </div>
             </div>
           </div>
@@ -1613,11 +1570,10 @@
           <h3 data-i18n="tab2_title">Client-Side Hardware Accelerated WebCodecs</h3>
           <p data-i18n="tab2_desc">Traditional platforms waste hundreds of dollars per month on cloud server transcoding CPU instances. Zylo executes the entire transcode process directly on the user's local GPU before transmission.</p>
           <ul class="tab-bullets">
-            <li><span class="check">✓</span> <strong data-i18n="tab2_b1_title">0 Server Transcoding Latency:</strong> <span data-i18n="tab2_b1_desc">Instant upload without waiting in queue.</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab2_b2_title">MediaBunny WebAssembly:</strong> <span data-i18n="tab2_b2_desc">Fast H.264 video compression directly in memory.</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab2_b3_title">Quality Presets:</strong> <span data-i18n="tab2_b3_desc">Lossless, Balanced, and Ultra-Speed compression modes.</span></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab2_b1_title">0 Server Transcoding Latency:</strong> <span data-i18n="tab2_b1_desc">Instant upload without waiting in cloud queues.</span></div></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab2_b2_title">MediaBunny WebAssembly:</strong> <span data-i18n="tab2_b2_desc">Fast H.264 video compression directly in memory.</span></div></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab2_b3_title">Quality Profiles:</strong> <span data-i18n="tab2_b3_desc">Fast Mode (2 Mbps) and Quality Mode (4 Mbps) for quick uploads.</span></div></li>
           </ul>
-          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Open zylo.stream</span> ↗</a>
         </div>
         <div class="tab-right">
           <!-- WebCodecs GPU Telemetry HUD -->
@@ -1628,19 +1584,19 @@
             </div>
             <div class="hud-line">
               <span>Hardware VideoEncoder:</span>
-              <strong>avc1.640028 (High Profile)</strong>
+              <strong>avc1.64001f (720p Profile)</strong>
             </div>
             <div class="hud-line">
               <span>Encoding Throughput:</span>
-              <strong style="color:var(--accent-cyan);">142 FPS (Real-Time 4.7x)</strong>
+              <strong style="color:var(--accent-cyan);">95 FPS (Real-Time 3.1x)</strong>
             </div>
             <div class="hud-line">
               <span>Original Clip Size:</span>
-              <span>84.2 MB (Raw 4K/1080p)</span>
+              <span>84.2 MB (Raw Desktop Stream)</span>
             </div>
             <div class="hud-line">
               <span>Optimized Stream Size:</span>
-              <strong style="color:var(--accent-green);">7.8 MB (-90.7%)</strong>
+              <strong style="color:var(--accent-green);">6.2 MB (-92.6%)</strong>
             </div>
             <div class="hud-line">
               <span>Server CPU Overhead:</span>
@@ -1656,11 +1612,10 @@
           <h3 data-i18n="tab3_title">Dual-Mode Privacy &amp; Revocation Killswitch</h3>
           <p data-i18n="tab3_desc">Creators retain full sovereign control over their content. Every uploaded clip generates two distinct cryptographically secure URLs.</p>
           <ul class="tab-bullets">
-            <li><span class="check">✓</span> <strong data-i18n="tab3_b1_title">Public Watch URL:</strong> <span data-i18n="tab3_b1_desc">Clean, shareable streaming link without management controls.</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab3_b2_title">Creator Master Secret:</strong> <span data-i18n="tab3_b2_desc">Permanent access to delete or revoke links at any moment.</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab3_b3_title">Instant Revoke:</strong> <span data-i18n="tab3_b3_desc">Deactivates public viewing instantly without deleting audit records.</span></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab3_b1_title">Public Watch URL:</strong> <span data-i18n="tab3_b1_desc">Clean, shareable streaming link without management controls.</span></div></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab3_b2_title">Creator Master Secret:</strong> <span data-i18n="tab3_b2_desc">Permanent access to delete or revoke links at any moment.</span></div></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab3_b3_title">Instant Revoke:</strong> <span data-i18n="tab3_b3_desc">Deactivates public viewing instantly without deleting audit records.</span></div></li>
           </ul>
-          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Open zylo.stream</span> ↗</a>
         </div>
         <div class="tab-right">
           <!-- Dual-URL Security Architecture Mockup -->
@@ -1674,7 +1629,7 @@
             <span class="url-type-badge url-type-creator">CREATOR MASTER KEY (HMAC)</span>
             <div style="color:var(--accent-orange); word-break:break-all; font-size:0.85rem; margin:4px 0;">https://zylo.stream/v/c7a10f?key=sec_8f9a2b1c4d...</div>
             <div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:8px;">Grants creator authority to instantly revoke or delete clip from R2 storage.</div>
-            <button id="btnMockRevoke" style="background:#ef4444; color:#fff; border:none; padding:4px 10px; border-radius:4px; font-family:var(--font-mono); font-size:0.72rem; cursor:pointer; font-weight:700;">
+            <button id="btnMockRevoke" style="background:#ef4444; color:#fff; border:none; padding:5px 12px; border-radius:4px; font-family:var(--font-mono); font-size:0.72rem; cursor:pointer; font-weight:700;">
               🛑 TEST ONE-CLICK KILLSWITCH
             </button>
             <span id="mockRevokeStatus" style="font-size:0.75rem; color:#10b981; margin-left:8px; display:none;">LINK REVOKED (404)</span>
@@ -1688,11 +1643,10 @@
           <h3 data-i18n="tab4_title">Native, Non-Intrusive &amp; AdBlock-Resistant Sponsorships</h3>
           <p data-i18n="tab4_desc">Say goodbye to annoying video pre-rolls, third-party trackers, and intrusive popups. Zylo delivers respectful, first-party sponsored placements natively rendered right within the player shell.</p>
           <ul class="tab-bullets">
-            <li><span class="check">✓</span> <strong data-i18n="tab4_b1_title">100% AdBlock-Immune:</strong> <span data-i18n="tab4_b1_desc">Delivered first-party from the same origin without third-party ad network scripts.</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab4_b2_title">Multi-Language &amp; Region Aware:</strong> <span data-i18n="tab4_b2_desc">Placements automatically adapt to the viewer's language (EN, ES, PT, JA).</span></li>
-            <li><span class="check">✓</span> <strong data-i18n="tab4_b3_title">Zero Viewing Interruption:</strong> <span data-i18n="tab4_b3_desc">No 30-second unskippable video ads. Gaming clips start playing instantly.</span></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab4_b1_title">100% AdBlock-Immune:</strong> <span data-i18n="tab4_b1_desc">Delivered first-party from the same origin without third-party ad network scripts.</span></div></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab4_b2_title">Multi-Language &amp; Region Aware:</strong> <span data-i18n="tab4_b2_desc">Placements automatically adapt to the viewer's language (EN, ES, PT, JA).</span></div></li>
+            <li><span class="check">✓</span> <div><strong data-i18n="tab4_b3_title">Zero Viewing Interruption:</strong> <span data-i18n="tab4_b3_desc">No 30-second unskippable video ads. Gaming clips start playing instantly.</span></div></li>
           </ul>
-          <a href="https://zylo.stream" class="btn-nav-primary"><span data-i18n="tab_cta">Open zylo.stream</span> ↗</a>
         </div>
         <div class="tab-right">
           <!-- Native Non-Intrusive Sponsor Mockup -->
@@ -1704,7 +1658,7 @@
             </p>
             <div style="background:rgba(0,0,0,0.4); border-radius:6px; padding:10px; font-family:var(--font-mono); font-size:0.75rem; color:var(--accent-green); display:flex; justify-content:space-between; align-items:center;">
               <span>Target: EN / ES / PT / JA</span>
-              <span style="color:var(--accent-cyan);">ADBLOCK BYPASSED (NATIVE)</span>
+              <span style="color:var(--accent-cyan);">ADBLOCK IMMUNE (FIRST-PARTY)</span>
             </div>
           </div>
         </div>
@@ -1712,7 +1666,7 @@
     </section>
 
     <!-- ========================================================
-         4. HIGH SCALABILITY ARCHITECTURE SECTION
+         4. HIGH SCALABILITY ARCHITECTURE SECTION (CANVAS BACKGROUND)
          ======================================================== -->
     <section class="scale-section" id="scalability">
       <canvas id="scaleCanvas"></canvas>
@@ -1799,7 +1753,7 @@
         step3_title: "3. Direct R2 Pipe",
         step4_title: "4. Discord Unfurl",
         btn_prev: "Previous",
-        btn_pause: "Pause Animation",
+        btn_pause: "Pause",
         btn_next: "Next",
         studio_tag: "In-Browser Recording Studio",
         studio_title: "Zylo Studio: No Downloads, No Setup",
@@ -1807,12 +1761,13 @@
         studio_h3: "Instant Capture from Any Screen or Webcam",
         studio_p: "Forget complex software configurations like OBS or heavy desktop apps. Zylo Studio leverages modern browser MediaStream and Canvas APIs to record instantly with zero latency.",
         studio_b1_title: "Dual Source Ingestion:",
-        studio_b1_desc: "Toggle seamlessly between full screen, window, or face camera with responsive picture-in-picture.",
+        studio_b1_desc: "Toggle seamlessly between full screen, window, or camera with picture-in-picture.",
         studio_b2_title: "Multi-Track Audio Mixing:",
-        studio_b2_desc: "Combines microphone voice commentary and desktop game sound with real-time waveform normalization.",
-        studio_b3_title: "6-Hour Auto-Destruct Protection:",
-        studio_b3_desc: "Built-in ephemeral lifecycles purge temporary clips automatically, keeping your storage clean and private.",
-        studio_cta: "Open Zylo Studio Live",
+        studio_b2_desc: "Combines microphone commentary and desktop game sound with real-time waveform normalization.",
+        studio_b3_title: "Keyframe Fast Trimmer:",
+        studio_b3_desc: "Built-in lossless trimmer cuts clip start and end on keyframes in seconds without long re-encoding delays.",
+        studio_b4_title: "6-Hour Auto-Destruct Protection:",
+        studio_b4_desc: "Built-in ephemeral lifecycles purge temporary clips automatically, keeping your storage clean and private.",
         feat_tag: "Core Platform Highlights",
         feat_title: "Designed for Creators & Communities",
         feat_desc: "Explore the specific modular subsystems powering the production deployment of zylo.stream.",
@@ -1831,11 +1786,11 @@
         tab2_title: "Client-Side Hardware Accelerated WebCodecs",
         tab2_desc: "Traditional platforms waste hundreds of dollars per month on cloud server transcoding CPU instances. Zylo executes the entire transcode process directly on the user's local GPU before transmission.",
         tab2_b1_title: "0 Server Transcoding Latency:",
-        tab2_b1_desc: "Instant upload without waiting in queue.",
+        tab2_b1_desc: "Instant upload without waiting in cloud queues.",
         tab2_b2_title: "MediaBunny WebAssembly:",
         tab2_b2_desc: "Fast H.264 video compression directly in memory.",
-        tab2_b3_title: "Quality Presets:",
-        tab2_b3_desc: "Lossless, Balanced, and Ultra-Speed compression modes.",
+        tab2_b3_title: "Quality Profiles:",
+        tab2_b3_desc: "Fast Mode (2 Mbps) and Quality Mode (4 Mbps) for quick uploads.",
         tab3_title: "Dual-Mode Privacy & Revocation Killswitch",
         tab3_desc: "Creators retain full sovereign control over their content. Every uploaded clip generates two distinct cryptographically secure URLs.",
         tab3_b1_title: "Public Watch URL:",
@@ -1852,7 +1807,6 @@
         tab4_b2_desc: "Placements automatically adapt to the viewer's language (EN, ES, PT, JA).",
         tab4_b3_title: "Zero Viewing Interruption:",
         tab4_b3_desc: "No 30-second unskippable video ads. Gaming clips start playing instantly.",
-        tab_cta: "Open zylo.stream",
         scale_tag: "Extreme Elasticity",
         scale_title: "Infinite Edge Scalability",
         scale_desc: "Engineered so that 10 users or 100,000 concurrent streamers cost practically the same to operate, with zero CPU bottlenecks.",
@@ -1891,7 +1845,7 @@
         step3_title: "3. Directo a R2",
         step4_title: "4. Embed Discord",
         btn_prev: "Anterior",
-        btn_pause: "Pausar Animación",
+        btn_pause: "Pausar",
         btn_next: "Siguiente",
         studio_tag: "Estudio de Grabación en el Navegador",
         studio_title: "Zylo Studio: Sin Descargas, Sin Configuración",
@@ -1902,9 +1856,10 @@
         studio_b1_desc: "Cambia fácilmente entre pantalla completa, ventana o cámara con picture-in-picture.",
         studio_b2_title: "Mezcla de Audio Multicanal:",
         studio_b2_desc: "Sincroniza micrófono y sonido del juego con normalización de ondas en vivo.",
-        studio_b3_title: "Autodestrucción en 6 Horas:",
-        studio_b3_desc: "Ciclos de vida efímeros que purgan clips temporales automáticamente.",
-        studio_cta: "Abrir Zylo Studio en Vivo",
+        studio_b3_title: "Recorte Rápido Keyframe:",
+        studio_b3_desc: "Corta inicios y finales en keyframes en segundos sin demoras de re-codificación.",
+        studio_b4_title: "Autodestrucción en 6 Horas:",
+        studio_b4_desc: "Ciclos de vida efímeros que purgan clips temporales automáticamente.",
         feat_tag: "Puntos Clave de la Plataforma",
         feat_title: "Diseñado para Creadores y Comunidades",
         feat_desc: "Explora los subsistemas modulares que impulsan el despliegue en producción de zylo.stream.",
@@ -1926,8 +1881,8 @@
         tab2_b1_desc: "Subida inmediata sin tiempos de espera.",
         tab2_b2_title: "MediaBunny WebAssembly:",
         tab2_b2_desc: "Compresión H.264 ultra rápida directamente en memoria.",
-        tab2_b3_title: "Ajustes de Calidad:",
-        tab2_b3_desc: "Modos Lossless, Equilibrado y Ultra-Rápido.",
+        tab2_b3_title: "Perfiles de Calidad:",
+        tab2_b3_desc: "Modo Rápido (2 Mbps) y Modo Calidad (4 Mbps) para subidas ágiles.",
         tab3_title: "Privacidad Dual y Botón de Revocación Inmediata",
         tab3_desc: "Los creadores mantienen control total sobre su contenido. Cada clip subido genera dos URLs criptográficamente seguras.",
         tab3_b1_title: "Enlace Público de Reproducción:",
@@ -1944,7 +1899,6 @@
         tab4_b2_desc: "Los espacios se adaptan al idioma del espectador (EN, ES, PT, JA).",
         tab4_b3_title: "Sin Interrupciones de Reproducción:",
         tab4_b3_desc: "Sin anuncios obligatorios de 30 segundos. El clip comienza al instante.",
-        tab_cta: "Abrir zylo.stream",
         scale_tag: "Elasticidad Extrema",
         scale_title: "Escalabilidad Infinita en el Borde",
         scale_desc: "Diseñado para que 10 usuarios o 100,000 streamers simultáneos cuesten prácticamente lo mismo de operar, sin saturar la CPU.",
@@ -1983,7 +1937,7 @@
         step3_title: "3. Direct Cloud R2",
         step4_title: "4. Embed Discord",
         btn_prev: "Anterior",
-        btn_pause: "Pausar Animação",
+        btn_pause: "Pausar",
         btn_next: "Próximo",
         studio_tag: "Estúdio de Gravação no Navegador",
         studio_title: "Zylo Studio: Sem Instalações",
@@ -1994,9 +1948,10 @@
         studio_b1_desc: "Alterne entre tela cheia, janela ou câmera com picture-in-picture.",
         studio_b2_title: "Mixagem de Áudio:",
         studio_b2_desc: "Sincroniza microfone e som do sistema com visualizador de ondas.",
-        studio_b3_title: "Destruição em 6 Horas:",
-        studio_b3_desc: "Ciclo de vida temporário para manter o armazenamento limpo.",
-        studio_cta: "Abrir Zylo Studio Ao Vivo",
+        studio_b3_title: "Recorte Rápido Keyframe:",
+        studio_b3_desc: "Corta inícios e finais rapidamente sem recodificação demorada.",
+        studio_b4_title: "Destruição em 6 Horas:",
+        studio_b4_desc: "Ciclo de vida temporário para manter o armazenamento limpo.",
         feat_tag: "Destaques da Plataforma",
         feat_title: "Projetado para Criadores e Comunidades",
         feat_desc: "Conheça os subsistemas que alimentam o zylo.stream.",
@@ -2018,8 +1973,8 @@
         tab2_b1_desc: "Upload imediato.",
         tab2_b2_title: "MediaBunny WebAssembly:",
         tab2_b2_desc: "Compressão de vídeo local rápida.",
-        tab2_b3_title: "Predefinições de Qualidade:",
-        tab2_b3_desc: "Opções para máxima velocidade ou qualidade.",
+        tab2_b3_title: "Perfis de Qualidade:",
+        tab2_b3_desc: "Modo Rápido (2 Mbps) e Modo Qualidade (4 Mbps) para envios rápidos.",
         tab3_title: "Privacidade e Revogação Imediata",
         tab3_desc: "Controle total sobre o conteúdo com URLs criptografadas.",
         tab3_b1_title: "Link Público:",
@@ -2036,7 +1991,6 @@
         tab4_b2_desc: "Adapta-se ao idioma do usuário.",
         tab4_b3_title: "Sem Interrupções:",
         tab4_b3_desc: "Os vídeos iniciam de forma imediata.",
-        tab_cta: "Abrir zylo.stream",
         scale_tag: "Elasticidade Extrema",
         scale_title: "Escalabilidade Infinita",
         scale_desc: "Projetado para manter o consumo de CPU em ~0% mesmo sob tráfego massivo.",
@@ -2086,9 +2040,10 @@
         studio_b1_desc: "画面全体、個別ウィンドウ、カメラのピクチャーインピクチャーに対応。",
         studio_b2_title: "音声ミキシング:",
         studio_b2_desc: "マイク音声とPCのシステム音声をリアルタイムで合成。",
-        studio_b3_title: "6時間自動消滅:",
-        studio_b3_desc: "一時的な動画は自動破棄されプライバシーを保護。",
-        studio_cta: "Zylo Studio を開く",
+        studio_b3_title: "キーフレーム高速トリミング:",
+        studio_b3_desc: "再エンコード待ちなしで不要な部分を瞬時にカット。",
+        studio_b4_title: "6時間自動消滅:",
+        studio_b4_desc: "一時的な動画は自動破棄されプライバシーを保護。",
         feat_tag: "コアプラットフォーム特徴",
         feat_title: "クリエイターとコミュニティのために",
         feat_desc: "zylo.stream の本番環境を支えるモジュール構造をご覧ください。",
@@ -2110,8 +2065,8 @@
         tab2_b1_desc: "エンコード待ちキューなし。",
         tab2_b2_title: "MediaBunny WebAssembly:",
         tab2_b2_desc: "メモリ上で直接H.264処理。",
-        tab2_b3_title: "品質プリセット:",
-        tab2_b3_desc: "用途に応じた最適圧縮モード。",
+        tab2_b3_title: "品質プロファイル:",
+        tab2_b3_desc: "高速モード (2 Mbps) と高画質モード (4 Mbps) による迅速な配信。",
         tab3_title: "公開リンクと即時取り消し",
         tab3_desc: "クリエイターがいつでも動画を非公開化可能。",
         tab3_b1_title: "公開視聴リンク:",
@@ -2128,7 +2083,6 @@
         tab4_b2_desc: "視聴者の言語に合わせたスポンサー枠。",
         tab4_b3_title: "待ち時間ゼロ:",
         tab4_b3_desc: "動画が中断されることなく即座に再生。",
-        tab_cta: "zylo.stream で体験",
         scale_tag: "極限の伸縮性",
         scale_title: "無限のエッジスケーラビリティ",
         scale_desc: "同時接続が増加してもサーバーCPU負荷をほぼ0%に維持する設計。",
@@ -2199,7 +2153,7 @@
       });
     });
 
-    // 3. Animated Interactive Pipeline Engine
+    // 3. Animated Interactive Pipeline Engine (Stable Height & Hover Support)
     const pipelineStages = [
       {
         title: {
@@ -2209,14 +2163,14 @@
           ja: "🎥 ステージ 1: 高解像度キャプチャ / 投入"
         },
         desc: {
-          en: "The user records directly in browser with Zylo Studio (Screen/Webcam @ 60 FPS) or drops a raw 1080p/4K gameplay file up to 100MB+.",
-          es: "El usuario graba directo en el navegador con Zylo Studio (Pantalla/Cámara a 60 FPS) o arrastra un archivo 1080p/4K de más de 100MB.",
-          pt: "O usuário grava direto pelo navegador com o Zylo Studio (Tela/Câmera a 60 FPS) ou envia um arquivo de até 100MB+.",
-          ja: "ユーザーはZylo Studioでブラウザ録画するか、100MB以上の1080p/4Kファイルを直接ドロップします。"
+          en: "The user either records directly in browser with Zylo Studio (Screen/Webcam @ 30 FPS) or drops a raw 720p/1080p gameplay file up to 100MB+.",
+          es: "El usuario graba directo en el navegador con Zylo Studio (Pantalla/Cámara a 30 FPS) o arrastra un archivo 720p/1080p de más de 100MB.",
+          pt: "O usuário grava direto pelo navegador com o Zylo Studio (Tela/Câmera a 30 FPS) ou envia um arquivo de até 100MB+.",
+          ja: "ユーザーはZylo Studioでブラウザ録画するか、100MB以上の720p/1080pファイルを直接ドロップします。"
         },
         tags: ["Target: Screen / Camera", "Zero Install Required", "Format: MP4/WebM/MKV"],
         overhead: "Zero Server Allocation",
-        res: "1080p 60FPS Native",
+        res: "720p 30 FPS Standard",
         status: "ACTIVE INGESTION",
         progressPct: 15
       },
@@ -2233,9 +2187,9 @@
           pt: "MediaBunny e WebCodecs utilizam a GPU do usuário para comprimir o vídeo em H.264 otimizado em cerca de 0.35s.",
           ja: "ハードウェア加速されたWebCodecsがユーザーのGPUでH.264へ約0.35秒で高速事前圧縮。"
         },
-        tags: ["Hardware VideoEncoder", "avc1.640028 High Profile", "Throughput: 142 FPS"],
+        tags: ["Hardware VideoEncoder", "avc1.64001f 720p Profile", "Throughput: 95 FPS"],
         overhead: "0% Server CPU Overhead",
-        res: "Bitrate Optimized (7.8MB)",
+        res: "Bitrate Optimized (6.2MB)",
         status: "GPU PROCESSING",
         progressPct: 45
       },
@@ -2283,6 +2237,7 @@
     let isPipePlaying = true;
     let pipeInterval;
 
+    const pipeSimContainer = document.getElementById('pipeSimContainer');
     const pipeNodes = document.querySelectorAll('.pipe-step-node');
     const pipeLaserFill = document.getElementById('pipeLaserFill');
     const pipeStageTitle = document.getElementById('pipeStageTitle');
@@ -2290,6 +2245,8 @@
     const pipeTag1 = document.getElementById('pipeTag1');
     const pipeTag2 = document.getElementById('pipeTag2');
     const pipeTag3 = document.getElementById('pipeTag3');
+    const pipeMetricRes = document.getElementById('pipeMetricRes');
+    const pipeMetricState = document.getElementById('pipeMetricState');
     const pipePrevBtn = document.getElementById('pipePrevBtn');
     const pipeNextBtn = document.getElementById('pipeNextBtn');
     const pipePlayPauseBtn = document.getElementById('pipePlayPauseBtn');
@@ -2311,6 +2268,8 @@
       pipeTag1.textContent = stage.tags[0];
       pipeTag2.textContent = stage.tags[1];
       pipeTag3.textContent = stage.tags[2];
+      pipeMetricRes.textContent = stage.res;
+      pipeMetricState.textContent = stage.status;
     }
 
     function startPipeCycle() {
@@ -2322,12 +2281,25 @@
       }, 3500);
     }
 
-    pipeNodes.forEach(node => {
+    // Hover on any step immediately switches to it
+    pipeNodes.forEach((node, i) => {
+      node.addEventListener('mouseenter', () => {
+        updatePipelineStage(i);
+      });
       node.addEventListener('click', () => {
-        const step = parseInt(node.getAttribute('data-step'), 10);
-        updatePipelineStage(step);
+        updatePipelineStage(i);
       });
     });
+
+    // Pause auto-rotation when hovering over the pipeline container so the user can explore smoothly
+    if (pipeSimContainer) {
+      pipeSimContainer.addEventListener('mouseenter', () => {
+        isPipePlaying = false;
+      });
+      pipeSimContainer.addEventListener('mouseleave', () => {
+        isPipePlaying = true;
+      });
+    }
 
     pipePrevBtn.addEventListener('click', () => {
       currentPipeStep = (currentPipeStep - 1 + pipelineStages.length) % pipelineStages.length;
@@ -2341,22 +2313,50 @@
 
     pipePlayPauseBtn.addEventListener('click', () => {
       isPipePlaying = !isPipePlaying;
-      pipePlayPauseBtn.innerHTML = isPipePlaying ? '⏸ Pause Animation' : '▶ Play Animation';
+      pipePlayPauseBtn.innerHTML = isPipePlaying ? '⏸ Pause' : '▶ Play';
     });
 
     startPipeCycle();
 
-    // 4. Studio Segmented Switcher Interaction (Mock)
+    // 4. Studio Mockup Interactive Controls
     const btnStudioScreen = document.getElementById('btnStudioScreen');
     const btnStudioCamera = document.getElementById('btnStudioCamera');
-    btnStudioScreen.addEventListener('click', () => {
-      btnStudioScreen.classList.add('active');
-      btnStudioCamera.classList.remove('active');
-    });
-    btnStudioCamera.addEventListener('click', () => {
-      btnStudioCamera.classList.add('active');
-      btnStudioScreen.classList.remove('active');
-    });
+    const studioLiveSpecs = document.getElementById('studioLiveSpecs');
+    const pillFast = document.getElementById('pillFast');
+    const pillQuality = document.getElementById('pillQuality');
+    const pillVoter = document.getElementById('pillVoter');
+
+    if (btnStudioScreen && btnStudioCamera) {
+      btnStudioScreen.addEventListener('click', () => {
+        btnStudioScreen.classList.add('active');
+        btnStudioCamera.classList.remove('active');
+      });
+      btnStudioCamera.addEventListener('click', () => {
+        btnStudioCamera.classList.add('active');
+        btnStudioScreen.classList.remove('active');
+      });
+    }
+
+    if (pillFast && pillQuality && pillVoter) {
+      pillFast.addEventListener('click', () => {
+        pillFast.classList.add('active');
+        pillQuality.classList.remove('active');
+        pillVoter.classList.remove('active');
+        studioLiveSpecs.innerHTML = 'RES: <strong>720p</strong> • FPS: <strong>30.0</strong> • <strong>2 Mbps</strong>';
+      });
+      pillQuality.addEventListener('click', () => {
+        pillQuality.classList.add('active');
+        pillFast.classList.remove('active');
+        pillVoter.classList.remove('active');
+        studioLiveSpecs.innerHTML = 'RES: <strong>720p</strong> • FPS: <strong>30.0</strong> • <strong>4 Mbps</strong>';
+      });
+      pillVoter.addEventListener('click', () => {
+        pillVoter.classList.add('active');
+        pillFast.classList.remove('active');
+        pillQuality.classList.remove('active');
+        studioLiveSpecs.innerHTML = 'RES: <strong>1080p</strong> • FPS: <strong>60.0</strong> • <strong>6 Mbps (Top.gg)</strong>';
+      });
+    }
 
     // 5. Feature Tabs Logic
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -2413,7 +2413,6 @@
       function drawParticles() {
         ctx.clearRect(0, 0, w, h);
 
-        // Draw connections
         for (let i = 0; i < particleCount; i++) {
           for (let j = i + 1; j < particleCount; j++) {
             const dx = particles[i].x - particles[j].x;
@@ -2432,7 +2431,6 @@
           }
         }
 
-        // Draw and update particles
         particles.forEach(p => {
           ctx.fillStyle = '#ff6d00';
           ctx.shadowColor = 'rgba(255, 109, 0, 0.5)';
